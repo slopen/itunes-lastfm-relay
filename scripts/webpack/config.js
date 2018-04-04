@@ -40,7 +40,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.js(x)?$/,
+				test: /\.(js|mjs)$/,
 				exclude: /(node_modules)/,
 				loader: 'babel-loader'
 			},
@@ -92,6 +92,10 @@ module.exports = {
 			{
 				from: path.resolve (SRC_PATH, 'index.html'),
 				to: 'index.html'
+			},
+			{
+				from: path.resolve (SRC_PATH, 'favicon.ico'),
+				to: 'favicon.ico'
 			},
 			{
 				from: path.resolve (SRC_PATH, 'images'),

@@ -59,12 +59,15 @@
   },
   "dependencies": {
     "@risingstack/graffiti-mongoose": "^6.0.0",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "body-parser": "^1.18.2",
     "classnames": "2.2.5",
     "config": "^1.30.0",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
     "graphql-relay": "^0.5.5",
+    "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.14.0",
     "moment": "^2.14.1",
     "mongoose": "^4.5.7",
@@ -74,8 +77,15 @@
     "react-dom": "^16.3.0",
     "react-list": "^0.8.0",
     "react-relay": "^1.5.0",
+    "react-relay-network-modern": "^2.1.1",
+    "react-relay-network-modern-ssr": "^0.0.1",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "regenerator-runtime": "^0.11.1",
+    "relay-context-provider": "^1.0.4",
+    "relay-query-lookup-renderer": "^3.0.1",
+    "relay-runtime": "^1.5.0",
+    "uuid": "^3.2.1",
     "whatwg-fetch": "^2.0.4"
   }
 }

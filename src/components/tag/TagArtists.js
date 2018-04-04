@@ -1,4 +1,4 @@
-import {createFragmentContainer, graphql} from 'react-relay/compat';
+import {createFragmentContainer, graphql} from 'react-relay';
 
 import ArtistsList from '../artist/ArtistsList';
 

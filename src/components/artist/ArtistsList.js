@@ -4,8 +4,6 @@ import ArtistPreview from './ArtistPreview';
 import ReactList from 'react-list';
 
 
-const artistsLimit = 5;
-
 export default class ArtistsList extends Component {
 	constructor (props) {
 		super (props);
@@ -48,21 +46,4 @@ export default class ArtistsList extends Component {
 			</div>
 		);
 	}
-
-	// render (){
-	//     const {'list': {similar, artists}} = this.props;
-	//     var list = (similar || artists).edges || [];
-
-	//     return (
-	//         <ul className="list-unstyled media-list">
-	//             {list.map(function(edge){
-	//                 return (
-	//                     <li key={edge.node.id}>
-	//                         <ArtistPreview data={edge.node}/>
-	//                     </li>
-	//                 );
-	//             })}
-	//         </ul>
-	//     );
-	// }
 }

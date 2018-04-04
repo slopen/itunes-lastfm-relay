@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {createFragmentContainer, graphql} from 'react-relay/compat';
+import {createFragmentContainer, graphql} from 'react-relay';
 
 import Header from './Header';
 

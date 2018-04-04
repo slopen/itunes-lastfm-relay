@@ -1,8 +1,12 @@
+import 'isomorphic-fetch';
+
 const config = require ('config');
 const path = require ('path');
+const bodyParser = require ('body-parser');
 
 const app = require ('express');
 const graphqlHTTP = require ('express-graphql');
+const {graphqlBatchHTTPWrapper} = require ('react-relay-network-modern');
 
 const schema = require ('./schema');
 const mongoose = require ('mongoose');
@@ -16,6 +20,12 @@ const INDEX_PATH = path.resolve (PUBLIC_PATH, 'index.html');
 
 mongoose.Promise = global.Promise;
 mongoose.connect (config.mongodb.connstr, config.mongodb.options);
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+const graphqlServer = graphqlHTTP ({schema, pretty: true});
+
+import render from './html/render';
 
 
 app ()
@@ -32,18 +42,18 @@ app ()
         next ();
     })
 
-    .use ('/graphql', graphqlHTTP ({
-        schema: schema,
-        pretty: true
-    }))
+    .use (bodyParser.json ())
+
+    .use ('/graphql/batch', graphqlBatchHTTPWrapper (graphqlServer))
+    .use ('/graphql', graphqlServer)
 
     .use (
         app.static (PUBLIC_PATH)
     )
 
-    .get ('*', (req, res) =>
-        res.sendFile (INDEX_PATH)
-    )
+    .get ('*', async (req, res) => {
+        res.send (await render (req));
+    })
 
     .listen (port, () => {
         console.log (`* ${name} graphql server running on ${port}/graphql`);

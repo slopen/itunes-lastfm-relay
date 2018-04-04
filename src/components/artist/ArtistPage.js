@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {createFragmentContainer, graphql} from 'react-relay/compat';
+import {createFragmentContainer, graphql} from 'react-relay';
 
 import ArtistSimilar from './ArtistSimilar';
 import ArtistPreview from './ArtistPreview';

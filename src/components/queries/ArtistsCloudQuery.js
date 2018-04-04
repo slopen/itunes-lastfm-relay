@@ -1,7 +1,7 @@
-import {graphql} from 'react-relay/compat';
+import {graphql} from 'react-relay';
 
 export default graphql`
-	query ArtistCloudQuery {
+	query ArtistsCloudQuery {
 		viewer {
 			...ArtistsCloud_viewer
 		}

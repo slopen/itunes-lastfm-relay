@@ -1,51 +1,38 @@
 import React from 'react';
-
-import {
-	Environment,
-	Network,
-	RecordSource,
-	Store
-} from 'relay-runtime';
-
-import {QueryRenderer} from 'react-relay';
+import QueryRenderer from 'relay-query-lookup-renderer';
 
 import LoaderComponent from './Loader';
 import ErrorComponent from './Error';
 
+const unescapeParams = (params) =>
+	Object
+		.keys (params)
+		.reduce ((res, key) => {
+			res [key] = decodeURIComponent (params [key]);
 
-export const fetchQuery = (operation, variables) =>
-	fetch ('/graphql', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify ({
-			query: operation.text,
-			variables
-		})
-	})
-		.then ((res) => res.json ());
+			return res;
+		}, {});
 
-
-export const environment = new Environment ({
-	network: Network.create (fetchQuery),
-	store: new Store (new RecordSource ())
-});
-
-
-export default (Component, Query) => ({match}) =>
+export default (environment, Component, Query) => ({match}) =>
 	<QueryRenderer
+		lookup
 		query={Query}
-		variables={{...match.params}}
+		variables={unescapeParams (match.params)}
 		environment={environment}
-		render={({error, props}) => {
-			if (error) {
-				return <ErrorComponent error={error}/>
-			} else if (props) {
-				return <Component
-					viewer={props.viewer}
-					params={{...match.params}}/>;
-			} else {
-				return <LoaderComponent/>;
+		render={(data) => {
+			const {error, props} = data;
+
+			try {
+				if (error) {
+					return <ErrorComponent error={error}/>
+				} else if (props) {
+					return <Component
+						viewer={props.viewer}
+						params={unescapeParams (match.params)}/>;
+				} else {
+					return <LoaderComponent/>;
+				}
+			} catch (e) {
+				console.log ('* render error', e);
 			}
 		}}/>

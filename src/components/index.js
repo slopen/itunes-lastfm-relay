@@ -1,8 +1,11 @@
+import 'regenerator-runtime/runtime';
+import 'isomorphic-fetch';
+
 import React from 'react';
-import {render} from 'react-dom';
+import {hydrate} from 'react-dom';
 
 import 'styles/styles.less';
 import App from 'components/routes';
 
 
-render (<App/>, document.getElementById ('root'));
+hydrate (<App/>, document.getElementById ('root'));

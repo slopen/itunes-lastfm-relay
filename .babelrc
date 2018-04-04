@@ -1,10 +1,15 @@
 {
 	"plugins": [
+		["module-resolver", {
+      		"root": ["./src"]
+    	}],
 		["relay", {
-			"compat": true,
 			"schema": "data/schema.graphql"
 		}],
-		"transform-runtime"
+		["transform-runtime", {
+			"polyfill": false,
+			"regenerator": true
+		}]
 	],
 	"presets": [
 		"react",

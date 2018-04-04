@@ -16,12 +16,16 @@ import ArtistPage from '../artist/ArtistPage';
 import render from './render';
 
 
-export default () =>
+export default ({environment}) =>
 	<div className="app container">
 
 		<Route
 			path="/:type?"
-			component={render (Header, HeaderQuery)}/>
+			component={render (
+				environment,
+				Header,
+				HeaderQuery
+			)}/>
 
 		<hr/>
 
@@ -30,27 +34,47 @@ export default () =>
 				<Route
 					exact
 					path="/"
-					component={render (ArtistsCloud, ArtistsCloudQuery)}/>
+					component={render (
+						environment,
+						ArtistsCloud,
+						ArtistsCloudQuery
+					)}/>
 
 				<Route
 					exact
 					path="/artists"
-					component={render (ArtistsCloud, ArtistsCloudQuery)}/>
+					component={render (
+						environment,
+						ArtistsCloud,
+						ArtistsCloudQuery
+					)}/>
 
 				<Route
 					exact
 					path="/artists/:name"
-					component={render (ArtistPage, ArtistQuery)}/>
+					component={render (
+						environment,
+						ArtistPage,
+						ArtistQuery
+					)}/>
 
 				<Route
 					exact
 					path="/tags"
-					component={render (TagsCloud, TagsCloudQuery)}/>
+					component={render (
+						environment,
+						TagsCloud,
+						TagsCloudQuery
+					)}/>
 
 				<Route
 					exact
 					path="/tags/:name"
-					component={render (TagPage, TagQuery)}/>
+					component={render (
+						environment,
+						TagPage,
+						TagQuery
+					)}/>
 			</Switch>
 		</div>
 	</div>
