@@ -13,7 +13,7 @@ export default (markup, data) =>
   		<meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=0,user-scalable=no"/>
 
   		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+	  	<link rel="stylesheet" href="/styles.css">
 	</head>
 	<body>
 	  	<div id="root">${markup}</div>

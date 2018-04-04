@@ -3,6 +3,7 @@ const env = require ('process-env');
 const webpack = require ('webpack');
 const CopyWebpackPlugin = require ('copy-webpack-plugin');
 const UglifyJsPlugin = require ('uglifyjs-webpack-plugin');
+const ExtractTextPlugin = require ('extract-text-webpack-plugin');
 
 const config = require ('config');
 const projectRoot = path.resolve (__dirname, '../../');
@@ -49,31 +50,19 @@ module.exports = {
 				loader: 'url-loader'
 			},
 			{
-				test: /\.?css$/,
-				use: [
-					'style-loader',
-					{
-						loader: 'css-loader',
-						options: {
-							localIdentName: '[path][name]__[local]--[hash:base64:5]',
-							sourceMap: !PRODUCTION
-						}
-					}
-				]
-			},
-			{
-				test: /\.less$/,
-				use: [
-					'style-loader',
-					{
-						loader: 'css-loader',
-						options: {
-							localIdentName: '[path][name]__[local]--[hash:base64:5]',
-							sourceMap: !PRODUCTION
-						}
-					},
-					'less-loader'
-				]
+				test: /\.(css|less)$/,
+				use: ExtractTextPlugin.extract ({
+					use: [
+						{
+							loader: 'css-loader',
+							options: {
+								localIdentName: '[path][name]__[local]--[hash:base64:5]',
+								sourceMap: !PRODUCTION
+							}
+						},
+						'less-loader'
+					]
+				})
 			},
 			{
 				test: /\.json$/,
@@ -88,6 +77,7 @@ module.exports = {
 		tls: 'empty'
 	},
 	plugins: [
+		new ExtractTextPlugin ('styles.css'),
 		new CopyWebpackPlugin ([
 			{
 				from: path.resolve (SRC_PATH, 'index.html'),
