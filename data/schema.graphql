@@ -1,0 +1,172 @@
+schema {
+  query: RootQuery
+}
+
+type Artist implements Node {
+  name: String
+  tracks: [ArtistTracks]
+  tags (
+    after: String,
+    first: Int,
+    before: String,
+    last: Int
+  ): ArtistTagsConnection
+  tagsLFM: [String]
+  similar (
+    after: String,
+    first: Int,
+    before: String,
+    last: Int
+  ): ArtistSimilarConnection
+  similarLFM: [String]
+  image: [ArtistImage]
+  url: String
+  bio: ArtistBio
+  stats: ArtistStats
+  _id: ID
+  id: ID!
+}
+
+type ArtistBio {
+  published: Date
+  summary: String
+}
+
+type ArtistConnection {
+  pageInfo: PageInfo!
+  edges: [ArtistEdge]
+  count: Float
+}
+
+type ArtistEdge {
+  node: Artist
+  cursor: String!
+}
+
+type ArtistImage {
+  _id: Generic
+  url: String
+  size: String
+}
+
+type ArtistSimilarConnection {
+  pageInfo: PageInfo!
+  edges: [ArtistSimilarEdge]
+  count: Float
+}
+
+type ArtistSimilarEdge {
+  node: Artist
+  cursor: String!
+}
+
+type ArtistStats {
+  listeners: Float
+  playcount: Float
+}
+
+type ArtistTagsConnection {
+  pageInfo: PageInfo!
+  edges: [ArtistTagsEdge]
+  count: Float
+}
+
+type ArtistTagsEdge {
+  node: Tag
+  cursor: String!
+}
+
+type ArtistTracks {
+  _id: Generic
+  name: String
+  album: String
+  length: Float
+  year: Float
+  bitrate: Float
+  path: String
+}
+
+scalar Date
+
+scalar Generic
+
+interface Node {
+  id: ID!
+}
+
+enum orderByArtist {
+  URL_ASC
+  URL_DESC
+  _ID_ASC
+  _ID_DESC
+}
+
+enum orderByTag {
+  _ID_ASC
+  _ID_DESC
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type RootQuery {
+  viewer: Viewer
+  node(id: ID!): Node
+  artist(id: ID!): Artist
+  artists(id: [ID], ids: [ID], orderBy: orderByArtist, name: String, url: String, _id: ID): [Artist]
+  tag(id: ID!): Tag
+  tags(id: [ID], ids: [ID], orderBy: orderByTag, name: String, _id: ID): [Tag]
+}
+
+type Tag implements Node {
+  name: String
+  artists(after: String, first: Int, before: String, last: Int): TagArtistsConnection
+  similar(after: String, first: Int, before: String, last: Int): TagSimilarConnection
+  _id: ID
+  id: ID!
+}
+
+type TagArtistsConnection {
+  pageInfo: PageInfo!
+  edges: [TagArtistsEdge]
+  count: Float
+}
+
+type TagArtistsEdge {
+  node: Artist
+  cursor: String!
+}
+
+type TagConnection {
+  pageInfo: PageInfo!
+  edges: [TagEdge]
+  count: Float
+}
+
+type TagEdge {
+  node: Tag
+  cursor: String!
+}
+
+type TagSimilarConnection {
+  pageInfo: PageInfo!
+  edges: [TagSimilarEdge]
+  count: Float
+}
+
+type TagSimilarEdge {
+  node: Tag
+  cursor: String!
+}
+
+type Viewer implements Node {
+  id: ID!
+  artists(after: String, first: Int, before: String, last: Int, orderBy: orderByArtist, name: String, url: String, _id: ID): ArtistConnection
+  artist(id: ID!): Artist
+  tags(after: String, first: Int, before: String, last: Int, orderBy: orderByTag, name: String, _id: ID): TagConnection
+  tag(id: ID!): Tag
+}

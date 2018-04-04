@@ -1,6 +1,5 @@
 node_modules
-dist
+build
 dump
 config.prod.json
-data
 *.log
