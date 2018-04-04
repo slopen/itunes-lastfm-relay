@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import Relay from 'react-relay/classic';
-import {Link} from 'react-router';
+import {createFragmentContainer, graphql} from 'react-relay/compat';
+import {Link} from 'react-router-dom';
 
-import {basicFields} from 'components/queries/Fragments';
-
-import Thumbnail from './Thumbnail';
-import TagsList from './Tags';
+import ArtistImage from './ArtistImage';
+import ArtistTags from './ArtistTags';
 
 
 class ArtistPreview extends Component {
@@ -22,21 +20,21 @@ class ArtistPreview extends Component {
 			fullMode = this.props.fullMode;
 
 		var link = (
-			<Link to={'/artist/' + data.name}>{data.name}</Link>
+			<Link to={'/artists/' + data.name}>{data.name}</Link>
 		);
 
 		return (
 			<div className={['media-item', fullMode ? 'full' : 'small'].join(' ')}>
 				{fullMode ? (<h1>{link}</h1>) : (<h5>{link}</h5>)}
 
-				<Link to={'/artist/' + data.name}>
-					<Thumbnail image={data.image}
+				<Link to={'/artists/' + data.name}>
+					<ArtistImage image={data.image}
 						size={fullMode ? 'extralarge' : 'medium'}/>
 				</Link>
 
 				<div className="artist-info">
 
-					<TagsList list={data}/>
+					<ArtistTags data={data}/>
 
 					<div className="stats">
 						<span>{data.stats.listeners}</span> / <span>{data.stats.playcount}</span>
@@ -55,28 +53,24 @@ class ArtistPreview extends Component {
 	}
 }
 
-export default Relay.createContainer (ArtistPreview, {
+export default createFragmentContainer (ArtistPreview, graphql`
+	fragment ArtistPreview on Artist {
 
-	initialVariables: {
-		fullMode: false,
-		artistsTagsLimit: 3
-	},
+		id
+		name
+		image {
+			url
+			size
+		}
+		stats {
+			playcount
+			listeners
+		}
 
+		bio {
+			summary
+		}
 
-	fragments: {
-		data: ({fullMode}) => Relay.QL`
-			fragment on Artist {
-
-				${basicFields}
-
-				bio @include(if: $fullMode){
-					summary
-				}
-
-				${TagsList.getFragment('list', {
-					fullMode: fullMode
-				})}
-			}
-		`
-	}
-});
+		...ArtistTags
+	}`
+)

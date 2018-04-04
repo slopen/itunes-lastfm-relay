@@ -1,47 +1,33 @@
 import React, {Component} from 'react';
-import Relay from 'react-relay/classic';
+import {createFragmentContainer, graphql} from 'react-relay/compat';
 
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 class Header extends Component {
 
 	render () {
-		const {routes, viewer} = this.props || {};
-
-		var route = routes [1],
-			path = '',
-			title = '';
-
-		if (route) {
-			path = (route.path || '')
-				.match (/^tag/g) ? 'artists' : 'tags';
-
-			title = (route.path || '')
-				.match (/^tag/g) ? 'tags' : 'artists';
-		}
+		const {params, viewer} = this.props || {};
+		const path = params.type === 'tags' ? 'artists' : 'tags';
+		const title = params.type !== 'tags' ? 'artists' : 'tags';
 
 		return (
 			<h1 className="main-header hoverable">
-				<div className="pull-right counter">{viewer [title].count}</div>
+				<div className="pull-right counter">
+					<Link to={'/' + title}>{viewer [title].count}</Link>
+				</div>
 				<Link to={'/' + path}>{title}</Link>
 			</h1>
 		);
 	}
 }
 
-export default Relay.createContainer (Header, {
-
-	fragments: {
-		viewer: () => Relay.QL`
-			fragment on Viewer {
-				artists (first:1) {
-					count
-				}
-				tags (first:1) {
-					count
-				}
-			}
-		`
-	}
-
-});
+export default createFragmentContainer (Header, graphql`
+	fragment Header_viewer on Viewer {
+		artists (first:1) {
+			count
+		}
+		tags (first:1) {
+			count
+		}
+	}`
+);

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import Relay from 'react-relay/classic';
+import {createFragmentContainer, graphql} from 'react-relay/compat';
 
 import Header from './Header';
+
 
 class App extends Component {
 	render () {
@@ -9,21 +10,18 @@ class App extends Component {
 
 		return (
 			<div className="container">
-				<Header routes={routes} viewer={viewer}/>
 				<hr/>
-				<div className="content"> {children} </div>
+				<div className="content">
+					{children}
+				</div>
 			</div>
 		);
 	}
 }
+				// <Header routes={routes} viewer={viewer}/>
 
-export default Relay.createContainer(App, {
-
-	fragments: {
-		viewer: () => Relay.QL`
-			fragment on Viewer {
-				${Header.getFragment ('viewer')}
-			}
-		`
-	}
-});
+export default createFragmentContainer (App, graphql`
+	fragment App_viewer on Viewer {
+		...Header_viewer
+	}`
+)

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import Relay from 'react-relay/classic';
+import {createFragmentContainer, graphql} from 'react-relay/compat';
 
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 class TagPreview extends Component {
 
@@ -21,7 +21,7 @@ class TagPreview extends Component {
 		const stats = this.getStats();
 
 		const link = (
-			<Link to={'/tag/' + data.name}>{data.name}</Link>
+			<Link to={'/tags/' + data.name}>{data.name}</Link>
 		);
 
 		return (
@@ -38,29 +38,19 @@ class TagPreview extends Component {
 	}
 }
 
-export default Relay.createContainer (TagPreview, {
+export default createFragmentContainer (TagPreview, graphql`
+	fragment TagPreview on Tag {
+		name
 
-	initialVariables: {
-		lookup: 24,
-		fullMode: false
-	},
-
-	fragments: {
-		data: () => Relay.QL`
-			fragment on Tag {
-				name
-
-				artists (first:$lookup) @include(if: $fullMode){
-					edges {
-						node {
-							stats {
-								listeners
-								playcount
-							}
-						}
+		artists (first: 24) {
+			edges {
+				node {
+					stats {
+						listeners
+						playcount
 					}
 				}
 			}
-		`
-	}
-});
+		}
+	}`
+);

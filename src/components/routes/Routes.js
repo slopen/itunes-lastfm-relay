@@ -1,58 +1,59 @@
 import React from 'react';
-import {Route, IndexRoute} from 'react-router';
+import {Route, Switch} from 'react-router-dom';
 
-import App from 'components/App';
-import Artist from 'components/artist/Page';
-import ArtistsCloud from 'components/artist/Cloud';
-import Tag from 'components/tag/Page';
-import TagsCloud from 'components/tag/Cloud';
-import LoaderStub from 'components/LoaderStub';
+import ArtistsCloudQuery from 'components/queries/ArtistsCloudQuery';
+import TagsCloudQuery from 'components/queries/TagsCloudQuery';
+import HeaderQuery from 'components/queries/HeaderQuery';
+import ArtistQuery from 'components/queries/ArtistQuery';
+import TagQuery from 'components/queries/TagQuery';
 
-import ViewerQueries from 'components/queries/ViewerQueries';
+import Header from '../Header';
+import ArtistsCloud from '../artist/ArtistsCloud';
+import TagsCloud from '../tag/TagsCloud';
+import TagPage from '../tag/TagPage';
+import ArtistPage from '../artist/ArtistPage';
 
-
-const renderOnLoad = (element) =>
-    ({props}) => React.createElement (
-        props ? element : LoaderStub,
-        {...props}
-    );
+import render from './render';
 
 
-export default (
-    <Route
-        path="/"
-        component={App}
-        queries={ViewerQueries}
-        render={renderOnLoad (App)}>
+export default () =>
+	<div className="app container">
 
-        <IndexRoute
-            component={ArtistsCloud}
-            queries={ViewerQueries}
-            render={renderOnLoad (ArtistsCloud)}/>
+		<Route
+			path="/:type?"
+			component={render (Header, HeaderQuery)}/>
 
-        <Route
-            path="artists"
-            component={ArtistsCloud}
-            queries={ViewerQueries}
-            render={renderOnLoad (ArtistsCloud)}/>
+		<hr/>
 
-        <Route
-            path="artist/:name"
-            component={Artist}
-            queries={ViewerQueries}
-            render={renderOnLoad (Artist)}/>
+		<div className="content">
+			<Switch>
+				<Route
+					exact
+					path="/"
+					component={render (ArtistsCloud, ArtistsCloudQuery)}/>
 
-        <Route
-            path="tags"
-            component={TagsCloud}
-            queries={ViewerQueries}
-            render={renderOnLoad (TagsCloud)}/>
+				<Route
+					exact
+					path="/artists"
+					component={render (ArtistsCloud, ArtistsCloudQuery)}/>
 
-        <Route
-            path="tag/:name"
-            component={Tag}
-            queries={ViewerQueries}
-            render={renderOnLoad (Tag)}/>
+				<Route
+					exact
+					path="/artists/:name"
+					component={render (ArtistPage, ArtistQuery)}/>
 
-    </Route>
-);
+				<Route
+					exact
+					path="/tags"
+					component={render (TagsCloud, TagsCloudQuery)}/>
+
+				<Route
+					exact
+					path="/tags/:name"
+					component={render (TagPage, TagQuery)}/>
+			</Switch>
+		</div>
+	</div>
+
+
+

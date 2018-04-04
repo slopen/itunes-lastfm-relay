@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import ArtistPreview from './Preview';
+import ArtistPreview from './ArtistPreview';
 import ReactList from 'react-list';
 
 
@@ -14,7 +14,7 @@ export default class ArtistsList extends Component {
 	}
 
 	getList () {
-		const {list: {similar, artists}} = this.props;
+		const {data: {similar, artists}} = this.props;
 
 		return (similar || artists).edges || [];
 	}
@@ -23,9 +23,9 @@ export default class ArtistsList extends Component {
 		const list = this.getList();
 
 		if (index === list.length - 1) {
-			this.props.relay.setVariables({
-				artistsLimit: list.length + artistsLimit
-			});
+			// this.props.relay.setVariables ({
+			// 	artistsLimit: list.length + artistsLimit
+			// });
 		}
 
 		var artist = list [index].node;
