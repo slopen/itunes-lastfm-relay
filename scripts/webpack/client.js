@@ -10,7 +10,7 @@ const projectRoot = path.resolve (__dirname, '../../');
 
 const {PRODUCTION} = config;
 const SRC_PATH = path.resolve (projectRoot, 'src');
-const BUILD_PATH = path.resolve (projectRoot, 'build');
+const BUILD_PATH = path.resolve (projectRoot, 'build/client');
 const MODULES_PATH = path.resolve (projectRoot, 'node_modules');
 
 const NODE_ENV = env.get ('NODE_ENV') || 'development';
@@ -79,10 +79,6 @@ module.exports = {
 	plugins: [
 		new ExtractTextPlugin ('styles.css'),
 		new CopyWebpackPlugin ([
-			{
-				from: path.resolve (SRC_PATH, 'index.html'),
-				to: 'index.html'
-			},
 			{
 				from: path.resolve (SRC_PATH, 'favicon.ico'),
 				to: 'favicon.ico'

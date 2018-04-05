@@ -12,8 +12,13 @@
 		}]
 	],
 	"presets": [
-		"react",
-		"env",
-		"stage-0"
+	    ["env", {
+	      "targets": {
+	      	"node": "8.1",
+	        "browsers": ["last 2 versions"]
+	      }
+	    }],
+		"stage-0",
+		"react"
 	]
 }

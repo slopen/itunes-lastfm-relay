@@ -10,9 +10,11 @@ import bodyParser from 'body-parser';
 import graphqlHTTP  from 'express-graphql';
 import {graphqlBatchHTTPWrapper}  from 'react-relay-network-modern';
 
+import cors from './cors';
 import connectDb from './db';
 import schema  from './schema';
 import html from './html';
+
 
 const {
     name,
@@ -31,19 +33,7 @@ env.set ('NODE_TLS_REJECT_UNAUTHORIZED', '0');
     const connection = await connectDb ();
 
     app
-        .all ('*', (req, res, next) => {
-            res.header ('Access-Control-Allow-Credentials', 'true');
-            res.header ('Access-Control-Allow-Origin', req.headers.origin || '*');
-            res.header ('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-            res.header ('Access-Control-Allow-Headers', 'X-Requested-With,X-HTTP-Method-Override,Content-Type,Accept');
-
-            if (req.method === 'OPTIONS') {
-                return res.send (200);
-            }
-
-            next ();
-        })
-
+        .use (cors)
         .use (compression ())
 
         .use (bodyParser.json ())

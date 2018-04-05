@@ -8,10 +8,11 @@ const {ssr} = config;
 
 export default express.Router ()
 
-	.use ('*', async (req, res) => {
-		if (ssr) {
-			return res.send (await preload (req));
-		}
-
-		res.send (render ());
-	});
+	.use ('*', async (req, res) =>
+		res
+			.status(200)
+			.send (ssr
+				? await preload (req)
+				: render ()
+			)
+	);

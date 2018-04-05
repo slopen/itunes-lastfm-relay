@@ -5,14 +5,14 @@
   "main": "server.js",
   "scripts": {
     "setup": "setup/import.sh",
-    "build": "npm run build:client && npm run build:server",
+    "build": "npm run build:relay && npm run build:client && npm run build:server",
     "build:production": "npm run lint && npm run build:client:production && npm run build:server:production",
-    "build:client": "NODE_ENV=development webpack --config scripts/webpack/config.js -d",
+    "build:client": "NODE_ENV=development webpack --config scripts/webpack/client.js -d",
     "build:server": "NODE_ENV=development ./node_modules/.bin/babel -d build/server src/server",
     "build:relay": "relay-compiler --src src --schema data/schema.graphql",
-    "build:client:production": "NODE_ENV=production webpack --config scripts/webpack/config.js -d",
-    "build:server:production": "NODE_ENV=production ./node_modules/.bin/babel -d build/server src/server",
-    "dev:client": "NODE_ENV=development webpack-dev-server --config scripts/webpack/config.js --hot --content-base build",
+    "build:client:production": "npm run build:relay && NODE_ENV=production webpack --config scripts/webpack/client.js -d",
+    "build:server:production": "NODE_ENV=production webpack --config scripts/webpack/server.js -d",
+    "dev:client": "NODE_ENV=development webpack-dev-server --config scripts/webpack/client.js --hot --content-base build",
     "dev:server": "NODE_ENV=development nodemon --watch src/server --watch config src/server/index.js --exec babel-node",
     "dev:relay": "relay-compiler --src src --schema data/schema.graphql --watch",
     "lint": "eslint src",
@@ -56,6 +56,7 @@
     "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-react": "^7.7.0",
     "file-loader": "^1.1.11",
+    "json-loader": "^0.5.7",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
     "nodemon": "^1.17.3",
@@ -64,7 +65,10 @@
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.4.1",
     "webpack-cli": "^2.0.13",
-    "webpack-dev-server": "^3.1.1"
+    "webpack-dev-server": "^3.1.1",
+    "webpack-node-externals": "^1.7.2",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "regenerator-runtime": "^0.11.1"
   },
   "dependencies": {
     "@risingstack/graffiti-mongoose": "^6.0.0",
@@ -75,7 +79,6 @@
     "config": "^1.30.0",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "graphql": "^0.13.2",
     "graphql-relay": "^0.5.5",
     "isomorphic-fetch": "^2.2.1",
@@ -92,11 +95,8 @@
     "react-relay-network-modern-ssr": "^0.0.1",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "regenerator-runtime": "^0.11.1",
-    "relay-context-provider": "^1.0.4",
     "relay-query-lookup-renderer": "^3.0.1",
     "relay-runtime": "^1.5.0",
-    "uuid": "^3.2.1",
-    "whatwg-fetch": "^2.0.4"
+    "uuid": "^3.2.1"
   }
 }

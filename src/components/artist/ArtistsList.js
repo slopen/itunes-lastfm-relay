@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import ArtistPreview from './ArtistPreview';
 import ReactList from 'react-list';
 
+const artistsLimit = 24;
 
 export default class ArtistsList extends Component {
 	constructor (props) {
@@ -18,7 +19,7 @@ export default class ArtistsList extends Component {
 	}
 
 	renderRow (key, index) {
-		const list = this.getList();
+		const list = this.getList ();
 
 		if (index === list.length - 1) {
 			// this.props.relay.setVariables ({
@@ -42,6 +43,7 @@ export default class ArtistsList extends Component {
 			<div className="media-list">
 				<ReactList
 					itemRenderer={this.renderRow}
+					minSize={artistsLimit}
 					length={list.length }/>
 			</div>
 		);

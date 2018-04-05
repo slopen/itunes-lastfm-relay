@@ -1,5 +1,10 @@
 import uuid from 'uuid';
-import {Environment, RecordSource, Store} from 'relay-runtime';
+
+import {
+	Environment,
+	RecordSource,
+	Store
+} from 'relay-runtime';
 
 import {
 	RelayNetworkLayer,
@@ -9,7 +14,12 @@ import {
 	cacheMiddleware
 } from 'react-relay-network-modern';
 
-import {getCacheKey} from 'react-relay-network-modern-ssr/lib/utils';
+import {
+	getCacheKey
+} from 'react-relay-network-modern-ssr/lib/utils';
+
+const url = 'https://itunes-lastfm-relay/graphql';
+const batchUrl = 'https://itunes-lastfm-relay/graphql/batch';
 
 const cache = new Map ();
 
@@ -34,16 +44,10 @@ const network = new RelayNetworkLayer ([
 		return await cache.get (cacheKey);
 	},
 
-	urlMiddleware ({
-		url: () => Promise.resolve (
-			'https://itunes-lastfm-relay/graphql'
-		)
-	}),
+	urlMiddleware ({url}),
 
 	batchMiddleware ({
-		batchUrl: () => Promise.resolve (
-			'https://itunes-lastfm-relay/graphql/batch'
-		),
+		batchUrl,
 		batchTimeout: 10
 	}),
 
@@ -60,6 +64,7 @@ export const cacheReady = async () => {
 
 	for (let i = 0; i < keys.length; i++) {
 		await cache.get (keys [i]);
+		cache.delete (keys [i]);
 	}
 };
 
