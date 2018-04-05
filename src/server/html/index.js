@@ -1,23 +1,17 @@
-const serialize = (data) =>
-	JSON.stringify (data).replace (/\//g, '\\/');
+import config from 'config';
+import express from 'express';
+import render from './render';
+import preload from './preload';
 
-export default (markup, data) =>
-`<!doctype html>
-<html>
-	<head>
-  		<title>itunes-lastfm-relay</title>
-  		<meta charset="utf-8">
-  		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-  		<meta name="HandheldFriendly" content="True"/>
-  		<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent"/>
-  		<meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=0,user-scalable=no"/>
 
-  		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	  	<link rel="stylesheet" href="/styles.css">
-	</head>
-	<body>
-	  	<div id="root">${markup}</div>
-	  	<script>window._preloaded = ${serialize (data)}</script>
-	  	<script src="/bundle.js"></script>
-	</body>
-<html>`;
+const {ssr} = config;
+
+export default express.Router ()
+
+	.use ('*', async (req, res) => {
+		if (ssr) {
+			return res.send (await preload (req));
+		}
+
+		res.send (render ());
+	});

@@ -1,12 +1,8 @@
-var getSchema = require ('@risingstack/graffiti-mongoose').getSchema;
+import {getSchema} from '@risingstack/graffiti-mongoose';
 
-const Tag = require ('../models/Tag');
-const Artist = require ('../models/Artist');
-
-const options = {
-	mutation: false,
-	allowMongoIDMutation: false
-};
+import config from 'config';
+import Tag from 'server/models/Tag';
+import Artist from 'server/models/Artist';
 
 
-module.exports = getSchema ([Artist, Tag], options);
+export default getSchema ([Artist, Tag], config.graffiti);

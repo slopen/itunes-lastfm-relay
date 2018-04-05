@@ -1,5 +1,6 @@
-var mongoose = require ('mongoose');
-var ObjectId = mongoose.Schema.Types.ObjectId;
+import mongoose from 'mongoose';
+
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const tagSchema = new mongoose.Schema ({
     name: {
@@ -20,4 +21,4 @@ const tagSchema = new mongoose.Schema ({
     versionKey: false
 });
 
-module.exports = mongoose.model ('Tag', tagSchema);
+export default mongoose.model ('Tag', tagSchema)

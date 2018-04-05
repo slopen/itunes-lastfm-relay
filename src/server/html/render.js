@@ -1,40 +1,24 @@
-import React from 'react';
-import {renderToString} from 'react-dom/server';
-import StaticRouter from 'react-router-dom/StaticRouter';
+const serialize = (data) =>
+	JSON.stringify (data).replace (/\//g, '\\/');
 
-import environment, {cacheReady} from '../../environment';
-import Routes from '../../components/routes/routes';
-import html from './';
+export default (markup = '', data) =>
+`<!doctype html>
+<html>
+	<head>
+  		<title>itunes-lastfm-relay</title>
+  		<meta charset="utf-8">
+  		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  		<meta name="HandheldFriendly" content="True"/>
+  		<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent"/>
+  		<meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=0,user-scalable=no"/>
 
-const Router = ({location, context}) =>
-    <StaticRouter
-        location={location}
-        context={context}>
-        <Routes environment={environment}/>
-    </StaticRouter>;
+  		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	  	<link rel="stylesheet" href="/styles.css">
 
-export default async (req) => {
-    let context = {};
-    const location = req.url;
-
-    renderToString (
-        <Router
-            location={location}
-            context={context}/>
-    );
-
-    await cacheReady ();
-    await new Promise ((resolve) => setTimeout (resolve, 1000));
-
-    const data = environment
-        .getStore ()
-        .getSource ();
-
-    const content = renderToString (
-        <Router
-            location={location}
-            context={context}/>
-    );
-
-    return html (content, data);
-}
+	  	${data ? '<script>window._preloaded = ' + serialize (data) + '</script>' : ''}
+	</head>
+	<body>
+	  	<div id="root">${markup}</div>
+	  	<script src="/bundle.js"></script>
+	</body>
+<html>`;

@@ -1,61 +1,63 @@
 import 'isomorphic-fetch';
 
-const config = require ('config');
-const path = require ('path');
-const bodyParser = require ('body-parser');
+import path from 'path';
+import env from 'process-env';
+import config from 'config';
 
-const app = require ('express');
-const graphqlHTTP = require ('express-graphql');
-const {graphqlBatchHTTPWrapper} = require ('react-relay-network-modern');
+import express from 'express';
+import compression from 'compression';
+import bodyParser from 'body-parser';
+import graphqlHTTP  from 'express-graphql';
+import {graphqlBatchHTTPWrapper}  from 'react-relay-network-modern';
 
-const schema = require ('./schema');
-const mongoose = require ('mongoose');
+import connectDb from './db';
+import schema  from './schema';
+import html from './html';
 
-const name = config.name;
-const port = config.port;
-const contentBase = config.contentBase;
+const {
+    name,
+    port,
+    contentBase
+} = config;
 
 const PUBLIC_PATH = path.resolve (__dirname, contentBase);
-const INDEX_PATH = path.resolve (PUBLIC_PATH, 'index.html');
-
-mongoose.Promise = global.Promise;
-mongoose.connect (config.mongodb.connstr, config.mongodb.options);
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 const graphqlServer = graphqlHTTP ({schema, pretty: true});
 
-import render from './html/render';
+env.set ('NODE_TLS_REJECT_UNAUTHORIZED', '0');
 
 
-app ()
-    .all ('*', (req, res, next) => {
-        res.header ('Access-Control-Allow-Credentials', 'true');
-        res.header ('Access-Control-Allow-Origin', req.headers.origin || '*');
-        res.header ('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-        res.header ('Access-Control-Allow-Headers', 'X-Requested-With,X-HTTP-Method-Override,Content-Type,Accept');
+(async (app) => {
 
-        if (req.method === 'OPTIONS') {
-            return res.send (200);
-        }
+    const connection = await connectDb ();
 
-        next ();
-    })
+    app
+        .all ('*', (req, res, next) => {
+            res.header ('Access-Control-Allow-Credentials', 'true');
+            res.header ('Access-Control-Allow-Origin', req.headers.origin || '*');
+            res.header ('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+            res.header ('Access-Control-Allow-Headers', 'X-Requested-With,X-HTTP-Method-Override,Content-Type,Accept');
 
-    .use (bodyParser.json ())
+            if (req.method === 'OPTIONS') {
+                return res.send (200);
+            }
 
-    .use ('/graphql/batch', graphqlBatchHTTPWrapper (graphqlServer))
-    .use ('/graphql', graphqlServer)
+            next ();
+        })
 
-    .use (
-        app.static (PUBLIC_PATH)
-    )
+        .use (compression ())
 
-    .get ('*', async (req, res) => {
-        res.send (await render (req));
-    })
+        .use (bodyParser.json ())
+        .use (express.static (PUBLIC_PATH))
 
-    .listen (port, () => {
-        console.log (`* ${name} graphql server running on ${port}/graphql`);
-        console.log (`* ${name} express server started on port ${port}`);
-    });
+        .use ('/graphql/batch', graphqlBatchHTTPWrapper (graphqlServer))
+        .use ('/graphql', graphqlServer)
+        .get ('*', html)
+
+        .listen (port, () => {
+            console.log (`* ${name} express server started on port ${port}`);
+            console.log (`* ${name} mongoose connected to ${connection.port}/${connection.name}`);
+            console.log (`* ${name} graphql server running on ${port}/graphql`);
+        });
+
+}) (express ());
+

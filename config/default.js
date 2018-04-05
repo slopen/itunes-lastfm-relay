@@ -1,6 +1,8 @@
+const name = 'itunes-lastfm-relay';
+
 module.exports = {
 
-	name: 'itunes-lastfm-relay',
+	name,
 	port: 8080,
 
 	devPort: 8090,
@@ -8,12 +10,20 @@ module.exports = {
 	contentBase: '../',
 
 	mongodb: {
-		connstr: 'mongodb://localhost:27017/lfm',
+		connstr: 'mongodb://localhost:27017/' + name,
 
 		options: {
 			useMongoClient: true,
 			autoReconnect: true,
 			reconnectInterval: 1000
 		}
-	}
+	},
+
+	graffiti: {
+		mutation: false,
+		allowMongoIDMutation: false
+	},
+
+	ssr: true
+
 };

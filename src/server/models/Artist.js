@@ -1,5 +1,6 @@
-var mongoose = require ('mongoose');
-var ObjectId = mongoose.Schema.Types.ObjectId;
+import mongoose from 'mongoose';
+
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const trackSchema = new mongoose.Schema ({
     _id: false,
@@ -64,4 +65,4 @@ const artistSchema = new mongoose.Schema ({
     versionKey: false
 });
 
-module.exports = mongoose.model ('Artist', artistSchema);
+export default mongoose.model ('Artist', artistSchema)
