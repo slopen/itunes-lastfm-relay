@@ -2,8 +2,9 @@
 
 Isomorphic Relay Modern app example
 
-<img src="/src/images/screenshot-01.png" align="left" height="370" width="330">
-<img src="/src/images/screenshot-02.png" align="right" height="370" width="330">
+<img src="/src/images/screenshot-01.png" align="left" height="370" width="340"> | <img src="/src/images/screenshot-02.png" align="right" height="370" width="340">
+--- | ---
+
 
 ### packages
 
