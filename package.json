@@ -1,8 +1,7 @@
 {
   "name": "itunes-lastfm-relay",
   "version": "0.0.1",
-  "description": "",
-  "main": "server.js",
+  "main": "build/server.js",
   "scripts": {
     "setup": "setup/import.sh",
     "build": "npm run build:relay && npm run build:client && npm run build:server",
@@ -25,7 +24,6 @@
     "test:flow": "flow check --show-all-errors src",
     "coverage:flow": "flow-coverage-report"
   },
-  "keywords": [],
   "author": "kostrov@gmail.com",
   "pre-commit": {
     "run": [
@@ -68,11 +66,11 @@
     "webpack-dev-server": "^3.1.1",
     "webpack-node-externals": "^1.7.2",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "babel-plugin-module-resolver": "^3.1.1",
     "regenerator-runtime": "^0.11.1"
   },
   "dependencies": {
     "@risingstack/graffiti-mongoose": "^6.0.0",
-    "babel-plugin-module-resolver": "^3.1.1",
     "body-parser": "^1.18.2",
     "classnames": "2.2.5",
     "compression": "^1.7.2",
