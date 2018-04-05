@@ -2,9 +2,10 @@
 
 Isomorphic Relay Modern app example
 
-<img src="/src/images/screenshot-01.png" align="left" height="400" width="330">
+<img src="/src/images/screenshot-01.png" align="left" height="370" width="330">
+<img src="/src/images/screenshot-02.png" align="right" height="370" width="330">
 
-<img src="/src/images/screenshot-02.png" align="right" height="400" width="330">
+### packages
 
 * babel-core: 6.26
 
