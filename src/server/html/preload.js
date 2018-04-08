@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import StaticRouter from 'react-router-dom/StaticRouter';
@@ -6,14 +8,24 @@ import environment, {cacheReady} from '../../environment';
 import Routes from '../../components/routes/routes';
 import render from './render';
 
-const Router = ({location, context}) =>
+
+import type {$Request} from 'express';
+import type {RecordSource} from 'react-relay';
+
+type RouterParams = {
+    location: string,
+    context: Object
+};
+
+
+const Router = ({location, context}: RouterParams) =>
     <StaticRouter
         location={location}
         context={context}>
         <Routes environment={environment}/>
     </StaticRouter>;
 
-export default async (req) => {
+export default async (req: $Request) => {
     let context = {};
     const location = req.originalUrl;
 
@@ -26,7 +38,7 @@ export default async (req) => {
     await cacheReady ();
     await new Promise ((resolve) => setTimeout (resolve, 1000));
 
-    const data = environment
+    const data: RecordSource = environment
         .getStore ()
         .getSource ();
 

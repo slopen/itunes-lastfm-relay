@@ -2,23 +2,25 @@
 
 Isomorphic Relay Modern app example
 
-<img src="/src/images/screenshot-01.png" align="left" height="380" width="390"> | <img src="/src/images/screenshot-02.png" align="right" height="380" width="390">
---- | ---
+<p align="center">
+	<img src="/src/images/screenshot-01.png" align="left" height="380" width="390"> | <img src="/src/images/screenshot-02.png" align="right" height="380" width="390">
+	--- | ---
+</p>
 
 
 ### packages
 
-* babel-core: 6.26
-
-* mongoose: 4.5
-
 * webpack: 4.4
+
+* flow: 0.69
 
 * react: 16.3
 
 * react-relay: 1.5
 
 * react-router: 4.2
+
+* mongoose: 4.5
 
 ### install
 
@@ -43,11 +45,13 @@ $ yarn run setup
 $ yarn run production
 ```
 
-open localhost:8080
+* open `http://localhost:8080`
+
+* [nginx setup](/nginx): `https://itunes-lastfm-relay`
 
 ### development
 
-[nginx setup](/nginx)
+* [nginx setup](/nginx): `https://itunes-lastfm-relay`
 
 ```
 $ yarn run dev

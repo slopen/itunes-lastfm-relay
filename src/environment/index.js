@@ -1,9 +1,10 @@
+// @flow
 import uuid from 'uuid';
 
 import {
-	Environment,
+	Store,
 	RecordSource,
-	Store
+	Environment
 } from 'relay-runtime';
 
 import {
@@ -11,17 +12,42 @@ import {
 	urlMiddleware,
 	batchMiddleware,
 	retryMiddleware,
-	cacheMiddleware
+	cacheMiddleware,
+	RelayNetworkLayerRequest
 } from 'react-relay-network-modern';
 
-import {
-	getCacheKey
-} from 'react-relay-network-modern-ssr/lib/utils';
+// TODO: remove after https://github.com/benmosher/eslint-plugin-import/pull/1057
+// eslint-disable-next-line import/named
+import type {RelayResponse} from 'react-relay-network-modern';
+import type {RecordSource as RecordSourceType} from 'relay-runtime';
+
+const stableCopy = (value: mixed): mixed => {
+	if (!value || typeof value !== 'object') {
+		return value;
+	}
+	if (Array.isArray (value)) {
+		return value.map (stableCopy);
+	}
+
+	const keys = Object.keys (value).sort ();
+	const stable = {};
+
+	for (let i = 0; i < keys.length; i++) {
+		stable [keys[i]] = stableCopy (value [keys[i]]);
+	}
+
+	return stable;
+}
+
+const getCacheKey = (queryID: string, variables: Object): string => {
+	return JSON.stringify (stableCopy ({queryID, variables}));
+}
+
 
 const url = 'https://itunes-lastfm-relay/graphql';
 const batchUrl = 'https://itunes-lastfm-relay/graphql/batch';
 
-const cache = new Map ();
+const cache: Map <string, Promise<RelayResponse>> = new Map ();
 
 const network = new RelayNetworkLayer ([
 
@@ -34,14 +60,16 @@ const network = new RelayNetworkLayer ([
 		req.fetchOpts.headers ['X-Request-ID'] = uuid.v4 ();
 		req.fetchOpts.credentials = 'include';
 
-		const cacheKey = getCacheKey (
-			req.operation.name,
-			req.variables
-		);
+		const res = next (req);
 
-		cache.set (cacheKey, next (req));
+		if (req instanceof RelayNetworkLayerRequest) {
+			const {operation, variables} = req;
+			const cacheKey = getCacheKey (operation.name, variables);
 
-		return await cache.get (cacheKey);
+			cache.set (cacheKey, res);
+		}
+
+		return await res;
 	},
 
 	urlMiddleware ({url}),
@@ -53,7 +81,7 @@ const network = new RelayNetworkLayer ([
 
 	retryMiddleware ({
 		fetchTimeout: 15000,
-		retryDelays: (attempt) => Math.pow (2, attempt + 4) * 100,
+		retryDelays: (attempt: number) => Math.pow (2, attempt + 4) * 100,
 		statusCodes: [500, 503, 504]
 	})
 
@@ -69,8 +97,13 @@ export const cacheReady = async () => {
 };
 
 
-const records = typeof window !== 'undefined'
+const preloaded: ?RecordSourceType = typeof window !== 'undefined'
 	? window._preloaded : null;
+const recordSource = preloaded
+	? new RecordSource (preloaded)
+	: new RecordSource ();
 
-export const store = new Store (new RecordSource (records));
-export default new Environment ({network, store});
+const store = new Store (recordSource);
+const environment = new Environment ({network, store});
+
+export default environment;

@@ -25,6 +25,11 @@
     "coverage:flow": "flow-coverage-report"
   },
   "author": "kostrov@gmail.com",
+  "flow-coverage-report": {
+    "includeGlob": [
+      "src/**/*.js"
+    ]
+  },
   "pre-commit": {
     "run": [
       "lint",
@@ -38,12 +43,13 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
     "babel-loader": "^7.1.4",
+    "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-react-transform": "^3.0.0",
     "babel-plugin-relay": "^1.5.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
     "babel-runtime": "^6.26.0",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
@@ -53,21 +59,24 @@
     "eslint-plugin-flowtype": "^2.46.1",
     "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-react": "^7.7.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
+    "flow-bin": "^0.69.0",
+    "flow-coverage-report": "^0.5.0",
+    "flow-runtime": "^0.17.0",
+    "flow-runtime-validators": "^0.17.0",
     "json-loader": "^0.5.7",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
     "nodemon": "^1.17.3",
+    "regenerator-runtime": "^0.11.1",
     "relay-compiler": "^1.5.0",
     "style-loader": "^0.20.3",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.4.1",
     "webpack-cli": "^2.0.13",
     "webpack-dev-server": "^3.1.1",
-    "webpack-node-externals": "^1.7.2",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "babel-plugin-module-resolver": "^3.1.1",
-    "regenerator-runtime": "^0.11.1"
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "@risingstack/graffiti-mongoose": "^6.0.0",

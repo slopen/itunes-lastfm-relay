@@ -3,6 +3,8 @@ import QueryRenderer from 'relay-query-lookup-renderer';
 
 import LoaderComponent from './Loader';
 import ErrorComponent from './Error';
+import Boundary from './Boundary';
+
 
 const unescapeParams = (params) =>
 	Object
@@ -13,26 +15,25 @@ const unescapeParams = (params) =>
 			return res;
 		}, {});
 
-export default (environment, Component, Query) => ({match}) =>
-	<QueryRenderer
-		lookup
-		query={Query}
-		variables={unescapeParams (match.params)}
-		environment={environment}
-		render={(data) => {
-			const {error, props} = data;
+const renderer = (Component, params) => ({error, props}) => {
+	if (error) {
+		return <ErrorComponent error={error}/>;
 
-			try {
-				if (error) {
-					return <ErrorComponent error={error}/>
-				} else if (props) {
-					return <Component
-						viewer={props.viewer}
-						params={unescapeParams (match.params)}/>;
-				} else {
-					return <LoaderComponent/>;
-				}
-			} catch (e) {
-				console.log ('* render error', e);
-			}
-		}}/>
+	} else if (props) {
+		return <Component
+			params={params}
+			viewer={props.viewer}/>;
+	}
+
+	return <LoaderComponent/>;
+};
+
+export default (environment, Component, Query) => ({match: {params}}) =>
+	<Boundary>
+		<QueryRenderer
+			lookup
+			query={Query}
+			environment={environment}
+			variables={unescapeParams (params)}
+			render={renderer (Component, unescapeParams (params))}/>
+	</Boundary>

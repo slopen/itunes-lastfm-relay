@@ -1,7 +1,5 @@
 import React from 'react';
 
 
-export default ({error = ''}) =>
-	<div className="Error">
-		{error.toString ()}
-	</div>
+export default ({error}) =>
+	<div className="error">{error}</div>

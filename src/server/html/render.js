@@ -1,7 +1,11 @@
-const serialize = (data) =>
+// @flow
+
+import type {RecordSource} from 'react-relay';
+
+const serialize = (data: RecordSource) =>
 	JSON.stringify (data).replace (/\//g, '\\/');
 
-export default (markup = '', data) =>
+export default (markup: ?string, data: ?RecordSource) =>
 `<!doctype html>
 <html>
 	<head>
@@ -18,7 +22,7 @@ export default (markup = '', data) =>
 	  	${data ? '<script>window._preloaded = ' + serialize (data) + '</script>' : ''}
 	</head>
 	<body>
-	  	<div id="root">${markup}</div>
+	  	<div id="root">${markup || ''}</div>
 	  	<script src="/bundle.js"></script>
 	</body>
 <html>`;
