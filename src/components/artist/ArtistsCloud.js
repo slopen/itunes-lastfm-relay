@@ -1,9 +1,20 @@
-import React, {Component} from 'react';
+// @flow
+
+import React from 'react';
 import {createFragmentContainer, graphql} from 'react-relay';
 import {Link} from 'react-router-dom';
 
-const style = (counts) => {
-	const fx = 10000;
+import type {
+	ArtistsCloud_viewer as Fragment
+} from './__generated__/ArtistsCloud_viewer.graphql';
+
+type Props = {
+	viewer: Fragment
+};
+
+const fx = 10000;
+
+const style = (counts): {fontSize: string} => {
 	const value = ((counts || 0) < fx ? fx : counts) / fx;
 	const result = (20 + (18 * Math.log (value))).toFixed (2);
 
@@ -12,22 +23,24 @@ const style = (counts) => {
 	};
 };
 
-class ArtistsCloud extends Component {
-	render () {
-		var artists = this.props.viewer.artists.edges || [];
+const ArtistsCloud = ({viewer}: Props) => {
+	const {artists} = viewer || {};
+	const {edges} = artists || {};
 
-		return (
-			<ul className="list-inline cloud">
-				{artists.map (({node}) =>
-					<li key={node.id}
-						style={style (node.stats && node.stats.playcount)}>
-						<Link to={'/artists/' + node.name}>{node.name}</Link>
-					</li>
-				)}
-			</ul>
-		);
+	if (!edges || !edges.length) {
+		return null;
 	}
 
+	return (
+		<ul className="list-inline cloud">
+			{edges.map (({node}) =>
+				<li key={node.id}
+					style={style (node.stats && node.stats.playcount)}>
+					<Link to={'/artists/' + node.name}>{node.name}</Link>
+				</li>
+			)}
+		</ul>
+	);
 }
 
 export default createFragmentContainer (ArtistsCloud, graphql`

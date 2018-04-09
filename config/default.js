@@ -1,4 +1,7 @@
+const env = require ('process-env');
 const name = 'itunes-lastfm-relay';
+
+env.set ('NODE_TLS_REJECT_UNAUTHORIZED', '0');
 
 module.exports = {
 

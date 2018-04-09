@@ -1,22 +1,42 @@
-import React, {Component} from 'react';
+// @flow
+
+import React from 'react';
 import {createFragmentContainer, graphql} from 'react-relay';
 
 import TagArtists from './TagArtists';
 import TagPreview from './TagPreview';
 
+import type {
+    TagPage_viewer as Fragment
+} from './__generated__/TagPage_viewer.graphql';
 
-class TagPage extends Component {
-	render () {
-		var data = this.props.viewer.tags.edges [0].node || {};
 
-		return (
-			<div className="tag">
-				<TagPreview data={data} fullMode={true}/>
-				<hr/>
-				<TagArtists data={data}/>
-			</div>
-		);
+type Props = {
+	viewer: Fragment
+};
+
+const TagPage = ({viewer}: Props) => {
+	const {tags} = viewer || {};
+	const {edges} = tags || {};
+
+	if (!edges || !edges [0]) {
+		return <div>NOT FOUND</div>
+
 	}
+
+	const {node} = edges [0];
+
+	return (
+		<div className="tag">
+			{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
+			<TagPreview data={node} fullMode={true}/>
+
+			<hr/>
+
+			{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
+			<TagArtists data={node}/>
+		</div>
+	);
 }
 
 export default createFragmentContainer (TagPage, graphql`

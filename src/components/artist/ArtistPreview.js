@@ -1,56 +1,65 @@
-import React, {Component} from 'react';
+// @flow
+import React from 'react';
 import {createFragmentContainer, graphql} from 'react-relay';
 import {Link} from 'react-router-dom';
 
 import ArtistImage from './ArtistImage';
 import ArtistTags from './ArtistTags';
 
+import type {
+	ArtistPreview as Fragment
+} from './__generated__/ArtistPreview.graphql';
 
-class ArtistPreview extends Component {
+type Props = {
+	data: Fragment,
+	fullMode: boolean
+};
 
-	rawBio () {
-		var bio = this.props.data.bio &&
-			this.props.data.bio.summary;
+const RawBio = ({bio}) => {
+	const html = bio && bio.summary;
 
-		return {__html: bio};
-	}
+	return html
+		? <div className="description"
+			dangerouslySetInnerHTML={{__html: html}}/>
+		: null;
+}
 
-	render () {
-		var data = this.props.data || {},
-			fullMode = this.props.fullMode;
+const ArtistPreview = ({data, fullMode}: Props) => {
+	const link = (
+		<Link to={'/artists/' + data.name}>{data.name}</Link>
+	);
 
-		var link = (
-			<Link to={'/artists/' + data.name}>{data.name}</Link>
-		);
+	return (
+		<div className={['media-item', fullMode ? 'full' : 'small'].join(' ')}>
+			{fullMode ? (<h1>{link}</h1>) : (<h5>{link}</h5>)}
 
-		return (
-			<div className={['media-item', fullMode ? 'full' : 'small'].join(' ')}>
-				{fullMode ? (<h1>{link}</h1>) : (<h5>{link}</h5>)}
+			<Link to={'/artists/' + data.name}>
+				{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
+				<ArtistImage
+					data={data}
+					size={fullMode ? 'extralarge' : 'medium'}/>
+			</Link>
 
-				<Link to={'/artists/' + data.name}>
-					<ArtistImage image={data.image}
-						size={fullMode ? 'extralarge' : 'medium'}/>
-				</Link>
+			<div className="artist-info">
 
-				<div className="artist-info">
+				{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
+				<ArtistTags data={data}/>
 
-					<ArtistTags data={data}/>
-
-					<div className="stats">
-						<span>{data.stats.listeners}</span> / <span>{data.stats.playcount}</span>
-					</div>
-
-					{fullMode ? (
-						<div className="description"
-							dangerouslySetInnerHTML={this.rawBio ()} />
-					) : null}
-
+				<div className="stats">
+					<span>{data.stats.listeners}</span>
+					{' / '}
+					<span>{data.stats.playcount}</span>
 				</div>
 
-				<div className="clearfix"/>
+				{fullMode ? (
+					<RawBio bio={data.bio}/>
+				) : null}
+
 			</div>
-		);
-	}
+
+			<div className="clearfix"/>
+		</div>
+	);
 }
 
 export default createFragmentContainer (ArtistPreview, graphql`
@@ -58,10 +67,8 @@ export default createFragmentContainer (ArtistPreview, graphql`
 
 		id
 		name
-		image {
-			url
-			size
-		}
+		...ArtistImage
+
 		stats {
 			playcount
 			listeners

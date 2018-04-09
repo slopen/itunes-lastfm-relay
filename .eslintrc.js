@@ -165,7 +165,7 @@ module.exports = {
         'no-implicit-coercion': 'off',
         'no-implicit-globals': 'error',
         'no-implied-eval': 'error',
-        'no-inline-comments': 'error',
+        'no-inline-comments': 'off',
         'no-inner-declarations': [
             'error',
             'functions'

@@ -1,26 +1,37 @@
-import React, {Component} from 'react';
+// @flow
+
+import React from 'react';
 import {createFragmentContainer, graphql} from 'react-relay';
 
 import TagPreview from '../tag/TagPreview';
 
-class TagsList extends Component {
-	render () {
-		var tags = this.props.data.tags.edges || [];
+import type {
+    ArtistTags as Fragment
+} from './__generated__/ArtistTags.graphql';
 
-		return (
-			<ul className="list-inline tags">
-				{tags.map ((edge) => {
-					var item = edge.node;
 
-					return (
-						<li key={item.id}>
-							<TagPreview data={item}/>
-						</li>
-					);
-				})}
-			</ul>
-		);
+type Props = {
+	data: Fragment
+};
+
+const TagsList = ({data}: Props) => {
+	const {tags} = data || {};
+	const {edges} = tags || {};
+
+	if (!edges || !edges.length) {
+		return null;
 	}
+
+	return (
+		<ul className="list-inline tags">
+			{edges.map (({node}) =>
+				<li key={node.id}>
+					{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
+					<TagPreview data={node}/>
+				</li>
+			)}
+		</ul>
+	);
 }
 
 export default createFragmentContainer (TagsList, graphql`

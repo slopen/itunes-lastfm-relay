@@ -1,8 +1,20 @@
+// @flow
+
 import React, {Component} from 'react';
+import ErrorComponent from './Error';
 
-export default class Boundary extends Component {
+type Props = {
+	children: React$Node
+};
 
-	constructor (props) {
+type State = {
+	error?: Error,
+	hasError: boolean
+};
+
+export default class Boundary extends Component<Props, State> {
+
+	constructor (props: Props) {
 		super (props);
 
 		this.state = {
@@ -10,15 +22,17 @@ export default class Boundary extends Component {
 		};
 	}
 
-	componentDidCatch (error, info) {
+	componentDidCatch (error: Error, info: mixed) {
 		this.setState ({error});
 
 		console.error ('* boundary error:', error, info);
 	}
 
 	render () {
-		if (this.state.error) {
-			return <div className="error">{this.state.error}</div>;
+		const {error} = this.state;
+
+		if (error) {
+			return <ErrorComponent error={error}/>;
 		}
 
 		return this.props.children;

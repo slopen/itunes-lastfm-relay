@@ -1,25 +1,46 @@
-import React, {Component} from 'react'
+// @flow
+
+import React from 'react'
 import {createFragmentContainer, graphql} from 'react-relay';
 
 import ArtistSimilar from './ArtistSimilar';
 import ArtistPreview from './ArtistPreview';
 
+import type {
+	ArtistPage_viewer as Fragment
+} from './__generated__/ArtistPage_viewer.graphql';
 
-class ArtistPage extends Component {
-	render () {
-		var data = this.props.viewer.artists.edges [0].node || {};
+type Props = {
+	viewer: Fragment
+};
 
-		return (
-			<div className="artist">
-				<ArtistPreview data={data} fullMode={true}/>
+const ArtistPage = ({viewer}: Props) => {
+	const {artists} = viewer || {};
+	const {edges} = artists || {};
 
-				<div className="clearfix"/>
-				<hr/>
+	if (!edges || !edges [0]) {
+		return <div>NOT FOUND</div>
 
-				<ArtistSimilar data={data}/>
-			</div>
-		);
 	}
+
+	const {node} = edges [0];
+
+	return (
+		<div className="artist">
+			{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
+			<ArtistPreview
+				data={node}
+				fullMode={true}/>
+
+			<div className="clearfix"/>
+			<hr/>
+
+			{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
+			<ArtistSimilar
+				data={node}/>
+		</div>
+	);
+
 }
 
 export default createFragmentContainer (ArtistPage, graphql`

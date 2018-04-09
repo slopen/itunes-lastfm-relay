@@ -464,11 +464,20 @@ declare class Mongoose$Connection {
   close(): Promise<any>;
   connect(uri: string, opts?: ConnectionConnectOpts): void;
   openUri(uri: string, opts?: ConnectionConnectOpts): void;
-  model<Doc>(
-    name: string | Doc,
-    schema?: Mongoose$Schema<Doc>,
+
+  // TODO: breaks flow 0.69 (generic class method)
+  // model<Doc> (
+  //   name: string | Doc,
+  //   schema?: Mongoose$Schema<Doc>,
+  //   collection?: Mongoose$Collection
+  // ): Class<Doc>;
+
+  model(
+    name: string,
+    schema?: Mongoose$Schema<Mongoose$Document>,
     collection?: Mongoose$Collection
-  ): Class<Doc>;
+  ): Class<Mongoose$Document>;
+
   collection(name: string): Mongoose$Collection;
   modelNames(): string[];
   config: Object;
@@ -497,8 +506,8 @@ declare class Mongoose$Connection {
 }
 
 declare module 'mongoose' {
+
   declare export type MongooseConnection = Mongoose$Connection;
-  declare export type MongoId = MongoId;
   declare export type BSONObjectId = bson$ObjectId;
   declare export type ObjectId = bson$ObjectId;
   declare export type MongooseQuery<Result, Doc> = Mongoose$Query<Result, Doc>;

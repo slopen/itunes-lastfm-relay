@@ -11,6 +11,8 @@ import type {PerfMiddlewareOpts} from 'react-relay-network-modern/lib/middleware
 import type {RetryMiddlewareOpts} from 'react-relay-network-modern/lib/middlewares/retry';
 
 declare module 'react-relay-network-modern' {
+  	import type {$Request, $Response} from 'express';
+
 
 	declare export class RelayRequest {
 		static lastGenId: number;
@@ -186,7 +188,7 @@ declare module 'react-relay-network-modern' {
 	) => RelayObservable<QueryPayload> | Disposable;
 
 
-	declare type ExpressMiddleware = (req: any, res: any) => any;
+	declare type ExpressMiddleware = (request: $Request, response: $Response) => Promise<void>;
 
 
 	declare type RelayNetworkLayerOpts = {|
@@ -229,7 +231,7 @@ declare module 'react-relay-network-modern' {
 	declare export function errorMiddleware (opts?: GqlErrorMiddlewareOpts): Middleware;
 	declare export function retryMiddleware (opts?: RetryMiddlewareOpts): Middleware;
 
-	declare export function graphqlBatchHTTPWrapper (req: any, res: any): any;
+	declare export function graphqlBatchHTTPWrapper (ExpressMiddleware): ExpressMiddleware;
 
 
 }

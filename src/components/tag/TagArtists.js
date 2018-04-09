@@ -1,3 +1,5 @@
+// @flow
+
 import {createFragmentContainer, graphql} from 'react-relay';
 
 import ArtistsList from '../artist/ArtistsList';

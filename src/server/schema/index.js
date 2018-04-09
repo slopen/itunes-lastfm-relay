@@ -1,3 +1,5 @@
+// @flow
+
 import {getSchema} from '@risingstack/graffiti-mongoose';
 
 import config from 'config';

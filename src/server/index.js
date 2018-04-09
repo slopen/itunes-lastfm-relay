@@ -1,7 +1,8 @@
+// @flow
+
 import 'isomorphic-fetch';
 
 import path from 'path';
-import env from 'process-env';
 import config from 'config';
 
 import express from 'express';
@@ -20,12 +21,14 @@ const {
     name,
     port,
     contentBase
+}: {
+    name: string,
+    port: string,
+    contentBase: string
 } = config;
 
 const PUBLIC_PATH = path.resolve (__dirname, contentBase);
 const graphqlServer = graphqlHTTP ({schema, pretty: true});
-
-env.set ('NODE_TLS_REJECT_UNAUTHORIZED', '0');
 
 
 (async (app) => {

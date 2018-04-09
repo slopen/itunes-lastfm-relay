@@ -3,7 +3,7 @@ schema {
 }
 
 type Artist implements Node {
-  name: String
+  name: String!
   tracks: [ArtistTracks]
   tags (
     after: String,
@@ -22,7 +22,7 @@ type Artist implements Node {
   image: [ArtistImage]
   url: String
   bio: ArtistBio
-  stats: ArtistStats
+  stats: ArtistStats!
   _id: ID
   id: ID!
 }
@@ -34,12 +34,12 @@ type ArtistBio {
 
 type ArtistConnection {
   pageInfo: PageInfo!
-  edges: [ArtistEdge]
+  edges: [ArtistEdge!]!
   count: Float
 }
 
 type ArtistEdge {
-  node: Artist
+  node: Artist!
   cursor: String!
 }
 
@@ -51,28 +51,28 @@ type ArtistImage {
 
 type ArtistSimilarConnection {
   pageInfo: PageInfo!
-  edges: [ArtistSimilarEdge]
+  edges: [ArtistSimilarEdge!]!
   count: Float
 }
 
 type ArtistSimilarEdge {
-  node: Artist
+  node: Artist!
   cursor: String!
 }
 
 type ArtistStats {
-  listeners: Float
-  playcount: Float
+  listeners: Float!
+  playcount: Float!
 }
 
 type ArtistTagsConnection {
   pageInfo: PageInfo!
-  edges: [ArtistTagsEdge]
+  edges: [ArtistTagsEdge!]!
   count: Float
 }
 
 type ArtistTagsEdge {
-  node: Tag
+  node: Tag!
   cursor: String!
 }
 
@@ -123,50 +123,76 @@ type RootQuery {
 }
 
 type Tag implements Node {
-  name: String
-  artists(after: String, first: Int, before: String, last: Int): TagArtistsConnection
-  similar(after: String, first: Int, before: String, last: Int): TagSimilarConnection
-  _id: ID
   id: ID!
+  _id: ID
+  name: String!
+  artists(
+    after: String,
+    first: Int,
+    before: String,
+    last: Int
+  ): TagArtistsConnection!
+  similar(
+    after: String,
+    first: Int,
+    before: String,
+    last: Int
+  ): TagSimilarConnection
 }
 
 type TagArtistsConnection {
   pageInfo: PageInfo!
-  edges: [TagArtistsEdge]
+  edges: [TagArtistsEdge!]!
   count: Float
 }
 
 type TagArtistsEdge {
-  node: Artist
+  node: Artist!
   cursor: String!
 }
 
 type TagConnection {
   pageInfo: PageInfo!
-  edges: [TagEdge]
+  edges: [TagEdge!]!
   count: Float
 }
 
 type TagEdge {
-  node: Tag
+  node: Tag!
   cursor: String!
 }
 
 type TagSimilarConnection {
   pageInfo: PageInfo!
-  edges: [TagSimilarEdge]
+  edges: [TagSimilarEdge!]!
   count: Float
 }
 
 type TagSimilarEdge {
-  node: Tag
+  node: Tag!
   cursor: String!
 }
 
 type Viewer implements Node {
   id: ID!
-  artists(after: String, first: Int, before: String, last: Int, orderBy: orderByArtist, name: String, url: String, _id: ID): ArtistConnection
+  artists(
+    after: String,
+    first: Int, before:
+    String, last: Int,
+    orderBy: orderByArtist,
+    name: String,
+    url: String,
+    _id: ID
+  ): ArtistConnection
   artist(id: ID!): Artist
-  tags(after: String, first: Int, before: String, last: Int, orderBy: orderByTag, name: String, _id: ID): TagConnection
+  tags(
+    after: String,
+    first: Int,
+    before: String,
+    last: Int,
+    orderBy: orderByTag,
+    name: String,
+    _id: ID
+  ): TagConnection
   tag(id: ID!): Tag
 }

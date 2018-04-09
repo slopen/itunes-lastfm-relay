@@ -1,8 +1,11 @@
+// @flow
+
 import mongoose from 'mongoose';
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
+const {Schema} = mongoose;
+const {ObjectId} = Schema.Types;
 
-const trackSchema = new mongoose.Schema ({
+const trackSchema = new Schema ({
     _id: false,
     name: {
         type: String,
@@ -26,7 +29,7 @@ const trackSchema = new mongoose.Schema ({
     }
 });
 
-const artistSchema = new mongoose.Schema ({
+const artistSchema = new Schema ({
     name: {
         type: String,
         required: true,

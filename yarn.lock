@@ -6021,7 +6021,7 @@ react-dom@^16.3.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-list@^0.8.0:
+react-list@^0.8.8:
   version "0.8.8"
   resolved "https://registry.npmjs.org/react-list/-/react-list-0.8.8.tgz#de2cb768dd210fb3e4835b9277f158e9cd403078"
   dependencies:

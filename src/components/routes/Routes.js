@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 
@@ -15,8 +17,14 @@ import ArtistPage from '../artist/ArtistPage';
 
 import render from './render';
 
+import type {Environment} from 'relay-runtime';
 
-export default ({environment}) =>
+type Props = {
+	environment: Environment
+};
+
+
+export default ({environment}: Props) =>
 	<div className="app container">
 
 		<Route
