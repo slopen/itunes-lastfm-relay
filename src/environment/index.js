@@ -94,6 +94,10 @@ export const cacheReady = async () => {
 		await cache.get (keys [i]);
 		cache.delete (keys [i]);
 	}
+
+	await new Promise ((resolve) =>
+		setTimeout (resolve, 500)
+	);
 };
 
 

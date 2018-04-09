@@ -36,7 +36,6 @@ export default async (req: $Request) => {
     );
 
     await cacheReady ();
-    await new Promise ((resolve) => setTimeout (resolve, 1000));
 
     const data: RecordSource = environment
         .getStore ()
