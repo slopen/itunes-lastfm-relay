@@ -59,7 +59,7 @@ export default createFragmentContainer (TagPreview, graphql`
 	fragment TagPreview on Tag {
 		name
 
-		artists (first: 24) {
+		artists (first: 5) {
 			edges {
 				node {
 					stats {

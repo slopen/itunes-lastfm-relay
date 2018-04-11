@@ -79,7 +79,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "@risingstack/graffiti-mongoose": "^6.0.0",
+    "@risingstack/graffiti-mongoose": "git+https://github.com/slopen/graffiti-mongoose.git#dab554d4ab1a2ff0e352974c61297527f689799b",
     "body-parser": "^1.18.2",
     "classnames": "2.2.5",
     "compression": "^1.7.2",

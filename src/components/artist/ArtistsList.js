@@ -5,15 +5,17 @@ import React, {Component} from 'react';
 import ArtistPreview from './ArtistPreview';
 import ReactList from 'react-list';
 
-const artistsLimit = 24;
+import type {RelayPaginationProp} from 'react-relay';
+
 
 type Artist = {
 	id: string
 };
 
 type Props = {
+	relay: RelayPaginationProp,
 	data: {
-		[key: 'similar' | 'artists']: {
+		[key: 'artistSimilar' | 'tagArtists']: {
 			edges: $ReadOnlyArray<{
 				node: Artist
 			}>
@@ -21,26 +23,27 @@ type Props = {
 	}
 };
 
+const artistsLimit = 12;
+
 export default class ArtistsList extends Component<Props> {
 	constructor (props: Props) {
 		super (props);
 
 		(this: any).renderRow = this.renderRow.bind (this);
+		(this: any).loadMore = this.loadMore.bind (this);
 	}
 
 	getList () {
-		const {data: {similar, artists}} = this.props;
+		const {data: {artistSimilar, tagArtists}} = this.props;
 
-		return (similar || artists).edges || [];
+		return (artistSimilar || tagArtists).edges || [];
 	}
 
 	renderRow (key: string, index: number) {
 		const list = this.getList ();
 
 		if (index === list.length - 1) {
-			// this.props.relay.setVariables ({
-			// 	artistsLimit: list.length + artistsLimit
-			// });
+			this.loadMore ();
 		}
 
 		const {node} = list [index];
@@ -51,6 +54,20 @@ export default class ArtistsList extends Component<Props> {
 				<ArtistPreview data={node}/>
 			</div>
 		);
+	}
+
+	loadMore () {
+		const {relay} = this.props;
+
+		if (!relay.hasMore () || relay.isLoading ()) {
+			return;
+		}
+
+		relay.loadMore (12, (error) => {
+			if (error) {
+				console.error ('pagination fetch error:', error);
+			}
+		});
 	}
 
 	render () {

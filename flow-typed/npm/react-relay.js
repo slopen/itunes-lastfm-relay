@@ -327,8 +327,8 @@ declare module 'react-relay' {
 	};
 
 	declare export type ConnectionData = {
-		edges?: ?Array<any>,
-		pageInfo?: ?PageInfo
+		+edges?: ?$ReadOnlyArray<any>,
+		+pageInfo?: ?PageInfo
 	};
 
 	declare export type ConnectionConfig = {
