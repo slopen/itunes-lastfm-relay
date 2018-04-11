@@ -1,51 +1,82 @@
 // @flow
 
-import React from 'react';
-import {createFragmentContainer, graphql} from 'react-relay';
+import React, {Component} from 'react';
+import {createPaginationContainer, graphql} from 'react-relay';
 import {Link} from 'react-router-dom';
+
+import ScrollHander from 'components/lib/scroll-handler';
+import cloudStyle from 'components/lib/cloud-style';
 
 import type {
 	ArtistsCloud_viewer as Fragment
 } from './__generated__/ArtistsCloud_viewer.graphql';
 
+import type {RelayPaginationProp} from 'react-relay';
+
 type Props = {
+	relay: RelayPaginationProp,
 	viewer: Fragment
 };
 
-const fx = 10000;
 
-const style = (counts): {fontSize: string} => {
-	const value = ((counts || 0) < fx ? fx : counts) / fx;
-	const result = (20 + (18 * Math.log (value))).toFixed (2);
+class ArtistsCloud extends Component<Props> {
 
-	return {
-		fontSize: `${result}%`
-	};
-};
+	constructor (props: Props) {
+		super (props);
 
-const ArtistsCloud = ({viewer}: Props) => {
-	const {artists} = viewer || {};
-	const {edges} = artists || {};
-
-	if (!edges || !edges.length) {
-		return null;
+		(this: any).loadMore = this.loadMore.bind (this);
 	}
 
-	return (
-		<ul className="list-inline cloud">
-			{edges.map (({node}) =>
-				<li key={node.id}
-					style={style (node.stats && node.stats.playcount)}>
-					<Link to={'/artists/' + node.name}>{node.name}</Link>
-				</li>
-			)}
-		</ul>
-	);
+	loadMore () {
+		const {relay} = this.props;
+
+		if (!relay.hasMore () || relay.isLoading ()) {
+			return;
+		}
+
+		relay.loadMore (25, (error) => {
+			if (error) {
+				console.error ('pagination fetch error:', error);
+			}
+		});
+	}
+
+	render () {
+		const {viewer} = this.props;
+		const {artists} = viewer || {};
+		const {edges} = artists || {};
+
+		if (!edges || !edges.length) {
+			return null;
+		}
+
+		return (
+			<div className="text-center">
+				<ul className="list-inline cloud">
+					{edges.map (({node}, index) =>
+						<li key={node.id}
+							style={cloudStyle (node.stats && node.stats.playcount, index)}>
+							<Link to={'/artists/' + node.name}>{node.name}</Link>
+						</li>
+					)}
+				</ul>
+				<ScrollHander onScrollEnd={this.loadMore}/>
+			</div>
+		);
+	}
 }
 
-export default createFragmentContainer (ArtistsCloud, graphql`
-	fragment ArtistsCloud_viewer on Viewer {
-		artists (first: 250){
+export default createPaginationContainer (ArtistsCloud, graphql`
+	fragment ArtistsCloud_viewer on Viewer
+		@argumentDefinitions (
+			count: {type: "Int", defaultValue: 100}
+			cursor: {type: "String"}
+		) {
+
+		artists (
+			first: $count
+			after: $cursor
+		) @connection (key: "ArtistsCloud_artists") {
 			edges {
 				node {
 					id
@@ -56,5 +87,28 @@ export default createFragmentContainer (ArtistsCloud, graphql`
 				}
 			}
 		}
-	}`
+	}`,
+	{
+		direction: 'forward',
+		getConnectionFromProps ({viewer}) {
+			return viewer && viewer.artists;
+		},
+		getVariables (props, {count, cursor}) {
+
+			return {
+				count,
+				cursor
+			};
+		},
+		query: graphql`
+			query ArtistsCloudRefetchQuery (
+				$count: Int!
+				$cursor: String
+			) {
+				viewer {
+					...ArtistsCloud_viewer @arguments (count: $count, cursor: $cursor)
+				}
+			}
+		`
+	}
 )

@@ -177,8 +177,9 @@ type Viewer implements Node {
   id: ID!
   artists(
     after: String,
-    first: Int, before:
-    String, last: Int,
+    first: Int,
+    before: String,
+    last: Int,
     orderBy: orderByArtist,
     name: String,
     url: String,

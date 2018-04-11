@@ -53,7 +53,7 @@ export default createPaginationContainer (ArtistsList, graphql`
 				$cursor: String
 			) {
 				tag (id: $id) {
-					...TagArtists @arguments(first: $count, cursor: $cursor)
+					...TagArtists @arguments (count: $count, cursor: $cursor)
 				}
 			}
 		`

@@ -1,59 +1,97 @@
 // @flow
 
-import React from 'react';
-import {createFragmentContainer, graphql} from 'react-relay';
+import React, {Component} from 'react';
+import {createPaginationContainer, graphql} from 'react-relay';
 
 import {Link} from 'react-router-dom';
+
+import ScrollHander from 'components/lib/scroll-handler';
+import cloudStyle from 'components/lib/cloud-style';
 
 import type {
 	TagsCloud_viewer as Fragment
 } from './__generated__/TagsCloud_viewer.graphql';
 
+import type {RelayPaginationProp} from 'react-relay';
+
 type Props = {
+	relay: RelayPaginationProp,
 	viewer: Fragment
 };
 
 
-const fx = 10000;
+const style = (node, index) => cloudStyle (
+	node
+		.artists
+		.edges
+		.reduce ((prev, {node: {stats}}) =>
+			prev + (stats
+				? Number (stats.playcount)
+				: 0
+			),
+		0),
+	index
+)
 
-const style = ({artists}): {fontSize: string} => {
-	const counts = artists.edges.reduce ((prev, next) =>
-		prev + next.node.stats.playcount, 0);
+class TagsCloud extends Component<Props> {
 
-	const value = ((counts||0) < fx ? fx : counts) / fx;
-	const result = (20 + (16 * Math.log (value))).toFixed (2);
+	constructor (props: Props) {
+		super (props);
 
-	return {
-		fontSize: `${result}%`
-	};
-}
-
-const TagsCloud = ({viewer}: Props) => {
-	const {tags} = viewer || {};
-	const {edges} = tags || {};
-
-	if (!edges || !edges.length) {
-		return null;
+		(this: any).loadMore = this.loadMore.bind (this);
 	}
 
-	return (
-		<ul className="list-inline cloud lowercase">
-			{edges.map (({node}) =>
-				<li key={node.name}
-					style={style (node)}>
+	loadMore () {
+		const {relay} = this.props;
 
-					<Link to={'/tags/' + node.name}>
-						{node.name}
-					</Link>
-				</li>
-			)}
-		</ul>
-	);
+		if (!relay.hasMore () || relay.isLoading ()) {
+			return;
+		}
+
+		relay.loadMore (25, (error) => {
+			if (error) {
+				console.error ('pagination fetch error:', error);
+			}
+		});
+	}
+
+	render () {
+		const {viewer} = this.props;
+		const {tags} = viewer || {};
+		const {edges} = tags || {};
+
+		if (!edges || !edges.length) {
+			return null;
+		}
+
+		return (
+			<ul className="list-inline cloud lowercase">
+				{edges.map (({node}, index) =>
+					<li key={node.name}
+						style={style (node, index)}>
+
+						<Link to={'/tags/' + node.name}>
+							{node.name}
+						</Link>
+					</li>
+				)}
+				<ScrollHander onScrollEnd={this.loadMore}/>
+			</ul>
+		);
+	}
 }
 
-export default createFragmentContainer (TagsCloud, graphql`
-	fragment TagsCloud_viewer on Viewer {
-		tags (first: 200){
+export default createPaginationContainer (TagsCloud, graphql`
+	fragment TagsCloud_viewer on Viewer
+		@argumentDefinitions (
+			count: {type: "Int", defaultValue: 100}
+			cursor: {type: "String"}
+		) {
+
+		tags (
+			first: $count
+			after: $cursor
+		) @connection (key: "TagsCloud_tags") {
 			edges {
 				node {
 					...on Tag {
@@ -71,5 +109,28 @@ export default createFragmentContainer (TagsCloud, graphql`
 				}
 			}
 		}
-	}`
+	}`,
+	{
+		direction: 'forward',
+		getConnectionFromProps ({viewer}) {
+			return viewer && viewer.tags;
+		},
+		getVariables (props, {count, cursor}) {
+
+			return {
+				count,
+				cursor
+			};
+		},
+		query: graphql`
+			query TagsCloudRefetchQuery (
+				$count: Int!
+				$cursor: String
+			) {
+				viewer {
+					...TagsCloud_viewer @arguments (count: $count, cursor: $cursor)
+				}
+			}
+		`
+	}
 )

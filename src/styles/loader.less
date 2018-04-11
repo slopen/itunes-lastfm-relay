@@ -4,3 +4,32 @@
   100% { opacity: 1.0; }
 }
 
+@rotate-deg: 90deg;
+@rotate-time: 800ms;
+
+@-webkit-keyframes rotate {
+    from { -webkit-transform: rotate3d(0, 1, 0, @rotate-deg); }
+}
+@-webkit-keyframes arotate {
+    from { -webkit-transform: rotate3d(0, 1, 0, -@rotate-deg); }
+    to { -webkit-transform: rotate3d(0, 1, 0, 0deg); }
+}
+
+
+
+.rotate{
+	transform-style: preserve-3d;
+  	-webkit-animation-name: rotate;
+  	-webkit-animation-duration: @rotate-time;
+  	-webkit-animation-iteration-count: 1;
+  	-webkit-animation-timing-function: ease-out;
+
+  	li{
+  		transform-style: preserve-3d;
+	  	-webkit-animation-name: arotate;
+	  	-webkit-animation-duration: @rotate-time;
+	  	-webkit-animation-iteration-count: 1;
+	  	-webkit-animation-timing-function: ease-out;
+
+  	}
+}
