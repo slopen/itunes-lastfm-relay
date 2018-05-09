@@ -3,7 +3,7 @@
 import React from 'react';
 import {createFragmentContainer, graphql} from 'react-relay';
 
-export type ArtistImageFragment = {|
+export type ArtistImageType = {|
     +image: ?$ReadOnlyArray<?{|
         +url: ?string,
         +size: ?string,
@@ -11,7 +11,7 @@ export type ArtistImageFragment = {|
 |};
 
 type Props = {
-    data: ArtistImageFragment,
+    data: ArtistImageType,
     size: | 'extralarge' | 'medium'
 };
 

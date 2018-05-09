@@ -9,8 +9,8 @@ const rotate = (input: number) => {
 	return (deg <= 5 ? (deg / -dfx) : (deg / dfx)).toFixed (4);
 }
 
-export default (counts: number, index: number): Object => {
-	const value = ((counts||0) < fx ? fx : counts) / fx;
+export default (counts: ?number, index: number): Object => {
+	const value = ((counts || 0) < fx ? fx : (counts || 0)) / fx;
 	const result = (36 + (20 * Math.log (value))).toFixed (2);
 
 	return {

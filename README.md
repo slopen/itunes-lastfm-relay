@@ -8,17 +8,17 @@ Isomorphic Relay Modern app example
 
 ### packages
 
-* webpack: 4.4
+* webpack: 4.8
 
-* flow: 0.69
+* flow: 0.71
 
 * react: 16.3
 
-* react-relay: 1.5
+* react-relay: 1.6
 
 * react-router: 4.2
 
-* mongoose: 4.5
+* mongoose: 5.0
 
 ### install
 

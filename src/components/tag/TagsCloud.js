@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom';
 import ScrollHander from 'components/lib/scroll-handler';
 import cloudStyle from 'components/lib/cloud-style';
 
-type TagsCloudType = {|
+export type TagsCloudType = {|
 	+tags: ?{|
 		+edges: $ReadOnlyArray<{|
 			+node: {|

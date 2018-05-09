@@ -8,7 +8,7 @@ import ReactList from 'react-list';
 import type {RelayPaginationProp} from 'react-relay';
 
 
-type Artist = {
+export type ArtistType = {
 	id: string
 };
 
@@ -17,7 +17,7 @@ type Props = {
 	data: {
 		[key: 'artistSimilar' | 'tagArtists']: {
 			edges: $ReadOnlyArray<{
-				node: Artist
+				node: ArtistType
 			}>
 		}
 	}

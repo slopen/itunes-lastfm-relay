@@ -1,10 +1,11 @@
 // @flow
 
 import {createPaginationContainer, graphql} from 'react-relay';
+import type {RelayPaginationProp} from 'react-relay';
 
 import ArtistsList from '../artist/ArtistsList';
 
-type TagArtistsType = {|
+export type TagArtistsType = {|
 	+id: string,
 	+tagArtists: {|
 		+edges: $ReadOnlyArray<{|
@@ -16,6 +17,7 @@ type TagArtistsType = {|
 |};
 
 type Props = {
+	relay: RelayPaginationProp,
 	data: TagArtistsType
 };
 

@@ -6,7 +6,7 @@ import {createFragmentContainer, graphql} from 'react-relay';
 import TagArtists from './TagArtists';
 import TagPreview from './TagPreview';
 
-type TagPageType = {|
+export type TagPageType = {|
 	+tags: ?{|
 		+edges: $ReadOnlyArray<{|
 			+node: Object

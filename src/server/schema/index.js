@@ -6,8 +6,12 @@ import Node from 'server/schema/types/node';
 
 export {default as schema} from './schema';
 
+type NodeVariables = {
+	id: string
+};
+
 export const rootValue = {
-	node ({id}) {
+	node ({id}: NodeVariables) {
 		if (!id) {
 			throw new Error ('node ID is required');
 		}

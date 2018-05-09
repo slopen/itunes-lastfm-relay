@@ -4,7 +4,7 @@ import {createPaginationContainer, graphql} from 'react-relay';
 
 import ArtistsList from './ArtistsList';
 
-export type ArtistSimilar = {|
+export type ArtistSimilarType = {|
 	+id: string,
 	+artistSimilar: ?{|
 		+edges: $ReadOnlyArray<{|
@@ -16,7 +16,7 @@ export type ArtistSimilar = {|
 |};
 
 type Props = {
-	data: ArtistSimilar
+	data: ArtistSimilarType
 };
 
 

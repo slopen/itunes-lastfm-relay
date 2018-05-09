@@ -318,14 +318,14 @@ type ValidationError = Object;
 // Try to replace `Mongoose$Query<Result, Doc>` on `this` in Flow above v0.53
 // For better dropdown suggesting used `Mongoose$Query<Result, Doc>`
 //   Fast check: `User.find().limit(5).` does not suggest if used `this`
-declare class Mongoose$Query<Result, Doc> extends Promise<Result> {
+declare class Mongoose$Query <Result, Doc> extends Promise <Result> {
   exec(): Promise<Result>;
-  where(criteria: Object): Mongoose$Query<Result, Doc>;
-  sort(fields: Object | string): Mongoose$Query<Result, Doc>;
-  limit(n: number): Mongoose$Query<Result, Doc>;
-  skip(n: number): Mongoose$Query<Result, Doc>;
-  select(fields: MongooseProjection): Mongoose$Query<Result, Doc>;
-  setOptions(opts: Object): Mongoose$Query<Result, Doc>;
+  where(criteria: Object): this;
+  sort(fields: Object | string): this;
+  limit(n: number): this;
+  skip(n: number): this;
+  select(fields: MongooseProjection): this;
+  setOptions(opts: Object): this;
   update(data: Object): Mongoose$Query<any, Doc>;
   update(
     criteria: Object,
@@ -353,15 +353,15 @@ declare class Mongoose$Query<Result, Doc> extends Promise<Result> {
   remove(criteria?: Object): Mongoose$Query<?Doc, Doc>;
   count(criteria?: Object): Promise<number>;
   schema: Mongoose$Schema<Doc>;
-  $where(fn: Function): Mongoose$Query<Result, Doc>;
-  batchSize(n: number): Mongoose$Query<Result, Doc>;
-  collation(value: Object): Mongoose$Query<Result, Doc>;
-  comment(val: string): Mongoose$Query<Result, Doc>;
+  $where(fn: Function): this;
+  batchSize(n: number): this;
+  collation(value: Object): this;
+  comment(val: string): this;
   cursor(opts?: Object): Mongoose$QueryCursor<Doc>;
   deleteMany(criteria?: Object): Mongoose$Query<any, Doc>;
   deleteOne(criteria?: Object): Mongoose$Query<any, Doc>;
-  distinct(field: string, criteria?: Object): Mongoose$Query<Result, Doc>;
-  find(criteria: Object): Mongoose$Query<Result, Doc>;
+  distinct(field: string, criteria?: Object): this;
+  find(criteria: Object): this;
   findOne(criteria?: Object, projection?: Object): Mongoose$Query<?Doc, Doc>;
   findOneAndRemove(
     criteria: Object,
@@ -383,16 +383,16 @@ declare class Mongoose$Query<Result, Doc> extends Promise<Result> {
   ): Mongoose$Query<?Doc, Doc>;
   getQuery(): Object;
   getUpdate(): Object;
-  hint(index: Object): Mongoose$Query<Result, Doc>;
+  hint(index: Object): this;
   lean(passPlainObject?: boolean): Mongoose$Query<any, Doc>;
-  maxScan(n: number): Mongoose$Query<Result, Doc>;
-  populate(path: string): Mongoose$Query<Result, Doc>;
+  maxScan(n: number): this;
+  populate(path: string): this;
   populate(obj: {
     path: string,
     select?: string,
     match?: Object,
     options?: Object
-  }): Mongoose$Query<Result, Doc>;
+  }): this;
   read(
     pref:
       | "primary"
@@ -401,19 +401,19 @@ declare class Mongoose$Query<Result, Doc> extends Promise<Result> {
       | "secondaryPreferred"
       | "nearest",
     tags?: Object[]
-  ): Mongoose$Query<Result, Doc>;
+  ): this;
   selected(): boolean;
   selectedExclusively(): boolean;
   selectedInclusively(): boolean;
-  setOptions(options: Object): Mongoose$Query<Result, Doc>;
+  setOptions(options: Object): this;
   slice(
     path: string,
     val: number | [number, number]
-  ): Mongoose$Query<Result, Doc>;
-  snapshot(bool: boolean): Mongoose$Query<Result, Doc>;
+  ): this;
+  snapshot(bool: boolean): this;
   stream(opts?: Object): Mongoose$QueryStream;
-  tailable(bool: boolean, opts?: Object): Mongoose$Query<Result, Doc>;
-  toConstructor(): Class<Mongoose$Query<Result, Doc>>;
+  tailable(bool: boolean, opts?: Object): this;
+  toConstructor(): Class<this>;
 }
 
 declare class Mongoose$QueryCursor<Doc> {

@@ -16,15 +16,9 @@ module.exports = {
 		connstr: 'mongodb://localhost:27017/' + name,
 
 		options: {
-			useMongoClient: true,
 			autoReconnect: true,
 			reconnectInterval: 1000
 		}
-	},
-
-	graffiti: {
-		mutation: false,
-		allowMongoIDMutation: false
 	},
 
 	ssr: true

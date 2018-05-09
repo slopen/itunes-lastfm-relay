@@ -10,7 +10,7 @@ type Stats = {|
 	+playcount: ?number
 |};
 
-type TagPreviewType = {|
+export type TagPreviewType = {|
 	+name: string,
 	+artists: {|
 		+edges: $ReadOnlyArray<{|

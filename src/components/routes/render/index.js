@@ -33,18 +33,16 @@ const unescapeParams = (params) =>
 			return res;
 		}, {});
 
-const renderer = (Component, params) => ({error, props}: ReadyState) => {
-	if (error) {
-		return <ErrorComponent error={error}/>;
+const renderer = (Component, params) =>
+	({error, props}: ReadyState) => {
+		if (error) {
+			return <ErrorComponent error={error}/>;
+		} else if (props) {
+			return <Component params={params} {...props}/>;
+		}
 
-	} else if (props) {
-		return <Component
-			params={params}
-			viewer={props.viewer}/>;
-	}
-
-	return <LoaderComponent/>;
-};
+		return <LoaderComponent/>;
+	};
 
 export default (
 	environment: Environment,

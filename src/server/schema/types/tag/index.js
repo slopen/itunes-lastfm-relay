@@ -1,3 +1,8 @@
+// @flow
+
+import type {MongooseDocument} from 'mongoose';
+import type {ConnectionArguments} from 'graphql-relay';
+
 import MongooseTag from 'server/models/tag';
 
 import Model from 'server/schema/types/model';
@@ -8,17 +13,19 @@ import {artistConnection} from 'server/schema/types/artist';
 
 export default class Tag extends Model {
 
+	_doc: MongooseDocument;
+
 	static MongooseModel = MongooseTag;
 
-	async artists (variables) {
-		const {artists: $in} = this._doc;
+	async artists (variables: ConnectionArguments) {
+		const {artists: $in} = this._doc.toJSON ();
 		const query = {_id: {$in}};
 
 		return artistConnection (query, variables);
 	}
 
-	async similar (variables) {
-		const {similar: $in} = this._doc;
+	async similar (variables: ConnectionArguments) {
+		const {similar: $in} = this._doc.toJSON ();
 		const query = {_id: {$in}};
 
 		return tagConnection (query, variables);

@@ -9,7 +9,7 @@ import cloudStyle from 'components/lib/cloud-style';
 
 import type {RelayPaginationProp} from 'react-relay';
 
-export type ArtistsCloudFragment = {|
+export type ArtistsCloudType = {|
 	+artists: ?{|
 		+edges: $ReadOnlyArray<{|
 			+node: {|
@@ -25,7 +25,7 @@ export type ArtistsCloudFragment = {|
 
 type Props = {
 	relay: RelayPaginationProp,
-	viewer: ArtistsCloudFragment
+	viewer: ArtistsCloudType
 };
 
 

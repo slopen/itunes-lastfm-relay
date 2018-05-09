@@ -2,23 +2,22 @@
 
 import {toGlobalId} from 'graphql-relay';
 
-import type {MongooseDocument} from 'mongoose';
-
-interface iModel {
-	[key: string]: mixed
-}
-
-type Doc = MongooseDocument & iModel;
+import type {
+	MongooseDocument,
+	MongooseModel
+} from 'mongoose';
 
 
-export default class Model implements iModel {
+export default class Model {
 
 	$key: string;
 	$value: mixed;
 
-	_doc: Doc;
+	_doc: MongooseDocument;
 
-	constructor (doc: Doc) {
+	static MongooseModel: MongooseModel;
+
+	constructor (doc: MongooseDocument) {
 		this._doc = doc;
 
 		return new Proxy (this, {
@@ -32,7 +31,7 @@ export default class Model implements iModel {
 
 				return typeof target [prop] !== 'undefined'
 					? target [prop]
-					: doc [prop];
+					: (doc: Object) [prop];
 			}
 		});
 	}

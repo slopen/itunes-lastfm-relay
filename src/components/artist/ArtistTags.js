@@ -5,7 +5,7 @@ import {createFragmentContainer, graphql} from 'react-relay';
 
 import TagPreview from '../tag/TagPreview';
 
-type ArtistTags = {|
+export type ArtistTagsType = {|
 	+tags: ?{|
 		+edges: $ReadOnlyArray<{|
 			+node: {|
@@ -17,7 +17,7 @@ type ArtistTags = {|
 
 
 type Props = {
-	data: ArtistTags
+	data: ArtistTagsType
 };
 
 const TagsList = ({data}: Props) => {

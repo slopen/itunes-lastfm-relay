@@ -6,7 +6,7 @@ import {createFragmentContainer, graphql} from 'react-relay';
 import ArtistSimilar from './ArtistSimilar';
 import ArtistPreview from './ArtistPreview';
 
-export type ArtistPageFragment = {|
+export type ArtistPageType = {|
 	+artists: ?{|
 		+edges: $ReadOnlyArray<{|
 			+node: {|
@@ -18,7 +18,7 @@ export type ArtistPageFragment = {|
 
 
 type Props = {
-	viewer: ArtistPageFragment
+	viewer: ArtistPageType
 };
 
 const ArtistPage = ({viewer}: Props) => {
@@ -34,6 +34,7 @@ const ArtistPage = ({viewer}: Props) => {
 
 	return (
 		<div className="artist">
+			{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
 			<ArtistPreview
 				data={node}
 				fullMode={true}/>
@@ -41,6 +42,7 @@ const ArtistPage = ({viewer}: Props) => {
 			<div className="clearfix"/>
 			<hr/>
 
+			{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
 			<ArtistSimilar
 				data={node}/>
 		</div>

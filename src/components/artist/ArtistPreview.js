@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 import ArtistImage from './ArtistImage';
 import ArtistTags from './ArtistTags';
 
-export type ArtistPreviewFragment = {|
+export type ArtistPreviewType = {|
 	+id: string,
 	+name: string,
 	+stats: {|
@@ -20,7 +20,7 @@ export type ArtistPreviewFragment = {|
 
 
 type Props = {
-	data: ArtistPreviewFragment,
+	data: ArtistPreviewType,
 	fullMode: boolean
 };
 
