@@ -7,15 +7,25 @@ import {Link} from 'react-router-dom';
 import ScrollHander from 'components/lib/scroll-handler';
 import cloudStyle from 'components/lib/cloud-style';
 
-import type {
-	ArtistsCloud_viewer as Fragment
-} from './__generated__/ArtistsCloud_viewer.graphql';
-
 import type {RelayPaginationProp} from 'react-relay';
+
+export type ArtistsCloudFragment = {|
+	+artists: ?{|
+		+edges: $ReadOnlyArray<{|
+			+node: {|
+				+id: string,
+				+name: string,
+				+stats: {|
+					+playcount: ?number
+				|}
+			|}
+		|}>
+	|}
+|};
 
 type Props = {
 	relay: RelayPaginationProp,
-	viewer: Fragment
+	viewer: ArtistsCloudFragment
 };
 
 

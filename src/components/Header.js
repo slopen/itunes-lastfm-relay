@@ -5,16 +5,20 @@ import {createFragmentContainer, graphql} from 'react-relay';
 
 import {Link} from 'react-router-dom';
 
-import type {
-    Header_viewer as Fragment
-} from './__generated__/Header_viewer.graphql';
-
+type HeaderType = {|
+	+artists: ?{|
+		+count: ?number
+	|},
+	+tags: ?{|
+		+count: ?number
+	|}
+|};
 
 type Props = {
 	params: {
 		type?: 'tags' | 'artists'
 	},
-	viewer: Fragment
+	viewer: HeaderType
 };
 
 const Header = ({params, viewer}: Props = {}) => {

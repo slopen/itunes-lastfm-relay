@@ -4,12 +4,19 @@ import {createPaginationContainer, graphql} from 'react-relay';
 
 import ArtistsList from '../artist/ArtistsList';
 
-import type {
-    TagArtists as Fragment
-} from './__generated__/TagArtists.graphql';
+type TagArtistsType = {|
+	+id: string,
+	+tagArtists: {|
+		+edges: $ReadOnlyArray<{|
+			+node: {|
+				+id: string
+			|}
+		|}>
+	|}
+|};
 
 type Props = {
-	data: Fragment
+	data: TagArtistsType
 };
 
 
@@ -52,7 +59,7 @@ export default createPaginationContainer (ArtistsList, graphql`
 				$count: Int!
 				$cursor: String
 			) {
-				tag (id: $id) {
+				tag: node (id: $id) {
 					...TagArtists @arguments (count: $count, cursor: $cursor)
 				}
 			}

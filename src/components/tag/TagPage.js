@@ -6,13 +6,16 @@ import {createFragmentContainer, graphql} from 'react-relay';
 import TagArtists from './TagArtists';
 import TagPreview from './TagPreview';
 
-import type {
-    TagPage_viewer as Fragment
-} from './__generated__/TagPage_viewer.graphql';
-
+type TagPageType = {|
+	+tags: ?{|
+		+edges: $ReadOnlyArray<{|
+			+node: Object
+		|}>
+	|}
+|};
 
 type Props = {
-	viewer: Fragment
+	viewer: TagPageType
 };
 
 const TagPage = ({viewer}: Props) => {

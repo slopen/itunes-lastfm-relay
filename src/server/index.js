@@ -13,7 +13,7 @@ import {graphqlBatchHTTPWrapper}  from 'react-relay-network-modern';
 
 import cors from './cors';
 import connectDb from './db';
-import schema  from './schema';
+import {schema, rootValue} from './schema';
 import html from './html';
 
 
@@ -28,7 +28,11 @@ const {
 } = config;
 
 const PUBLIC_PATH = path.resolve (__dirname, contentBase);
-const graphqlServer = graphqlHTTP ({schema, pretty: true});
+const graphqlServer = graphqlHTTP ({
+    schema,
+    rootValue,
+    pretty: true
+});
 
 
 (async (app) => {

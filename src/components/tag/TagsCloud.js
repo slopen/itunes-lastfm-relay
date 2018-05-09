@@ -8,15 +8,30 @@ import {Link} from 'react-router-dom';
 import ScrollHander from 'components/lib/scroll-handler';
 import cloudStyle from 'components/lib/cloud-style';
 
-import type {
-	TagsCloud_viewer as Fragment
-} from './__generated__/TagsCloud_viewer.graphql';
+type TagsCloudType = {|
+	+tags: ?{|
+		+edges: $ReadOnlyArray<{|
+			+node: {|
+				+name: string,
+				+artists: {|
+					+edges: $ReadOnlyArray<{|
+						+node: {|
+							+stats: {|
+								+playcount: ?number
+							|}
+						|}
+					|}>
+				|}
+			|}
+		|}>
+	|}
+|};
 
 import type {RelayPaginationProp} from 'react-relay';
 
 type Props = {
 	relay: RelayPaginationProp,
-	viewer: Fragment
+	viewer: TagsCloudType
 };
 
 

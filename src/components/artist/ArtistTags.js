@@ -5,13 +5,19 @@ import {createFragmentContainer, graphql} from 'react-relay';
 
 import TagPreview from '../tag/TagPreview';
 
-import type {
-    ArtistTags as Fragment
-} from './__generated__/ArtistTags.graphql';
+type ArtistTags = {|
+	+tags: ?{|
+		+edges: $ReadOnlyArray<{|
+			+node: {|
+				+id: string
+			|}
+		|}>
+	|}
+|};
 
 
 type Props = {
-	data: Fragment
+	data: ArtistTags
 };
 
 const TagsList = ({data}: Props) => {

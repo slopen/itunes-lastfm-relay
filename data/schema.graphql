@@ -61,8 +61,8 @@ type ArtistSimilarEdge {
 }
 
 type ArtistStats {
-  listeners: Float!
-  playcount: Float!
+  listeners: Float
+  playcount: Float
 }
 
 type ArtistTagsConnection {
@@ -175,6 +175,7 @@ type TagSimilarEdge {
 
 type Viewer implements Node {
   id: ID!
+  artist(id: ID!): Artist
   artists(
     after: String,
     first: Int,
@@ -185,7 +186,6 @@ type Viewer implements Node {
     url: String,
     _id: ID
   ): ArtistConnection
-  artist(id: ID!): Artist
   tags(
     after: String,
     first: Int,

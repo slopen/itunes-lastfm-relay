@@ -6,12 +6,21 @@ import {Link} from 'react-router-dom';
 import ArtistImage from './ArtistImage';
 import ArtistTags from './ArtistTags';
 
-import type {
-	ArtistPreview as Fragment
-} from './__generated__/ArtistPreview.graphql';
+export type ArtistPreviewFragment = {|
+	+id: string,
+	+name: string,
+	+stats: {|
+		+playcount: ?number,
+		+listeners: ?number
+	|},
+	+bio: ?{|
+		+summary: ?string
+	|}
+|};
+
 
 type Props = {
-	data: Fragment,
+	data: ArtistPreviewFragment,
 	fullMode: boolean
 };
 

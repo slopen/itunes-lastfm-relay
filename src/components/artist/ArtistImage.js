@@ -3,12 +3,15 @@
 import React from 'react';
 import {createFragmentContainer, graphql} from 'react-relay';
 
-import type {
-    ArtistImage as Fragment
-} from './__generated__/ArtistImage.graphql';
+export type ArtistImageFragment = {|
+    +image: ?$ReadOnlyArray<?{|
+        +url: ?string,
+        +size: ?string,
+    |}>
+|};
 
 type Props = {
-    data: Fragment,
+    data: ArtistImageFragment,
     size: | 'extralarge' | 'medium'
 };
 

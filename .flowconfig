@@ -49,6 +49,7 @@ munge_underscores=true
 module.file_ext=.js
 module.file_ext=.jsx
 module.file_ext=.less
+module.file_ext=.graphql
 module.file_ext=.graphql.js
 module.name_mapper='.*\(.less\)' -> 'LessModule'
 module.name_mapper='^styles\(.*\)$' -> '<PROJECT_ROOT>/src/styles/\1'

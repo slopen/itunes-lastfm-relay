@@ -3,6 +3,7 @@
 		["module-resolver", {
       		"root": ["./src"]
     	}],
+    	"babel-plugin-inline-import",
 		["relay", {
 			"schema": "data/schema.graphql"
 		}],

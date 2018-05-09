@@ -5,18 +5,24 @@ import {createFragmentContainer, graphql} from 'react-relay';
 
 import {Link} from 'react-router-dom';
 
-import type {
-    TagPreview as Fragment
-} from './__generated__/TagPreview.graphql';
+type Stats = {|
+	+listeners: ?number,
+	+playcount: ?number
+|};
 
-
-type Stats = {
-	listeners: number,
-	playcount: number
-};
+type TagPreviewType = {|
+	+name: string,
+	+artists: {|
+		+edges: $ReadOnlyArray<{|
+			+node: {|
+				+stats: Stats
+			|}
+		|}>
+	|}
+|};
 
 type Props = {
-	data: Fragment,
+	data: TagPreviewType,
 	fullMode: boolean
 };
 
@@ -30,6 +36,14 @@ const getStats = ({data: {artists}}): Stats => {
 		}, {listeners: 0, playcount: 0})
 		: {listeners: 0, playcount: 0};
 };
+
+const TagStats = ({stats: {
+	listeners,
+	playcount
+}}: {stats: Stats}) =>
+	<div className="stats">{
+		`${listeners || 0} / ${playcount || 0}`
+	}</div>
 
 const TagPreview = ({data, fullMode}: Props) => {
 	const link = (
@@ -47,9 +61,7 @@ const TagPreview = ({data, fullMode}: Props) => {
 			)}
 
 			{fullMode ? (
-				<div className="stats">{
-					stats.listeners + ' / ' + stats.playcount
-				}</div>
+				<TagStats stats={stats}/>
 			): null}
 		</div>
 	);
