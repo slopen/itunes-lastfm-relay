@@ -1,7 +1,4 @@
 // @flow
-
-// TODO: remove after https://github.com/benmosher/eslint-plugin-import/pull/1057
-// eslint-disable-next-line import/named
 import type {RelayRequest, RelayResponse} from 'react-relay-network-modern';
 
 const CACHE: Map <string, Promise<RelayResponse>> = new Map ();

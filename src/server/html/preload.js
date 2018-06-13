@@ -25,8 +25,7 @@ const Router = ({location, context}: RouterParams) =>
         <Routes environment={environment}/>
     </StaticRouter>;
 
-export default async (req: $Request) => {
-    let context = {};
+export default async (req: $Request, context: Object = {}) => {
     const location = req.originalUrl;
 
     renderToString (

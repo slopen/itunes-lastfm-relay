@@ -1,7 +1,7 @@
 const path = require ('path');
 const env = require ('process-env');
 const webpack = require ('webpack');
-const ExtractTextPlugin = require ('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require ('mini-css-extract-plugin');
 const nodeExternals = require('webpack-node-externals');
 
 const config = require ('config');
@@ -56,19 +56,20 @@ module.exports = {
 			},
 			{
 				test: /\.(css|less)$/,
-				use: ExtractTextPlugin.extract ({
-					use: [
-						'css-loader',
-						'less-loader'
-					]
-				})
+				use: [
+					MiniCssExtractPlugin.loader,
+					'css-loader',
+					'less-loader'
+				]
 			}
 		],
 		noParse: /lie\.js|[\s\S]*.(svg|ttf|eot)/
 	},
 
 	plugins: [
-		new ExtractTextPlugin ('styles.css'),
+		new MiniCssExtractPlugin ({
+			filename: 'styles.css'
+		}),
 		new webpack.NoEmitOnErrorsPlugin (),
 		new webpack.DefinePlugin ({
 			'__DEV__': !PRODUCTION,
@@ -79,9 +80,7 @@ module.exports = {
 		})
 	],
 
-	stats: {
-		children: false
-	},
+	stats: false,
 
 	devServer: {
 		inline: true

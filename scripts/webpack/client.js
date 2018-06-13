@@ -3,7 +3,7 @@ const env = require ('process-env');
 const webpack = require ('webpack');
 const CopyWebpackPlugin = require ('copy-webpack-plugin');
 const UglifyJsPlugin = require ('uglifyjs-webpack-plugin');
-const ExtractTextPlugin = require ('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require ('mini-css-extract-plugin');
 
 const config = require ('config');
 const projectRoot = path.resolve (__dirname, '../../');
@@ -31,7 +31,7 @@ module.exports = {
 	},
 
 	resolve: {
-		extensions: ['.js', '.jsx'],
+		extensions: ['.js', '.mjs'],
 		modules: [
 			SRC_PATH,
 			MODULES_PATH
@@ -41,9 +41,14 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.(js|mjs)$/,
+				test: /\.js$/,
 				exclude: /(node_modules)/,
 				loader: 'babel-loader'
+			},
+			{
+				test: /\.mjs$/,
+				include: /node_modules\/react-relay-network-modern/,
+				type: 'javascript/auto'
 			},
 			{
 				test: /\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)|\.(png|jpg|gif)$/,
@@ -51,18 +56,11 @@ module.exports = {
 			},
 			{
 				test: /\.(css|less)$/,
-				use: ExtractTextPlugin.extract ({
-					use: [
-						{
-							loader: 'css-loader',
-							options: {
-								localIdentName: '[path][name]__[local]--[hash:base64:5]',
-								sourceMap: !PRODUCTION
-							}
-						},
-						'less-loader'
-					]
-				})
+				use: [
+					MiniCssExtractPlugin.loader,
+					'css-loader',
+					'less-loader'
+				]
 			},
 			{
 				test: /\.json$/,
@@ -77,7 +75,9 @@ module.exports = {
 		tls: 'empty'
 	},
 	plugins: [
-		new ExtractTextPlugin ('styles.css'),
+		new MiniCssExtractPlugin ({
+			filename: 'styles.css'
+		}),
 		new CopyWebpackPlugin ([
 			{
 				from: path.resolve (SRC_PATH, 'favicon.ico'),
@@ -122,9 +122,7 @@ module.exports = {
 		new webpack.optimize.AggressiveMergingPlugin
 	] : []),
 
-	stats: {
-		children: false
-	},
+	stats: false,
 
 	devServer: {
 		https: true,
