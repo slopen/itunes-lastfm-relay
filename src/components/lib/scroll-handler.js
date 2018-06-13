@@ -5,17 +5,17 @@ import {findDOMNode} from 'react-dom';
 import throttle from 'lodash.throttle';
 
 type Props = {
-	threshold?: number;
-	onScrollEnd: (position:number) => mixed;
+	threshold?: number,
+	onScrollEnd: (position:number) => mixed
 };
 
 type Direction = 'down' | 'up';
 
 
 type PartialWindow = {
-	scrollY: number;
-	innerHeight: number;
-	innerWidth: number;
+	scrollY: number,
+	innerHeight: number,
+	innerWidth: number,
 } & EventTarget;
 
 const isInViewport = (element: ?Node, threshold: number) => {

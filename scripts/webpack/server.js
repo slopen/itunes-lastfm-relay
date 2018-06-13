@@ -1,8 +1,7 @@
 const path = require ('path');
 const env = require ('process-env');
 const webpack = require ('webpack');
-const MiniCssExtractPlugin = require ('mini-css-extract-plugin');
-const nodeExternals = require('webpack-node-externals');
+const nodeExternals = require ('webpack-node-externals');
 
 const config = require ('config');
 const projectRoot = path.resolve (__dirname, '../../');
@@ -50,14 +49,13 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.(js|mjs)$/,
+				test: /\.js$/,
 				exclude: /(node_modules)/,
 				loader: 'babel-loader'
 			},
 			{
 				test: /\.(css|less)$/,
 				use: [
-					MiniCssExtractPlugin.loader,
 					'css-loader',
 					'less-loader'
 				]
@@ -81,10 +79,6 @@ module.exports = {
 	],
 
 	stats: false,
-
-	devServer: {
-		inline: true
-	},
 
 	cache: true,
 	devtool: PRODUCTION ? false : 'source-map'

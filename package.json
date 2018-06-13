@@ -2,6 +2,7 @@
   "name": "itunes-lastfm-relay",
   "version": "0.0.1",
   "main": "build/server.js",
+  "license": "SEE LICENSE IN <filename>",
   "scripts": {
     "setup": "setup/import.sh",
     "build": "npm run build:relay && npm run build:client && npm run build:server",

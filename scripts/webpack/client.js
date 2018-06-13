@@ -131,7 +131,7 @@ module.exports = {
 		contentBase: BUILD_PATH,
 		historyApiFallback: true,
 		disableHostCheck: true,
-		stats: 'minimal',
+		stats: 'errors-only',
 		hot: true,
 		inline: true
 	},

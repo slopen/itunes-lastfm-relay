@@ -4,8 +4,8 @@ import config from 'config';
 import mongoose from 'mongoose';
 
 type MongoOptions = {
-	connstr: string;
-	options: Object;
+	connstr: string,
+	options: Object
 };
 
 const opts: MongoOptions = config.mongodb;
