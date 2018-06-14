@@ -12,7 +12,7 @@
     "build:relay": "relay-compiler --src ./src --schema ./data/schema.graphql",
     "build:client:production": "npm run build:relay && NODE_ENV=production webpack --config scripts/webpack/client.js -d",
     "build:server:production": "NODE_ENV=production webpack --progress --config scripts/webpack/server.js -d",
-    "dev:client": "NODE_ENV=development webpack-dev-server --progress --config scripts/webpack/client.js --hot --content-base build",
+    "dev:client": "NODE_ENV=development webpack-dev-server --noinfo --config scripts/webpack/client.js --hot",
     "dev:server": "NODE_ENV=development BABEL_DISABLE_CACHE=1 nodemon --watch src/server --watch config src/server/index.js --exec babel-node",
     "dev:relay": "npm run build:relay -- --watch",
     "lint": "eslint src",
