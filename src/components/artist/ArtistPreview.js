@@ -40,16 +40,22 @@ const ArtistPreview = ({data, fullMode}: Props) => {
 
 	return (
 		<div className={['media-item', fullMode ? 'full' : 'small'].join(' ')}>
-			{fullMode ? (<h1>{link}</h1>) : (<h5>{link}</h5>)}
+			{fullMode ? (
+				<h1 className="item-title">{link}</h1>
+			) : (
+				<h4 className="item-title">{link}</h4>
+			)}
 
-			<Link to={'/artists/' + data.name}>
+			<Link
+				className="item-image"
+				to={'/artists/' + data.name}>
 				{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
 				<ArtistImage
 					data={data}
 					size={fullMode ? 'extralarge' : 'medium'}/>
 			</Link>
 
-			<div className="artist-info">
+			<div className="item-info">
 
 				{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
 				<ArtistTags data={data}/>
@@ -65,8 +71,6 @@ const ArtistPreview = ({data, fullMode}: Props) => {
 				) : null}
 
 			</div>
-
-			<div className="clearfix"/>
 		</div>
 	);
 }

@@ -39,7 +39,7 @@ export default class ArtistsList extends Component<Props> {
 		return (artistSimilar || tagArtists).edges || [];
 	}
 
-	renderRow (key: string, index: number) {
+	renderRow (index: number) {
 		const list = this.getList ();
 
 		if (index === list.length - 1) {
@@ -63,7 +63,7 @@ export default class ArtistsList extends Component<Props> {
 			return;
 		}
 
-		relay.loadMore (12, (error) => {
+		relay.loadMore (artistsLimit, (error) => {
 			if (error) {
 				console.error ('pagination fetch error:', error);
 			}
@@ -76,10 +76,11 @@ export default class ArtistsList extends Component<Props> {
 		return (
 			<div className="media-list">
 				<ReactList
-					axis={'y'}
-					itemRenderer={this.renderRow}
+					type="uniform"
+					length={list.length}
 					minSize={artistsLimit}
-					length={list.length}/>
+					pageSize={artistsLimit / 2}
+					itemRenderer={this.renderRow}/>
 			</div>
 		);
 	}

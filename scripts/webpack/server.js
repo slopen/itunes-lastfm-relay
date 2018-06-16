@@ -65,9 +65,6 @@ module.exports = {
 	},
 
 	plugins: [
-		new MiniCssExtractPlugin ({
-			filename: 'styles.css'
-		}),
 		new webpack.NoEmitOnErrorsPlugin (),
 		new webpack.DefinePlugin ({
 			'__DEV__': !PRODUCTION,

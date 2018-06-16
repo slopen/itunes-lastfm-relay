@@ -3,7 +3,7 @@
 import React from 'react';
 import {createFragmentContainer, graphql} from 'react-relay';
 
-import TagPreview from '../tag/TagPreview';
+import TagPreview from 'components/tag/TagPreview';
 
 export type ArtistTagsType = {|
 	+tags: ?{|

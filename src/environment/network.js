@@ -1,4 +1,5 @@
 // @flow
+
 import uuid from 'uuid';
 
 import {
@@ -12,8 +13,6 @@ import {
 
 import cache from './cache';
 
-// TODO: remove after https://github.com/benmosher/eslint-plugin-import/pull/1057
-// eslint-disable-next-line import/named
 import type {RelayResponse} from 'react-relay-network-modern';
 
 
@@ -45,7 +44,7 @@ export default new RelayNetworkLayer ([
 
 	batchMiddleware ({
 		batchUrl,
-		batchTimeout: 10
+		batchTimeout: 60
 	}),
 
 	retryMiddleware ({

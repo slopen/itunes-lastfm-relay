@@ -1,0 +1,41 @@
+.tags{
+    margin-top:0;
+    font-size:14px;
+
+    li{
+        padding-left:0;
+        margin-right: .3em;
+        text-transform: lowercase;
+        display: inline-block;
+
+        &:after{
+            content: ",";
+        }
+        &:last-child:after{
+            display:none;
+            margin-right:0;
+        }
+
+        >div{
+            display:inline;
+            h5{
+                display:inherit;
+                font-size:inherit;
+            }
+        }
+    }
+}
+
+.tag > .text-item{
+    padding:1.5em;
+    .hoverable ();
+
+    h1{
+        margin-top:0;
+
+        .fa {
+            font-size: 80%;
+        }
+    }
+}
+

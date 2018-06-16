@@ -1,89 +1,90 @@
 schema {
-  query: RootQuery
+	query: RootQuery
+	mutation: RootMutation
 }
 
 type Artist implements Node {
-  name: String!
-  tracks: [ArtistTracks]
-  tags (
-    after: String,
-    first: Int,
-    before: String,
-    last: Int
-  ): ArtistTagsConnection
-  tagsLFM: [String]
-  similar (
-    after: String,
-    first: Int,
-    before: String,
-    last: Int
-  ): ArtistSimilarConnection
-  similarLFM: [String]
-  image: [ArtistImage]
-  url: String
-  bio: ArtistBio
-  stats: ArtistStats!
-  _id: ID
-  id: ID!
+	name: String!
+	tracks: [ArtistTracks]
+	tags (
+		after: String,
+		first: Int,
+		before: String,
+		last: Int
+	): ArtistTagsConnection
+	tagsLFM: [String]
+	similar (
+		after: String,
+		first: Int,
+		before: String,
+		last: Int
+	): ArtistSimilarConnection
+	similarLFM: [String]
+	image: [ArtistImage]
+	url: String
+	bio: ArtistBio
+	stats: ArtistStats!
+	_id: ID
+	id: ID!
 }
 
 type ArtistBio {
-  published: Date
-  summary: String
+	published: Date
+	summary: String
 }
 
 type ArtistConnection {
-  pageInfo: PageInfo!
-  edges: [ArtistEdge!]!
-  count: Float
+	pageInfo: PageInfo!
+	edges: [ArtistEdge!]!
+	count: Float
 }
 
 type ArtistEdge {
-  node: Artist!
-  cursor: String!
+	node: Artist!
+	cursor: String!
 }
 
 type ArtistImage {
-  _id: Generic
-  url: String
-  size: String
+	_id: Generic
+	url: String
+	size: String
 }
 
 type ArtistSimilarConnection {
-  pageInfo: PageInfo!
-  edges: [ArtistSimilarEdge!]!
-  count: Float
+	pageInfo: PageInfo!
+	edges: [ArtistSimilarEdge!]!
+	count: Float
 }
 
 type ArtistSimilarEdge {
-  node: Artist!
-  cursor: String!
+	node: Artist!
+	cursor: String!
 }
 
 type ArtistStats {
-  listeners: Float
-  playcount: Float
+	listeners: Float
+	playcount: Float
 }
 
 type ArtistTagsConnection {
-  pageInfo: PageInfo!
-  edges: [ArtistTagsEdge!]!
-  count: Float
+	pageInfo: PageInfo!
+	edges: [ArtistTagsEdge!]!
+	count: Float
 }
 
 type ArtistTagsEdge {
-  node: Tag!
-  cursor: String!
+	node: Tag!
+	cursor: String!
 }
 
 type ArtistTracks {
-  _id: Generic
-  name: String
-  album: String
-  length: Float
-  year: Float
-  bitrate: Float
-  path: String
+	_id: Generic
+	name: String
+	album: String
+	length: Float
+	year: Float
+	bitrate: Float
+	path: String
 }
 
 scalar Date
@@ -91,109 +92,138 @@ scalar Date
 scalar Generic
 
 interface Node {
-  id: ID!
+	id: ID!
 }
 
 enum orderByArtist {
-  URL_ASC
-  URL_DESC
-  _ID_ASC
-  _ID_DESC
+	URL_ASC
+	URL_DESC
+	_ID_ASC
+	_ID_DESC
 }
 
 enum orderByTag {
-  _ID_ASC
-  _ID_DESC
+	_ID_ASC
+	_ID_DESC
 }
 
 type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
+	hasNextPage: Boolean!
+	hasPreviousPage: Boolean!
+	startCursor: String
+	endCursor: String
 }
 
 type RootQuery {
-  viewer: Viewer
-  node(id: ID!): Node
-  artist(id: ID!): Artist
-  artists(id: [ID], ids: [ID], orderBy: orderByArtist, name: String, url: String, _id: ID): [Artist]
-  tag(id: ID!): Tag
-  tags(id: [ID], ids: [ID], orderBy: orderByTag, name: String, _id: ID): [Tag]
+	viewer: Viewer
+	node(id: ID!): Node
+	artist(id: ID!): Artist
+	artists(
+		id: [ID],
+		ids: [ID],
+		orderBy: orderByArtist,
+		name: String,
+		url: String,
+		_id: ID
+	): [Artist]
+	tag(id: ID!): Tag
+	tags(
+		id: [ID],
+		ids: [ID],
+		orderBy: orderByTag,
+		name: String,
+		_id: ID
+	): [Tag]
 }
 
 type Tag implements Node {
-  id: ID!
-  _id: ID
-  name: String!
-  artists(
-    after: String,
-    first: Int,
-    before: String,
-    last: Int
-  ): TagArtistsConnection!
-  similar(
-    after: String,
-    first: Int,
-    before: String,
-    last: Int
-  ): TagSimilarConnection
+	id: ID!
+	_id: ID
+	name: String!
+	artists(
+		after: String,
+		first: Int,
+		before: String,
+		last: Int
+	): TagArtistsConnection!
+	similar(
+		after: String,
+		first: Int,
+		before: String,
+		last: Int
+	): TagSimilarConnection
 }
 
 type TagArtistsConnection {
-  pageInfo: PageInfo!
-  edges: [TagArtistsEdge!]!
-  count: Float
+	pageInfo: PageInfo!
+	edges: [TagArtistsEdge!]!
+	count: Float
 }
 
 type TagArtistsEdge {
-  node: Artist!
-  cursor: String!
+	node: Artist!
+	cursor: String!
 }
 
 type TagConnection {
-  pageInfo: PageInfo!
-  edges: [TagEdge!]!
-  count: Float
+	pageInfo: PageInfo!
+	edges: [TagEdge!]!
+	count: Float
 }
 
 type TagEdge {
-  node: Tag!
-  cursor: String!
+	node: Tag!
+	cursor: String!
 }
 
 type TagSimilarConnection {
-  pageInfo: PageInfo!
-  edges: [TagSimilarEdge!]!
-  count: Float
+	pageInfo: PageInfo!
+	edges: [TagSimilarEdge!]!
+	count: Float
 }
 
 type TagSimilarEdge {
-  node: Tag!
-  cursor: String!
+	node: Tag!
+	cursor: String!
 }
 
 type Viewer implements Node {
-  id: ID!
-  artist(id: ID!): Artist
-  artists(
-    after: String,
-    first: Int,
-    before: String,
-    last: Int,
-    orderBy: orderByArtist,
-    name: String,
-    url: String,
-    _id: ID
-  ): ArtistConnection
-  tags(
-    after: String,
-    first: Int,
-    before: String,
-    last: Int,
-    orderBy: orderByTag,
-    name: String,
-    _id: ID
-  ): TagConnection
-  tag(id: ID!): Tag
+	id: ID!
+	artist(id: ID!): Artist
+	artists(
+		after: String,
+		first: Int,
+		before: String,
+		last: Int,
+		orderBy: orderByArtist,
+		name: String,
+		url: String,
+		_id: ID
+	): ArtistConnection
+	tags(
+		after: String,
+		first: Int,
+		before: String,
+		last: Int,
+		orderBy: orderByTag,
+		name: String,
+		_id: ID
+	): TagConnection
+	tag(id: ID!): Tag
+}
+
+input UpdateTagInput {
+	id: ID!
+	name: String!
+	clientMutationId: String
+}
+
+type UpdateTagPayload {
+	tag: Tag
+	clientMutationId: String
+}
+
+
+type RootMutation {
+	updateTag(input: UpdateTagInput!): UpdateTagPayload
 }

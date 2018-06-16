@@ -44,7 +44,9 @@ module.exports = {
 			{
 				test: /\.js$/,
 				exclude: /(node_modules)/,
-				loader: 'babel-loader'
+				loaders: [
+					'babel-loader'
+				]
 			},
 			{
 				test: /\.mjs$/,
@@ -58,7 +60,9 @@ module.exports = {
 			{
 				test: /\.(css|less)$/,
 				use: [
-					MiniCssExtractPlugin.loader,
+					PRODUCTION
+						? MiniCssExtractPlugin.loader
+						: 'style-loader',
 					'css-loader',
 					'less-loader'
 				]

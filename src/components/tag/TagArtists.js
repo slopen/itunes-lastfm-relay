@@ -3,7 +3,7 @@
 import {createPaginationContainer, graphql} from 'react-relay';
 import type {RelayPaginationProp} from 'react-relay';
 
-import ArtistsList from '../artist/ArtistsList';
+import ArtistsList from 'components/artist/ArtistsList';
 
 export type TagArtistsType = {|
 	+id: string,

@@ -2,7 +2,7 @@
 
 import Viewer from 'server/schema/types/viewer';
 import Node from 'server/schema/types/node';
-
+import mutations from 'server/schema/mutations';
 
 export {default as schema} from './schema';
 
@@ -21,6 +21,8 @@ export const rootValue = {
 
 	viewer () {
 		return new Viewer ();
-	}
+	},
+
+	...mutations
 }
 

@@ -9,11 +9,11 @@ import HeaderQuery from 'components/queries/HeaderQuery';
 import ArtistQuery from 'components/queries/ArtistQuery';
 import TagQuery from 'components/queries/TagQuery';
 
-import Header from '../Header';
-import ArtistsCloud from '../artist/ArtistsCloud';
-import TagsCloud from '../tag/TagsCloud';
-import TagPage from '../tag/TagPage';
-import ArtistPage from '../artist/ArtistPage';
+import Header from 'components/Header';
+import ArtistsCloud from 'components/artist/ArtistsCloud';
+import TagsCloud from 'components/tag/TagsCloud';
+import TagPage from 'components/tag/TagPage';
+import ArtistPage from 'components/artist/ArtistPage';
 
 import render from './render';
 
@@ -25,7 +25,7 @@ type Props = {
 
 
 export default ({environment}: Props) =>
-	<div className="app container">
+	<div className="app">
 
 		<Route
 			path="/:type?"
