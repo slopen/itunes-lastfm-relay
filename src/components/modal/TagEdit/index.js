@@ -5,6 +5,9 @@ import React, {Component} from 'react';
 import Modal from 'components/lib/modal';
 import Fields from './fields';
 
+import TagArtistAddMutation from 'components/mutations/TagArtistAdd';
+import TagArtistRemoveMutation from 'components/mutations/TagArtistRemove';
+
 import type {RelayProp} from 'react-relay';
 
 type TagData = {
@@ -31,12 +34,36 @@ export default class TagEditModal extends Component <Props, State> {
 
 		this.state = {};
 
-		(this: any).onChange = this.onChange.bind (this);
+		(this: any).onFieldChange = this.onFieldChange.bind (this);
+		(this: any).onArtistAdd = this.onArtistAdd.bind (this);
+		(this: any).onArtistRemove = this.onArtistRemove.bind (this);
 		(this: any).onConfirm = this.onConfirm.bind (this);
 	}
 
-	onChange (data: Object) {
+	onFieldChange (data: Object) {
 		this.setState ({...data});
+	}
+
+	onArtistAdd (id: string) {
+		const {
+			data,
+			relay: {environment}
+		} = this.props;
+
+		console.log ('onArtistAdd', id);
+
+		TagArtistAddMutation (environment, id, data.id);
+	}
+
+	onArtistRemove (id: string) {
+		const {
+			data,
+			relay: {environment}
+		} = this.props;
+
+		console.log ('onArtistRemove', id);
+
+		TagArtistRemoveMutation (environment, id, data.id);
 	}
 
 	onConfirm () {
@@ -61,7 +88,9 @@ export default class TagEditModal extends Component <Props, State> {
 				<Fields
 					data={data}
 					relay={relay}
-					onChange={this.onChange}/>
+					onFieldChange={this.onFieldChange}
+					onArtistAdd={this.onArtistAdd}
+					onArtistRemove={this.onArtistRemove}/>
 			</Modal>
 		);
 	}

@@ -6,31 +6,12 @@ import {commitMutation, graphql} from 'react-relay';
 import type {Environment} from 'react-relay';
 
 const mutation = graphql`
-	mutation TagArtistAddMutation (
-		$input: TagArtistAddInput!
+	mutation TagArtistRemoveMutation (
+		$input: TagArtistRemoveInput!
 	) {
-		tagArtistAdd (input: $input) {
-			tag {
-				id
-				...TagPreview
-			}
-			artist {
-				id
-				...ArtistPreview
-			}
-
-			tagArtistEdge {
-				cursor
-				node {
-					id
-				}
-			}
-			artistTagEdge {
-				cursor
-				node {
-					id
-				}
-			}
+		tagArtistRemove (input: $input) {
+			tagArtistId
+			artistTagId
 		}
 	}
 `;
@@ -55,22 +36,22 @@ export default (environment: Environment, artistId: string, tagId: string) => {
 			},
 			onError: (err) => console.error (err),
 			configs: [{
-				type: 'RANGE_ADD',
+				type: 'RANGE_DELETE',
 				parentID: tagId,
-				connectionInfo: [{
-					key: 'TagArtists_artists',
-					rangeBehavior: 'prepend'
+				connectionKeys: [{
+					key: 'TagArtists_artists'
 				}],
-				edgeName: 'tagArtistEdge'
+				pathToConnection: ['tag', 'artists'],
+				deletedIDFieldName: 'tagArtistId'
 			},
 			{
-				type: 'RANGE_ADD',
+				type: 'RANGE_DELETE',
 				parentID: artistId,
-				connectionInfo: [{
-					key: 'ArtistTags_tags',
-					rangeBehavior: 'prepend'
+				connectionKeys: [{
+					key: 'ArtistTags_tags'
 				}],
-				edgeName: 'artistTagEdge'
+				pathToConnection: ['artist', 'tags'],
+				deletedIDFieldName: 'artistTagId'
 			}]
 		}
 	);

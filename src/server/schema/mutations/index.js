@@ -1,25 +1,51 @@
+import {offsetToCursor} from 'graphql-relay';
+
+import Node from 'server/schema/types/node';
+
 
 export default {
 
-	updateTag: function ({input}) {
+	tagUpdate: async ({input}) => {
 		const {clientMutationId, name, id} = input;
+		const tag = await Node.fromGlobalId (id);
 
-		console.log ('* update tag', {clientMutationId, name, id});
+		tag.name = name;
 
-		return Promise.resolve ({
-			clientMutationId,
-			tag: {name, id}
-		});
+		return {
+			tag,
+			clientMutationId
+		};
 	},
 
-	updateArtist: function ({input}) {
-		const {clientMutationId, name, description, id} = input;
+	tagArtistAdd: async ({input}) => {
+		const {clientMutationId, tagId, artistId} = input;
+		const tag = await Node.fromGlobalId (tagId);
+		const artist = await Node.fromGlobalId (artistId);
 
-		console.log ('* update artist', {clientMutationId, name, description, id});
-
-		return Promise.resolve ({
+		return {
 			clientMutationId,
-			artist: {name, description, id}
-		});
+			tag,
+			artist,
+			artistTagEdge: {
+				cursor: offsetToCursor (0),
+				node: tag
+			},
+			tagArtistEdge: {
+				cursor: offsetToCursor (0),
+				node: artist
+			}
+		};
+	},
+
+	tagArtistRemove: async ({input}) => {
+		const {clientMutationId, tagId, artistId} = input;
+		const tag = await Node.fromGlobalId (tagId);
+		const artist = await Node.fromGlobalId (artistId);
+
+		return {
+			clientMutationId,
+			artistTagId: tag.id,
+			tagArtistId: artist.id
+		};
 	}
 }

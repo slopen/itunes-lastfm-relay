@@ -12,7 +12,13 @@ import TagEditArtistsRemove from './TagEditArtistsRemove';
 import TagEditArtistsRemoveQuery from './queries/TagEditArtistsRemoveQuery';
 
 
-export default ({data, relay, onChange}) =>
+export default ({
+	data,
+	relay,
+	onFieldChange,
+	onArtistAdd,
+	onArtistRemove
+}) =>
 	<form>
 
 		<Render
@@ -20,7 +26,7 @@ export default ({data, relay, onChange}) =>
 			query={TagEditFieldsQuery}
 			environment={relay.environment}
 			component={TagEditFields}
-			componentProps={{onChange}}/>
+			componentProps={{onChange: onFieldChange}}/>
 
 		<fieldset>
 			<div className="field">
@@ -30,7 +36,7 @@ export default ({data, relay, onChange}) =>
 					query={TagEditArtistsAddQuery}
 					environment={relay.environment}
 					component={TagEditArtistsAdd}
-					componentProps={{onChange}}/>
+					componentProps={{onChange: onArtistAdd}}/>
 			</div>
 
 			<div className="field">
@@ -40,7 +46,7 @@ export default ({data, relay, onChange}) =>
 					query={TagEditArtistsRemoveQuery}
 					environment={relay.environment}
 					component={TagEditArtistsRemove}
-					componentProps={{onChange}}/>
+					componentProps={{onChange: onArtistRemove}}/>
 			</div>
 		</fieldset>
 

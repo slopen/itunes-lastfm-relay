@@ -36,6 +36,6 @@ export default (environment: Environment, name: string, id: string) => {
 				console.log ('response received from server:', response, errors)
 			},
 			onError: (err) => console.error (err)
-		},
+		}
 	);
 }

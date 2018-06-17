@@ -224,12 +224,28 @@ type TagUpdatePayload {
 }
 
 input TagArtistAddInput {
-	id: ID!
+	tagId: ID!
+	artistId: ID!
 	clientMutationId: String
 }
 
 type TagArtistAddPayload {
 	tag: Tag
+	artist: Artist
+	tagArtistEdge: TagArtistsEdge
+	artistTagEdge: ArtistTagsEdge
+	clientMutationId: String
+}
+
+input TagArtistRemoveInput {
+	tagId: ID!
+	artistId: ID!
+	clientMutationId: String
+}
+
+type TagArtistRemovePayload {
+	tagArtistId: ID!
+	artistTagId: ID!
 	clientMutationId: String
 }
 
@@ -237,4 +253,5 @@ type TagArtistAddPayload {
 type RootMutation {
 	tagUpdate(input: TagUpdateInput!): TagUpdatePayload
 	tagArtistAdd(input: TagArtistAddInput!): TagArtistAddPayload
+	tagArtistRemove(input: TagArtistRemoveInput!): TagArtistRemovePayload
 }

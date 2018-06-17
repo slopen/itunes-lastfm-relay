@@ -111,7 +111,7 @@ export default createPaginationContainer (TagsCloud, graphql`
 				node {
 					...on Tag {
 						name
-						artists (first: 4){
+						artists (first: 5) {
 							edges {
 								node {
 									stats {

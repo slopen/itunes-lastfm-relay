@@ -28,7 +28,7 @@ export default (T: Class <Model>) =>
 			.skip (offset)
 			.limit (limit || 1);
 
-		return connectionFromArraySlice (
+		const connection = connectionFromArraySlice (
 			data.map ((doc) => new T (doc)),
 			variables,
 			{
@@ -36,4 +36,6 @@ export default (T: Class <Model>) =>
 				arrayLength: count
 			}
 		);
+
+		return {...connection, count};
 	};

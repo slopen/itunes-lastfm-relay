@@ -21,7 +21,7 @@ type ArtistPreviewNode = {
 
 type TagArtistsType = {|
 	+id: string,
-	+tagArtists: {|
+	+artists: {|
 		+edges: $ReadOnlyArray <ArtistPreviewNode>
 	|}
 |};
@@ -37,7 +37,7 @@ const ArtistsList = ({relay, data, onChange}: Props) =>
 	<RelayList
 		limit={12}
 		relay={relay}
-		list={data.tagArtists.edges}
+		list={data.artists.edges}
 		renderRow={({node}: ArtistPreviewNode) =>
 			<ArtistSelectItem
 				data={node}
@@ -60,10 +60,10 @@ export default createPaginationContainer (ArtistsList, graphql`
 
 		id
 
-		tagArtists: artists (
+		artists (
 			first: $count
 			after: $cursor
-		) @connection(key: "TagEditArtistsRemove_tagArtists") {
+		) @connection(key: "TagArtists_artists") {
 			edges {
 				node {
 					id
@@ -75,7 +75,7 @@ export default createPaginationContainer (ArtistsList, graphql`
 	{
 		direction: 'forward',
 		getConnectionFromProps ({data}) {
-			return data && data.tagArtists;
+			return data && data.artists;
 		},
 		getVariables: ({data: {id}}: Props, {count, cursor}) => ({
 			id,

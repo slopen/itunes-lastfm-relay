@@ -14,7 +14,7 @@
     "build:server:production": "NODE_ENV=production webpack --progress --config scripts/webpack/server.js -d",
     "dev:client": "NODE_ENV=development webpack-dev-server --noinfo --config scripts/webpack/client.js --hot",
     "dev:server": "NODE_ENV=development BABEL_DISABLE_CACHE=1 nodemon --watch src/server --watch config src/server/index.js --exec babel-node",
-    "dev:relay": "npm run build:relay -- --watch",
+    "dev:relay": "relay-compiler --watch --src ./src --schema ./data/schema.graphql",
     "lint": "eslint src",
     "server": "NODE_ENV=development node build/server",
     "server:production": "NODE_ENV=production node build/server",

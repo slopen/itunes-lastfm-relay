@@ -16,7 +16,7 @@ type Stats = {|
 export type TagPreviewType = {|
 	id: string,
 	name: string,
-	+artists: {|
+	+tagStats: {|
 		+edges: $ReadOnlyArray<{|
 			+node: {|
 				+stats: Stats
@@ -31,9 +31,9 @@ type Props = {
 	fullMode: boolean
 };
 
-const getStats = ({data: {artists}}): Stats => {
-	return artists
-		? artists.edges.reduce ((stats, edge) => {
+const getStats = ({data: {tagStats}}): Stats => {
+	return tagStats
+		? tagStats.edges.reduce ((stats, edge) => {
 			stats.listeners += edge.node.stats.listeners;
 			stats.playcount += edge.node.stats.playcount;
 
@@ -74,11 +74,16 @@ const TagPreview = ({data, fullMode, relay}: Props) => {
 };
 
 export default createFragmentContainer (TagPreview, graphql`
-	fragment TagPreview on Tag {
+	fragment TagPreview on Tag
+		@argumentDefinitions (
+			count: {type: "Int", defaultValue: 12}
+		) {
+
 		id
 		name
 
-		artists (first: 5) {
+		tagStats: artists (first: $count)
+		@connection (key: "TagPreview_tagStats") {
 			edges {
 				node {
 					stats {

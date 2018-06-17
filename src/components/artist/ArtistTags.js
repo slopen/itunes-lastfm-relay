@@ -30,7 +30,7 @@ const TagsList = ({data}: Props) => {
 
 	return (
 		<ul className="list-inline tags">
-			{edges.map (({node}) =>
+			{edges.slice (0, 3).map (({node}) =>
 				<li key={node.id}>
 					{/* $FlowFixMe https://github.com/facebook/relay/issues/2316 */}
 					<TagPreview data={node}/>
@@ -42,7 +42,7 @@ const TagsList = ({data}: Props) => {
 
 export default createFragmentContainer (TagsList, graphql`
 	fragment ArtistTags on Artist {
-		tags (first: 3) {
+		tags (first: 3) @connection (key: "ArtistTags_tags") {
 			edges {
 				node {
 					id
