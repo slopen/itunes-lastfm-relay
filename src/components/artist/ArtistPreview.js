@@ -21,7 +21,7 @@ export type ArtistPreviewType = {|
 
 type Props = {
 	data: ArtistPreviewType,
-	fullMode: boolean
+	fullMode?: boolean
 };
 
 const RawBio = ({bio}) => {

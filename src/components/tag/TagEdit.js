@@ -3,12 +3,12 @@
 import React, {Component} from 'react';
 import EditTagModal from 'components/modal/TagEdit';
 
-import UpdateTagMutation from 'components/mutations/UpdateTag';
+import TagUpdateMutation from 'components/mutations/TagUpdate';
 
 import type {RelayProp} from 'react-relay';
 
 type TagData = {
-	+id: string,
+	id: string,
 	name: string
 };
 
@@ -50,11 +50,11 @@ export default class TagEdit extends Component <Props, State> {
 
 		console.log ('on confirm', data);
 
-		UpdateTagMutation (environment, data.name, id);
+		TagUpdateMutation (environment, data.name, id);
 	}
 
 	render () {
-		const {data} = this.props;
+		const {data, relay} = this.props;
 		const {isOpen} = this.state;
 
 		return (
@@ -68,6 +68,7 @@ export default class TagEdit extends Component <Props, State> {
 
 				<EditTagModal
 					data={data}
+					relay={relay}
 					isOpen={isOpen}
 					onToggle={this.onToggle}
 					onConfirm={this.onConfirm}/>

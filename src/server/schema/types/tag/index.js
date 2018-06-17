@@ -23,14 +23,6 @@ export default class Tag extends Model {
 
 		return artistConnection (query, variables);
 	}
-
-	async similar (variables: ConnectionArguments) {
-		const {similar: $in} = this._doc.toJSON ();
-		const query = {_id: {$in}};
-
-		return tagConnection (query, variables);
-	}
-
 }
 
 export const tagConnection = connection (Tag);

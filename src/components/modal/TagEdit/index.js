@@ -1,14 +1,20 @@
 // @flow
 
 import React, {Component} from 'react';
+
 import Modal from 'components/lib/modal';
+import Fields from './fields';
+
+import type {RelayProp} from 'react-relay';
 
 type TagData = {
+	id: string,
 	name: string
 };
 
 type Props = {
 	data: TagData,
+	relay: RelayProp,
 	isOpen?: boolean,
 	onToggle: () => void,
 	onConfirm: (Object) => void
@@ -25,19 +31,12 @@ export default class TagEditModal extends Component <Props, State> {
 
 		this.state = {};
 
-		(this: any).onFocus = this.onFocus.bind (this);
 		(this: any).onChange = this.onChange.bind (this);
 		(this: any).onConfirm = this.onConfirm.bind (this);
 	}
 
-	onFocus () {
-		if (!Object.keys (this.state).length) {
-			this.setState ({...this.props.data});
-		}
-	}
-
-	onChange ({target: {name, value}}: SyntheticInputEvent <EventTarget>) {
-		this.setState ({[name]: value});
+	onChange (data: Object) {
+		this.setState ({...data});
 	}
 
 	onConfirm () {
@@ -47,13 +46,10 @@ export default class TagEditModal extends Component <Props, State> {
 	render () {
 		const {
 			data,
+			relay,
 			isOpen,
 			onToggle
 		} = this.props;
-
-		const {
-			name = data.name
-		} = this.state;
 
 		return (
 			<Modal
@@ -62,15 +58,10 @@ export default class TagEditModal extends Component <Props, State> {
 				toggle={onToggle}
 				onConfirm={this.onConfirm}>
 
-				<input
-					required
-					name="name"
-					value={name}
-					onFocus={this.onFocus}
-					onChange={this.onChange}
-					className="form-control"
-					placeholder="name"
-					type="text"/>
+				<Fields
+					data={data}
+					relay={relay}
+					onChange={this.onChange}/>
 			</Modal>
 		);
 	}

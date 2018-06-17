@@ -212,18 +212,29 @@ type Viewer implements Node {
 	tag(id: ID!): Tag
 }
 
-input UpdateTagInput {
+input TagUpdateInput {
 	id: ID!
 	name: String!
 	clientMutationId: String
 }
 
-type UpdateTagPayload {
+type TagUpdatePayload {
+	tag: Tag
+	clientMutationId: String
+}
+
+input TagArtistAddInput {
+	id: ID!
+	clientMutationId: String
+}
+
+type TagArtistAddPayload {
 	tag: Tag
 	clientMutationId: String
 }
 
 
 type RootMutation {
-	updateTag(input: UpdateTagInput!): UpdateTagPayload
+	tagUpdate(input: TagUpdateInput!): TagUpdatePayload
+	tagArtistAdd(input: TagArtistAddInput!): TagArtistAddPayload
 }

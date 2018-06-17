@@ -3,17 +3,18 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 
-import ArtistsCloudQuery from 'components/queries/ArtistsCloudQuery';
-import TagsCloudQuery from 'components/queries/TagsCloudQuery';
-import HeaderQuery from 'components/queries/HeaderQuery';
-import ArtistQuery from 'components/queries/ArtistQuery';
-import TagQuery from 'components/queries/TagQuery';
-
 import Header from 'components/Header';
 import ArtistsCloud from 'components/artist/ArtistsCloud';
 import TagsCloud from 'components/tag/TagsCloud';
-import TagPage from 'components/tag/TagPage';
 import ArtistPage from 'components/artist/ArtistPage';
+import TagPage from 'components/tag/TagPage';
+
+import HeaderQuery from './queries/HeaderQuery';
+import ArtistsCloudQuery from './queries/ArtistsCloudQuery';
+import TagsCloudQuery from './queries/TagsCloudQuery';
+import ArtistPageQuery from './queries/ArtistPageQuery';
+import TagPageQuery from './queries/TagPageQuery';
+
 
 import render from './render';
 
@@ -63,7 +64,7 @@ export default ({environment}: Props) =>
 					component={render (
 						environment,
 						ArtistPage,
-						ArtistQuery
+						ArtistPageQuery
 					)}/>
 
 				<Route
@@ -81,7 +82,7 @@ export default ({environment}: Props) =>
 					component={render (
 						environment,
 						TagPage,
-						TagQuery
+						TagPageQuery
 					)}/>
 			</Switch>
 		</div>

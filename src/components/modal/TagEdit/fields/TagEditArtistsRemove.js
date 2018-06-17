@@ -4,14 +4,19 @@ import React from 'react';
 import {createPaginationContainer, graphql} from 'react-relay';
 
 import RelayList from 'components/lib/relay-list';
-import ArtistPreview from 'components/artist/ArtistPreview';
+import ArtistSelectItem from 'components/artist/ArtistSelectItem';
 
 
 import type {RelayPaginationProp} from 'react-relay';
-import type {ArtistPreviewType} from 'components/artist/ArtistPreview';
+import type {ArtistSelectItemType} from 'components/artist/ArtistSelectItem';
+
+type ArtistItemType = {
+	...$Exact<ArtistSelectItemType>,
+	id: string
+};
 
 type ArtistPreviewNode = {
-	node: ArtistPreviewType
+	node: ArtistItemType
 };
 
 type TagArtistsType = {|
@@ -23,24 +28,31 @@ type TagArtistsType = {|
 
 type Props = {
 	relay: RelayPaginationProp,
-	data: TagArtistsType
+	data: TagArtistsType,
+	onChange: (id: string) => void
 };
 
 
-const ArtistsList = ({relay, data}: Props) =>
+const ArtistsList = ({relay, data, onChange}: Props) =>
 	<RelayList
 		limit={12}
 		relay={relay}
 		list={data.tagArtists.edges}
 		renderRow={({node}: ArtistPreviewNode) =>
-			<div className="item" key={node.id}>
-				<ArtistPreview data={node}/>
-			</div>
+			<ArtistSelectItem
+				data={node}
+				key={node.id}
+				onAction={() =>
+					onChange (node.id)
+				}
+				actionIcon={
+					<i className="fa fa-times"/>
+				}/>
 		}/>
 
 
 export default createPaginationContainer (ArtistsList, graphql`
-	fragment TagArtists on Tag
+	fragment TagEditArtistsRemove on Tag
 		@argumentDefinitions (
 			count: {type: "Int", defaultValue: 12}
 			cursor: {type: "String"}
@@ -51,11 +63,11 @@ export default createPaginationContainer (ArtistsList, graphql`
 		tagArtists: artists (
 			first: $count
 			after: $cursor
-		) @connection(key: "TagArtists_tagArtists") {
+		) @connection(key: "TagEditArtistsRemove_tagArtists") {
 			edges {
 				node {
 					id
-					...ArtistPreview
+					...ArtistSelectItem
 				}
 			}
 		}
@@ -71,13 +83,13 @@ export default createPaginationContainer (ArtistsList, graphql`
 			cursor
 		}),
 		query: graphql`
-			query TagArtistsPaginationQuery (
+			query TagEditArtistsRemovePaginationQuery (
 				$id: ID!
 				$count: Int!
 				$cursor: String
 			) {
 				tag: node (id: $id) {
-					...TagArtists @arguments (count: $count, cursor: $cursor)
+					...TagEditArtistsRemove @arguments (count: $count, cursor: $cursor)
 				}
 			}
 		`

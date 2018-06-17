@@ -5,7 +5,7 @@ import {createFragmentContainer, graphql} from 'react-relay';
 
 import TagPreview from 'components/tag/TagPreview';
 
-export type ArtistTagsType = {|
+export type ArtistTagsType = {
 	+tags: ?{|
 		+edges: $ReadOnlyArray<{|
 			+node: {|
@@ -13,7 +13,7 @@ export type ArtistTagsType = {|
 			|}
 		|}>
 	|}
-|};
+};
 
 
 type Props = {

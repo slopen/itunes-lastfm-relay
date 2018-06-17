@@ -14,7 +14,7 @@ type Stats = {|
 |};
 
 export type TagPreviewType = {|
-	+id: string,
+	id: string,
 	name: string,
 	+artists: {|
 		+edges: $ReadOnlyArray<{|

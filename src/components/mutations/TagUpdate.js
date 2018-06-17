@@ -6,10 +6,10 @@ import {commitMutation, graphql} from 'react-relay';
 import type {Environment} from 'react-relay';
 
 const mutation = graphql`
-	mutation UpdateTagMutation (
-		$input: UpdateTagInput!
+	mutation TagUpdateMutation (
+		$input: TagUpdateInput!
 	) {
-		updateTag (input: $input) {
+		tagUpdate (input: $input) {
 			tag {
 				name
 				id
@@ -19,8 +19,6 @@ const mutation = graphql`
 `;
 
 export default (environment: Environment, name: string, id: string) => {
-	console.log (name, id);
-
 	const variables = {
 		input: {
 			name,

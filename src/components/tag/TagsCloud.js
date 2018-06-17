@@ -138,7 +138,7 @@ export default createPaginationContainer (TagsCloud, graphql`
 			};
 		},
 		query: graphql`
-			query TagsCloudRefetchQuery (
+			query TagsCloudPaginationQuery (
 				$count: Int!
 				$cursor: String
 			) {

@@ -1,23 +1,41 @@
 // @flow
 
+import React from 'react';
 import {createPaginationContainer, graphql} from 'react-relay';
 
-import ArtistsList from './ArtistsList';
+import RelayList from 'components/lib/relay-list';
+import ArtistPreview from 'components/artist/ArtistPreview';
 
-export type ArtistSimilarType = {|
+
+import type {RelayPaginationProp} from 'react-relay';
+import type {ArtistPreviewType} from 'components/artist/ArtistPreview';
+
+type ArtistPreviewNode = {
+	node: ArtistPreviewType
+};
+
+type ArtistSimilarType = {|
 	+id: string,
-	+artistSimilar: ?{|
-		+edges: $ReadOnlyArray<{|
-			+node: {|
-				+id: string
-			|}
-		|}>
+	+artistSimilar: {|
+		+edges: $ReadOnlyArray <ArtistPreviewNode>
 	|}
 |};
 
 type Props = {
+	relay: RelayPaginationProp,
 	data: ArtistSimilarType
 };
+
+const ArtistsList = ({relay, data}: Props) =>
+	<RelayList
+		limit={12}
+		relay={relay}
+		list={data.artistSimilar.edges}
+		renderRow={({node}: ArtistPreviewNode) =>
+			<div className="item" key={node.id}>
+				<ArtistPreview data={node}/>
+			</div>
+		}/>
 
 
 export default createPaginationContainer (ArtistsList, graphql`
@@ -32,7 +50,7 @@ export default createPaginationContainer (ArtistsList, graphql`
 		artistSimilar: similar (
 			first: $count
 			after: $cursor
-		) @connection(key: "ArtistsList_artistSimilar") {
+		) @connection (key: "ArtistsList_artistSimilar") {
 			edges {
 				node {
 					id
@@ -54,7 +72,7 @@ export default createPaginationContainer (ArtistsList, graphql`
 			};
 		},
 		query: graphql`
-			query ArtistSimilarQuery (
+			query ArtistSimilarPaginationQuery (
 				$id: ID!,
 				$count: Int!
 				$cursor: String

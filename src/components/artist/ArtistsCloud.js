@@ -111,7 +111,7 @@ export default createPaginationContainer (ArtistsCloud, graphql`
 			};
 		},
 		query: graphql`
-			query ArtistsCloudRefetchQuery (
+			query ArtistsCloudPaginationQuery (
 				$count: Int!
 				$cursor: String
 			) {
