@@ -32,8 +32,8 @@ export default (environment: Environment, tagId: string, name: string) => {
 		{
 			mutation,
 			variables,
-			onCompleted: (response: Object, errors) => {
-				console.log ('* mutation response:', response, errors)
+			onCompleted: (response: Object) => {
+				console.log ('* mutation response:', response)
 			},
 			onError: (err) => console.error ('* mutation error:', err)
 		}

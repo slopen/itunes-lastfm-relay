@@ -49,13 +49,13 @@ export default createPaginationContainer (ArtistsList, graphql`
 		@argumentDefinitions (
 			count: {type: "Int", defaultValue: 12}
 			cursor: {type: "String"}
-			exclude: {type: "[ID]", defaultValue: []}
+			excludeTag: {type: "ID"}
 		) {
 
 		artists (
 			first: $count
 			after: $cursor
-			exclude: $exclude
+			excludeTag: $excludeTag
 		) @connection (key: "TagEditArtistsAdd_artists") {
 			edges {
 				node {
@@ -70,19 +70,27 @@ export default createPaginationContainer (ArtistsList, graphql`
 		getConnectionFromProps ({data}) {
 			return data && data.artists;
 		},
-		getVariables (props, {count, cursor}) {
+		getVariables (props, {count, cursor}, fragmentVariables) {
 			return {
 				count,
-				cursor
+				cursor,
+				excludeTag: fragmentVariables
+					? fragmentVariables.excludeTag
+					: null
 			};
 		},
 		query: graphql`
 			query TagEditArtistsAddPaginationQuery (
 				$count: Int!
 				$cursor: String
+				$excludeTag: ID
 			) {
 				data: viewer {
-					...TagEditArtistsAdd @arguments (count: $count, cursor: $cursor)
+					...TagEditArtistsAdd @arguments (
+						count: $count,
+						cursor: $cursor,
+						excludeTag: $excludeTag
+					)
 				}
 			}
 		`

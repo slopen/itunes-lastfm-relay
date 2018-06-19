@@ -3,9 +3,11 @@
 import {graphql} from 'react-relay';
 
 export default graphql`
-	query TagEditArtistsAddQuery {
+	query TagEditArtistsAddQuery ($excludeTag: ID) {
 		data: viewer {
-			...TagEditArtistsAdd
+			...TagEditArtistsAdd @arguments (
+				excludeTag: $excludeTag
+			)
 		}
 	}
 `;

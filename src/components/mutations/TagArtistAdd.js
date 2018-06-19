@@ -17,13 +17,7 @@ const mutation = graphql`
 					...ArtistPreview
 				}
 			}
-			artistTagEdge {
-				cursor
-				node {
-					id
-					...TagPreview
-				}
-			}
+			viewerAddArtistId
 		}
 	}
 `;
@@ -43,11 +37,12 @@ export default (environment: Environment, tagId: string, artistId: string) => {
 		{
 			mutation,
 			variables,
-			onCompleted: (response: Object, errors) => {
-				console.log ('* mutation response:', response, errors)
+			onCompleted: (response: Object) => {
+				console.log ('* mutation response:', response)
 			},
 			onError: (err) => console.error ('* mutation error:', err),
 			configs: [{
+				// adding tag -> artist connection item
 				type: 'RANGE_ADD',
 				parentID: tagId,
 				connectionInfo: [{
@@ -55,15 +50,17 @@ export default (environment: Environment, tagId: string, artistId: string) => {
 					rangeBehavior: 'prepend'
 				}],
 				edgeName: 'tagArtistEdge'
-			},
-			{
-				type: 'RANGE_ADD',
-				parentID: artistId,
-				connectionInfo: [{
-					key: 'ArtistTags_tags',
-					rangeBehavior: 'prepend'
+			}, {
+				// removing viewer -> artists by excludeTag connection item
+				type: 'RANGE_DELETE',
+				parentName: 'viewer',
+				parentID: 'viewer',
+				connectionKeys: [{
+					key: 'TagEditArtistsAdd_artists',
+					filters: {excludeTag: tagId}
 				}],
-				edgeName: 'artistTagEdge'
+				pathToConnection: ['viewer', 'artists'],
+				deletedIDFieldName: 'viewerAddArtistId'
 			}]
 		}
 	);

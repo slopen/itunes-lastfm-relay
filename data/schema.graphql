@@ -117,23 +117,6 @@ type PageInfo {
 type RootQuery {
 	viewer: Viewer
 	node(id: ID!): Node
-	artist(id: ID!): Artist
-	artists(
-		id: [ID],
-		ids: [ID],
-		orderBy: orderByArtist,
-		name: String,
-		url: String,
-		_id: ID
-	): [Artist]
-	tag(id: ID!): Tag
-	tags(
-		id: [ID],
-		ids: [ID],
-		orderBy: orderByTag,
-		name: String,
-		_id: ID
-	): [Tag]
 }
 
 type Tag implements Node {
@@ -199,7 +182,7 @@ type Viewer implements Node {
 		name: String,
 		url: String,
 		_id: ID,
-		exclude: [ID]
+		excludeTag: ID
 	): ArtistConnection
 	tags(
 		after: String,
@@ -209,7 +192,6 @@ type Viewer implements Node {
 		orderBy: orderByTag,
 		name: String,
 		_id: ID,
-		exclude: [ID]
 	): TagConnection
 	tag(id: ID!): Tag
 }
@@ -232,23 +214,21 @@ input TagArtistAddInput {
 }
 
 type TagArtistAddPayload {
-	tag: Tag
-	artist: Artist
-	tagArtistEdge: TagArtistsEdge
-	artistTagEdge: ArtistTagsEdge
 	clientMutationId: String
+	tagArtistEdge: TagArtistsEdge
+	viewerAddArtistId: ID
 }
 
 input TagArtistRemoveInput {
-	tagId: ID!
-	artistId: ID!
+	tagId: ID
+	artistId: ID
 	clientMutationId: String
 }
 
 type TagArtistRemovePayload {
-	tagArtistId: ID!
-	artistTagId: ID!
 	clientMutationId: String
+	tagArtistId: ID
+	viewerAddArtistEdge: ArtistEdge
 }
 
 

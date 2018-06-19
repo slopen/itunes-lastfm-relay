@@ -85,7 +85,10 @@ export default createPaginationContainer (ArtistsList, graphql`
 				$cursor: String
 			) {
 				tag: node (id: $id) {
-					...TagEditArtistsRemove @arguments (count: $count, cursor: $cursor)
+					...TagEditArtistsRemove @arguments (
+						count: $count,
+						cursor: $cursor
+					)
 				}
 			}
 		`

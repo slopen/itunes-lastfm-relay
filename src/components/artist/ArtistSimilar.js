@@ -77,7 +77,7 @@ export default createPaginationContainer (ArtistsList, graphql`
 				$count: Int!
 				$cursor: String
 			) {
-				artist (id: $id) {
+				artist: node (id: $id) {
 					...ArtistSimilar @arguments (first: $count, cursor: $cursor)
 				}
 			}

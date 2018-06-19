@@ -44,7 +44,7 @@ export default ({
 			<div className="field">
 				<label>Add Artist</label>
 				<Render
-					variables={{id: data.id}}
+					variables={{excludeTag: data.id}}
 					query={TagEditArtistsAddQuery}
 					environment={relay.environment}
 					component={TagEditArtistsAdd}

@@ -29,42 +29,40 @@ export default {
 		const {clientMutationId, name, tagId} = input;
 
 		return {
-			tag: await Tag.updateTag (tagId, {name}),
-			clientMutationId
+			clientMutationId,
+			tag: await Tag.updateTag (tagId, {name})
 		};
 	},
 
 	tagArtistAdd: async ({input}: TagArtistInput) => {
 		const {clientMutationId, tagId, artistId} = input;
-
-		const tag = await Tag.addArtist (tagId, artistId);
 		const artist = await Artist.addTag (artistId, tagId);
+
+		await Tag.addArtist (tagId, artistId);
 
 		return {
 			clientMutationId,
-			artistTagEdge: {
-				cursor: offsetToCursor (0),
-				node: tag
-			},
 			tagArtistEdge: {
 				cursor: offsetToCursor (0),
 				node: artist
-			}
+			},
+			viewerAddArtistId: artistId
 		};
 	},
 
 	tagArtistRemove: async ({input}: TagArtistInput) => {
 		const {clientMutationId, tagId, artistId} = input;
-
-		const tag = await Tag.removeArtist (tagId, artistId);
 		const artist = await Artist.removeTag (artistId, tagId);
 
-		if (tag && artist) {
-			return {
-				clientMutationId,
-				artistTagId: tagId,
-				tagArtistId: artistId
-			};
-		}
+		await Tag.removeArtist (tagId, artistId);
+
+		return {
+			clientMutationId,
+			tagArtistId: artistId,
+			viewerAddArtistEdge: {
+				cursor: offsetToCursor (0),
+				node: artist
+			}
+		};
 	}
 }

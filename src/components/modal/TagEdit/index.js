@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import Modal from 'components/lib/modal';
 import Fields from './fields';
 
+import TagUpdateMutation from 'components/mutations/TagUpdate';
 import TagArtistAddMutation from 'components/mutations/TagArtistAdd';
 import TagArtistRemoveMutation from 'components/mutations/TagArtistRemove';
 
@@ -19,8 +20,7 @@ type Props = {
 	data: TagData,
 	relay: RelayProp,
 	isOpen?: boolean,
-	onToggle: () => void,
-	onConfirm: (Object) => void
+	onToggle: () => void
 };
 
 type State = {
@@ -37,11 +37,12 @@ export default class TagEditModal extends Component <Props, State> {
 		(this: any).onFieldChange = this.onFieldChange.bind (this);
 		(this: any).onArtistAdd = this.onArtistAdd.bind (this);
 		(this: any).onArtistRemove = this.onArtistRemove.bind (this);
-		(this: any).onConfirm = this.onConfirm.bind (this);
 	}
 
-	onFieldChange (data: Object) {
-		this.setState ({...data});
+	onFieldChange (data: TagData) {
+		const {data: {id}, relay: {environment}} = this.props;
+
+		TagUpdateMutation (environment, id, data.name);
 	}
 
 	onArtistAdd (artistId: string) {
@@ -56,10 +57,6 @@ export default class TagEditModal extends Component <Props, State> {
 		TagArtistRemoveMutation (environment, data.id, artistId);
 	}
 
-	onConfirm () {
-		this.props.onConfirm (this.state);
-	}
-
 	render () {
 		const {
 			data,
@@ -72,8 +69,7 @@ export default class TagEditModal extends Component <Props, State> {
 			<Modal
 				title="edit tag"
 				isOpen={isOpen}
-				toggle={onToggle}
-				onConfirm={this.onConfirm}>
+				toggle={onToggle}>
 
 				<Fields
 					data={data}

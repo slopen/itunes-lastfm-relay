@@ -16,7 +16,6 @@ type Props = {
 	isOpen?: boolean,
 	toggle: Function,
 	title: string,
-	onConfirm: Function,
 	children?: Element <*> | $ReadOnlyArray <Element <*>>
 };
 
@@ -25,7 +24,6 @@ export default ({
 	isOpen,
 	toggle,
 	title,
-	onConfirm,
 	children
 }: Props) =>
 	<Modal
@@ -43,9 +41,6 @@ export default ({
 		<ModalFooter>
 			<button
 				onClick={toggle}
-				className="btn btn-sm btn-default">cancel</button>
-			<button
-				onClick={onConfirm}
-				className="btn btn-sm btn-success">confirm</button>
+				className="btn btn-sm btn-default btn-block">done</button>
 		</ModalFooter>
 	</Modal>

@@ -3,7 +3,6 @@
 import React, {Component} from 'react';
 import EditTagModal from 'components/modal/TagEdit';
 
-import TagUpdateMutation from 'components/mutations/TagUpdate';
 
 import type {RelayProp} from 'react-relay';
 
@@ -21,6 +20,7 @@ type State = {
 	isOpen?: boolean
 };
 
+
 export default class TagEdit extends Component <Props, State> {
 
 	constructor (props: Props) {
@@ -29,7 +29,6 @@ export default class TagEdit extends Component <Props, State> {
 		this.state = {};
 
 		(this: any).onToggle = this.onToggle.bind (this);
-		(this: any).onConfirm = this.onConfirm.bind (this);
 	}
 
 	onToggle (e?: Event) {
@@ -40,12 +39,6 @@ export default class TagEdit extends Component <Props, State> {
 		this.setState ({
 			isOpen: !this.state.isOpen
 		});
-	}
-
-	onConfirm (data: TagData) {
-		const {data: {id}, relay: {environment}} = this.props;
-
-		TagUpdateMutation (environment, id, data.name);
 	}
 
 	render () {
@@ -65,8 +58,7 @@ export default class TagEdit extends Component <Props, State> {
 					data={data}
 					relay={relay}
 					isOpen={isOpen}
-					onToggle={this.onToggle}
-					onConfirm={this.onConfirm}/>
+					onToggle={this.onToggle}/>
 			</span>
 		);
 	}
