@@ -17,7 +17,7 @@ const mutation = graphql`
 `;
 
 
-export default (environment: Environment, artistId: string, tagId: string) => {
+export default (environment: Environment, tagId: string, artistId: string) => {
 	const variables = {
 		input: {
 			tagId,
@@ -32,9 +32,9 @@ export default (environment: Environment, artistId: string, tagId: string) => {
 			mutation,
 			variables,
 			onCompleted: (response: Object, errors) => {
-				console.log ('response received from server:', response, errors)
+				console.log ('* mutation response:', response, errors)
 			},
-			onError: (err) => console.error (err),
+			onError: (err) => console.error ('* mutation error:', err),
 			configs: [{
 				type: 'RANGE_DELETE',
 				parentID: tagId,

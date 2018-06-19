@@ -18,11 +18,11 @@ const mutation = graphql`
 	}
 `;
 
-export default (environment: Environment, name: string, id: string) => {
+export default (environment: Environment, tagId: string, name: string) => {
 	const variables = {
 		input: {
+			tagId,
 			name,
-			id,
 			clientMutationId: uuid.v4 ()
 		}
 	};
@@ -33,9 +33,9 @@ export default (environment: Environment, name: string, id: string) => {
 			mutation,
 			variables,
 			onCompleted: (response: Object, errors) => {
-				console.log ('response received from server:', response, errors)
+				console.log ('* mutation response:', response, errors)
 			},
-			onError: (err) => console.error (err)
+			onError: (err) => console.error ('* mutation error:', err)
 		}
 	);
 }

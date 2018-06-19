@@ -10,25 +10,18 @@ const mutation = graphql`
 		$input: TagArtistAddInput!
 	) {
 		tagArtistAdd (input: $input) {
-			tag {
-				id
-				...TagPreview
-			}
-			artist {
-				id
-				...ArtistPreview
-			}
-
 			tagArtistEdge {
 				cursor
 				node {
 					id
+					...ArtistPreview
 				}
 			}
 			artistTagEdge {
 				cursor
 				node {
 					id
+					...TagPreview
 				}
 			}
 		}
@@ -36,7 +29,7 @@ const mutation = graphql`
 `;
 
 
-export default (environment: Environment, artistId: string, tagId: string) => {
+export default (environment: Environment, tagId: string, artistId: string) => {
 	const variables = {
 		input: {
 			tagId,
@@ -51,9 +44,9 @@ export default (environment: Environment, artistId: string, tagId: string) => {
 			mutation,
 			variables,
 			onCompleted: (response: Object, errors) => {
-				console.log ('response received from server:', response, errors)
+				console.log ('* mutation response:', response, errors)
 			},
-			onError: (err) => console.error (err),
+			onError: (err) => console.error ('* mutation error:', err),
 			configs: [{
 				type: 'RANGE_ADD',
 				parentID: tagId,

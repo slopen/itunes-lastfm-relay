@@ -25,7 +25,7 @@ const types = {
 };
 
 export default class Node {
-	static fromGlobalId (globalId: string) {
+	static fromGlobalId (globalId: string): Promise <Tag> | Promise <Artist> {
 		const {type, id} = fromGlobalId (globalId);
 
 		return types [type] (id);

@@ -2,6 +2,14 @@
 
 import mongoose from 'mongoose';
 
+import type {MongoId, MongooseDocument} from 'mongoose';
+
+export type TagMongooseDoc = MongooseDocument & {
+    name: String,
+    artists: Array <MongoId>,
+    similar: Array <MongoId>
+};
+
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const tagSchema = new mongoose.Schema ({
@@ -19,8 +27,6 @@ const tagSchema = new mongoose.Schema ({
         type: ObjectId,
         ref: 'Tag'
     }]
-}, {
-    versionKey: false
-});
+}, {versionKey: false});
 
 export default mongoose.model ('Tag', tagSchema)

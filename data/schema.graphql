@@ -198,7 +198,8 @@ type Viewer implements Node {
 		orderBy: orderByArtist,
 		name: String,
 		url: String,
-		_id: ID
+		_id: ID,
+		exclude: [ID]
 	): ArtistConnection
 	tags(
 		after: String,
@@ -207,13 +208,14 @@ type Viewer implements Node {
 		last: Int,
 		orderBy: orderByTag,
 		name: String,
-		_id: ID
+		_id: ID,
+		exclude: [ID]
 	): TagConnection
 	tag(id: ID!): Tag
 }
 
 input TagUpdateInput {
-	id: ID!
+	tagId: ID!
 	name: String!
 	clientMutationId: String
 }

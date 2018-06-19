@@ -10,13 +10,9 @@ import ArtistSelectItem from 'components/artist/ArtistSelectItem';
 import type {RelayPaginationProp} from 'react-relay';
 import type {ArtistSelectItemType} from 'components/artist/ArtistSelectItem';
 
-type ArtistItemType = {
-	...$Exact<ArtistSelectItemType>,
-	id: string
-};
 
 type ArtistPreviewNode = {
-	node: ArtistItemType
+	node: ArtistSelectItemType
 };
 
 type TagArtistsType = {|

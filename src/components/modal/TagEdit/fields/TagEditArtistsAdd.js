@@ -10,13 +10,8 @@ import ArtistSelectItem from 'components/artist/ArtistSelectItem';
 import type {RelayPaginationProp} from 'react-relay';
 import type {ArtistSelectItemType} from 'components/artist/ArtistSelectItem';
 
-type ArtistItemType = {
-	id: string,
-	...$Exact<ArtistSelectItemType>,
-};
-
 type ArtistPreviewNode = {
-	node: ArtistItemType
+	node: ArtistSelectItemType
 };
 
 
@@ -54,11 +49,13 @@ export default createPaginationContainer (ArtistsList, graphql`
 		@argumentDefinitions (
 			count: {type: "Int", defaultValue: 12}
 			cursor: {type: "String"}
+			exclude: {type: "[ID]", defaultValue: []}
 		) {
 
 		artists (
 			first: $count
 			after: $cursor
+			exclude: $exclude
 		) @connection (key: "TagEditArtistsAdd_artists") {
 			edges {
 				node {

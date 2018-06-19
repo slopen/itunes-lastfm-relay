@@ -10,18 +10,20 @@ import Boundary from './Boundary';
 
 import type {
 	ReadyState,
-	GraphQLTaggedNode
+	GraphQLTaggedNode,
+	Environment as RelayEnv
 } from 'react-relay'
 
 import type {
-	Environment
+	Environment as RuntimeEnv
 } from 'relay-runtime';
 
+
 type RenderProps = {
-	environment: Environment,
-	component: React$ComponentType<*>,
 	query: GraphQLTaggedNode,
 	variables?: Object,
+	environment: RelayEnv | RuntimeEnv,
+	component: React$ComponentType <*>,
 	componentProps?: Object
 };
 
@@ -31,7 +33,7 @@ export default ({
 	variables,
 	environment,
 	component: Component,
-	componentProps
+	componentProps = {}
 }: RenderProps) =>
 	<Boundary>
 		<QueryRenderer

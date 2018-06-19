@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 
 import {
@@ -7,13 +9,25 @@ import {
 	ModalFooter
 } from 'reactstrap';
 
+
+import type {Element} from 'react';
+
+type Props = {
+	isOpen?: boolean,
+	toggle: Function,
+	title: string,
+	onConfirm: Function,
+	children?: Element <*> | $ReadOnlyArray <Element <*>>
+};
+
+
 export default ({
 	isOpen,
 	toggle,
 	title,
 	onConfirm,
 	children
-}) =>
+}: Props) =>
 	<Modal
 		isOpen={isOpen}
 		toggle={toggle}>

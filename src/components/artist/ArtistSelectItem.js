@@ -10,9 +10,8 @@ import type {ArtistImageType} from './ArtistImage';
 
 export type ArtistSelectItemType = {
 	id: string,
-	name: string,
-	...$Exact<ArtistImageType>
-};
+	name: string
+} & ArtistImageType;
 
 type Props = {
 	data: ArtistSelectItemType,

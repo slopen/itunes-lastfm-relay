@@ -2,6 +2,27 @@
 
 import mongoose from 'mongoose';
 
+import type {MongoId, MongooseDocument} from 'mongoose';
+
+export type ArtistMongooseDoc = MongooseDocument & {
+    url: string,
+    bio: {
+        published: string,
+        summary: string
+    },
+    stats: {
+        listeners: number,
+        playcount: number
+    },
+    name: string,
+    similar: Array <MongoId>,
+    tags: Array <MongoId>,
+    image: Array <{
+        url: string,
+        size: string
+    }>
+};
+
 const {Schema} = mongoose;
 const {ObjectId} = Schema.Types;
 

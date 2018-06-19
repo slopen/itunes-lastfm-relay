@@ -8,7 +8,7 @@ const SchemaNodeInterface = schema.getType ('Node');
 
 if (SchemaNodeInterface instanceof GraphQLInterfaceType) {
 	SchemaNodeInterface.resolveType = /* $FlowFixMe graphql types */
-		(doc) => schema.getType (doc.constructor.name);
+		(doc: mixed) => schema.getType (doc.constructor.name);
 }
 
 export default schema;

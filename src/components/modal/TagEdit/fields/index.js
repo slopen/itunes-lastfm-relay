@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 
 import Render from 'components/render';
@@ -11,6 +13,16 @@ import TagEditArtistsAddQuery from './queries/TagEditArtistsAddQuery';
 import TagEditArtistsRemove from './TagEditArtistsRemove';
 import TagEditArtistsRemoveQuery from './queries/TagEditArtistsRemoveQuery';
 
+import type {RelayProp} from 'react-relay';
+
+type Props = {
+	data: {id: string},
+	relay: RelayProp,
+	onArtistAdd: (id: string) => void,
+	onArtistRemove: (id: string) => void,
+	onFieldChange: (data: Object) => void
+};
+
 
 export default ({
 	data,
@@ -18,7 +30,7 @@ export default ({
 	onFieldChange,
 	onArtistAdd,
 	onArtistRemove
-}) =>
+}: Props) =>
 	<form>
 
 		<Render

@@ -43,14 +43,9 @@ export default class TagEdit extends Component <Props, State> {
 	}
 
 	onConfirm (data: TagData) {
-		const {
-			data: {id},
-			relay: {environment}
-		} = this.props;
+		const {data: {id}, relay: {environment}} = this.props;
 
-		console.log ('on confirm', data);
-
-		TagUpdateMutation (environment, data.name, id);
+		TagUpdateMutation (environment, id, data.name);
 	}
 
 	render () {

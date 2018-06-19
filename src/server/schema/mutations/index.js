@@ -1,31 +1,47 @@
+// @flow
+
 import {offsetToCursor} from 'graphql-relay';
 
-import Node from 'server/schema/types/node';
+import Tag from 'server/schema/types/tag';
+import Artist from 'server/schema/types/artist';
+
+
+type TagUpdateInput = {
+	input: {
+		clientMutationId: string,
+		name: string,
+		tagId: string
+	}
+};
+
+type TagArtistInput = {
+	input: {
+		clientMutationId: string,
+		artistId: string,
+		tagId: string
+	}
+};
 
 
 export default {
 
-	tagUpdate: async ({input}) => {
-		const {clientMutationId, name, id} = input;
-		const tag = await Node.fromGlobalId (id);
-
-		tag.name = name;
+	tagUpdate: async ({input}: TagUpdateInput) => {
+		const {clientMutationId, name, tagId} = input;
 
 		return {
-			tag,
+			tag: await Tag.updateTag (tagId, {name}),
 			clientMutationId
 		};
 	},
 
-	tagArtistAdd: async ({input}) => {
+	tagArtistAdd: async ({input}: TagArtistInput) => {
 		const {clientMutationId, tagId, artistId} = input;
-		const tag = await Node.fromGlobalId (tagId);
-		const artist = await Node.fromGlobalId (artistId);
+
+		const tag = await Tag.addArtist (tagId, artistId);
+		const artist = await Artist.addTag (artistId, tagId);
 
 		return {
 			clientMutationId,
-			tag,
-			artist,
 			artistTagEdge: {
 				cursor: offsetToCursor (0),
 				node: tag
@@ -37,15 +53,18 @@ export default {
 		};
 	},
 
-	tagArtistRemove: async ({input}) => {
+	tagArtistRemove: async ({input}: TagArtistInput) => {
 		const {clientMutationId, tagId, artistId} = input;
-		const tag = await Node.fromGlobalId (tagId);
-		const artist = await Node.fromGlobalId (artistId);
 
-		return {
-			clientMutationId,
-			artistTagId: tag.id,
-			tagArtistId: artist.id
-		};
+		const tag = await Tag.removeArtist (tagId, artistId);
+		const artist = await Artist.removeTag (artistId, tagId);
+
+		if (tag && artist) {
+			return {
+				clientMutationId,
+				artistTagId: tagId,
+				tagArtistId: artistId
+			};
+		}
 	}
 }

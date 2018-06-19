@@ -2,11 +2,6 @@
 
 import {RelayObservable} from 'relay-runtime/lib/RelayObservable';
 
-// import type {
-// 	Record,
-// 	RecordMap
-// } from 'react-relay';
-
 import type {
 	FragmentReference as iFragmentReference,
 	ConcreteRequest as iConcreteRequest,
@@ -23,6 +18,7 @@ import type {
 
 
 declare module 'relay-runtime' {
+
 	import type {
 		Record,
 		RecordMap,

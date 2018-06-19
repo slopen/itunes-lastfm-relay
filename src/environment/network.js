@@ -23,8 +23,9 @@ const batchUrl = 'https://itunes-lastfm-relay/graphql/batch';
 export default new RelayNetworkLayer ([
 
 	cacheMiddleware ({
-		size: 100,
-		ttl: 900000
+		size: 50,
+		ttl: 900000,
+		clearOnMutation: true
 	}),
 
 	(next) => async (req) => {

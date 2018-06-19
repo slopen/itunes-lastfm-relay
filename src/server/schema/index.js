@@ -10,19 +10,26 @@ type NodeVariables = {
 	id: string
 };
 
-export const rootValue = {
-	node ({id}: NodeVariables) {
-		if (!id) {
-			throw new Error ('node ID is required');
-		}
+type RootValueType = {
+	node: typeof node,
+	viewer: typeof viewer,
+	[key: string]: Function
+};
 
-		return Node.fromGlobalId (id);
-	},
+const node = ({id}: NodeVariables) => {
+	if (!id) {
+		throw new Error ('node ID is required');
+	}
 
-	viewer () {
-		return new Viewer ();
-	},
+	return Node.fromGlobalId (id);
+};
 
+const viewer = () => new Viewer ();
+
+
+export const rootValue = ({
+	node,
+	viewer,
 	...mutations
-}
+}: RootValueType)
 

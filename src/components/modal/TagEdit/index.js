@@ -44,26 +44,16 @@ export default class TagEditModal extends Component <Props, State> {
 		this.setState ({...data});
 	}
 
-	onArtistAdd (id: string) {
-		const {
-			data,
-			relay: {environment}
-		} = this.props;
+	onArtistAdd (artistId: string) {
+		const {data, relay: {environment}} = this.props;
 
-		console.log ('onArtistAdd', id);
-
-		TagArtistAddMutation (environment, id, data.id);
+		TagArtistAddMutation (environment, data.id, artistId);
 	}
 
-	onArtistRemove (id: string) {
-		const {
-			data,
-			relay: {environment}
-		} = this.props;
+	onArtistRemove (artistId: string) {
+		const {data, relay: {environment}} = this.props;
 
-		console.log ('onArtistRemove', id);
-
-		TagArtistRemoveMutation (environment, id, data.id);
+		TagArtistRemoveMutation (environment, data.id, artistId);
 	}
 
 	onConfirm () {

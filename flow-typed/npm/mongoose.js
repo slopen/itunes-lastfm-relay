@@ -24,7 +24,7 @@ declare class bson$Decimal128 {
 }
 /*** end FIX broken globals import 'bson' (((( ***/
 
-export type MongoId = bson$ObjectId | string | number;
+type Mongo$Id = bson$ObjectId | string | number;
 
 type Mongoose$Types = {|
   ObjectId: Class<bson$ObjectId>,
@@ -208,7 +208,7 @@ declare class Mongoose$Document {
     projection?: MongooseProjection
   ): Mongoose$Query<?this, this>;
   static findById(
-    id: MongoId,
+    id: Mongo$Id,
     projection?: MongooseProjection,
     options?: Object
   ): Mongoose$Query<?this, this>;
@@ -222,11 +222,11 @@ declare class Mongoose$Document {
     options?: Object
   ): Mongoose$Query<?this, this>;
   static findByIdAndRemove(
-    id: MongoId,
+    id: Mongo$Id,
     options?: Object
   ): Mongoose$Query<?this, this>;
   static findByIdAndUpdate(
-    id: MongoId,
+    id: Mongo$Id,
     data: Object,
     options?: Object
   ): Mongoose$Query<?this, this>;
@@ -303,7 +303,7 @@ declare class Mongoose$Document {
 
   populate(path?: string | Object, cb?: (err: Error, doc: this) => void): void;
   execPopulate(): Promise<this>;
-  populated(path: string): ?MongoId;
+  populated(path: string): ?Mongo$Id;
   toJSON(options?: ToObjectOpts<this>): Object;
   toObject(options?: ToObjectOpts<this>): Object;
   toString(): string;
@@ -465,12 +465,11 @@ declare class Mongoose$Connection {
   connect(uri: string, opts?: ConnectionConnectOpts): void;
   openUri(uri: string, opts?: ConnectionConnectOpts): void;
 
-  // TODO: breaks flow 0.69 (generic class method)
-  // model<Doc> (
-  //   name: string | Doc,
-  //   schema?: Mongoose$Schema<Doc>,
-  //   collection?: Mongoose$Collection
-  // ): Class<Doc>;
+  model<Doc> (
+    name: string | Doc,
+    schema?: Mongoose$Schema<Doc>,
+    collection?: Mongoose$Collection
+  ): Class<Doc>;
 
   model(
     name: string,
@@ -510,6 +509,7 @@ declare module 'mongoose' {
   declare export type MongooseConnection = Mongoose$Connection;
   declare export type BSONObjectId = bson$ObjectId;
   declare export type ObjectId = bson$ObjectId;
+  declare export type MongoId = Mongo$Id;
   declare export type MongooseQuery<Result, Doc> = Mongoose$Query<Result, Doc>;
   declare export type MongooseDocument = Mongoose$Document;
   declare export type MongooseModel = typeof Mongoose$Document;
