@@ -29,6 +29,10 @@
   "flow-coverage-report": {
     "includeGlob": [
       "src/**/*.js"
+    ],
+    "excludeGlob": [
+      "node_modules/**",
+      "src/**/__generated__/**"
     ]
   },
   "pre-commit": {
