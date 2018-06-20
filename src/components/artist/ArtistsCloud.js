@@ -19,13 +19,14 @@ export type ArtistsCloudType = {|
 					+playcount: ?number
 				|}
 			|}
-		|}>
+		|}>,
+		pageInfo?: Object
 	|}
 |};
 
 type Props = {
 	relay: RelayPaginationProp,
-	viewer: ArtistsCloudType
+	data: ArtistsCloudType
 };
 
 
@@ -52,8 +53,8 @@ class ArtistsCloud extends Component<Props> {
 	}
 
 	render () {
-		const {viewer} = this.props;
-		const {artists} = viewer || {};
+		const {data} = this.props;
+		const {artists} = data || {};
 		const {edges} = artists || {};
 
 		if (!edges || !edges.length) {
@@ -77,7 +78,7 @@ class ArtistsCloud extends Component<Props> {
 }
 
 export default createPaginationContainer (ArtistsCloud, graphql`
-	fragment ArtistsCloud_viewer on Viewer
+	fragment ArtistsCloud on RootQuery
 		@argumentDefinitions (
 			count: {type: "Int", defaultValue: 100}
 			cursor: {type: "String"}
@@ -100,11 +101,10 @@ export default createPaginationContainer (ArtistsCloud, graphql`
 	}`,
 	{
 		direction: 'forward',
-		getConnectionFromProps ({viewer}) {
-			return viewer && viewer.artists;
+		getConnectionFromProps ({data}: Props) {
+			return data && data.artists;
 		},
 		getVariables (props, {count, cursor}) {
-
 			return {
 				count,
 				cursor
@@ -115,9 +115,7 @@ export default createPaginationContainer (ArtistsCloud, graphql`
 				$count: Int!
 				$cursor: String
 			) {
-				viewer {
-					...ArtistsCloud_viewer @arguments (count: $count, cursor: $cursor)
-				}
+				...ArtistsCloud @arguments (count: $count, cursor: $cursor)
 			}
 		`
 	}

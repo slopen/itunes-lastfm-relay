@@ -43,7 +43,7 @@ const TagPage = ({data}: Props) => {
 }
 
 export default createFragmentContainer (TagPage, graphql`
-	fragment TagPage on Viewer {
+	fragment TagPage on RootQuery {
 		tags (name: $name, first: 1) {
 			edges {
 				node {

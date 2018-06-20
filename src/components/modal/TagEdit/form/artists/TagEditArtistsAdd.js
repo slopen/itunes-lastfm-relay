@@ -40,11 +40,11 @@ const TagArtistsAddList = ({relay, data, onChange}: Props) =>
 		}/> : null;
 
 export default createPaginationContainer (TagArtistsAddList, graphql`
-	fragment TagEditArtistsAdd on Viewer
+	fragment TagEditArtistsAdd on RootQuery
 		@argumentDefinitions (
+			tagId: {type: "ID!"}
 			count: {type: "Int", defaultValue: 12}
 			cursor: {type: "String"}
-			tagId: {type: "ID"}
 			search: {type: "String"}
 		) {
 
@@ -82,19 +82,17 @@ export default createPaginationContainer (TagArtistsAddList, graphql`
 		},
 		query: graphql`
 			query TagEditArtistsAddPaginationQuery (
+				$tagId: ID!
 				$count: Int!
 				$cursor: String
-				$tagId: ID
 				$search: String
 			) {
-				available: viewer {
-					...TagEditArtistsAdd @arguments (
-						count: $count,
-						cursor: $cursor,
-						tagId: $tagId,
-						search: $search
-					)
-				}
+				...TagEditArtistsAdd @arguments (
+					count: $count,
+					cursor: $cursor,
+					tagId: $tagId,
+					search: $search
+				)
 			}
 		`
 	}

@@ -25,7 +25,9 @@ type TagArtistsType = {|
 
 type Props = {
 	relay?: RelayPaginationProp,
-	data: TagArtistsType,
+	data: {
+		tag: TagArtistsType
+	},
 	onChange: (id: string) => void
 };
 
@@ -35,7 +37,7 @@ const TagArtistsRemoveList = ({relay, data, onChange}: Props) =>
 	relay ? <RelayList
 		limit={8}
 		relay={relay}
-		list={data.artists.edges}
+		list={data.tag.artists.edges}
 		renderRow={({node}: ArtistPreviewNode) =>
 			<ArtistSelectItem
 				data={node}
@@ -46,22 +48,27 @@ const TagArtistsRemoveList = ({relay, data, onChange}: Props) =>
 
 
 export default createPaginationContainer (TagArtistsRemoveList, graphql`
-	fragment TagEditArtistsRemove on Tag
+	fragment TagEditArtistsRemove on RootQuery
 		@argumentDefinitions (
+			tagId: {type: "ID!"},
 			count: {type: "Int", defaultValue: 12}
 			cursor: {type: "String"}
 			search: {type: "String"}
 		) {
 
-		artists (
-			first: $count
-			after: $cursor
-			search: $search
-		) @connection(key: "TagArtists_artists") {
-			edges {
-				node {
-					id
-					...ArtistSelectItem
+		tag: node (id: $tagId) {
+			...on Tag {
+				artists (
+					first: $count
+					after: $cursor
+					search: $search
+				) @connection(key: "TagArtists_artists") {
+					edges {
+						node {
+							id
+							...ArtistSelectItem
+						}
+					}
 				}
 			}
 		}
@@ -69,7 +76,7 @@ export default createPaginationContainer (TagArtistsRemoveList, graphql`
 	{
 		direction: 'forward',
 		getConnectionFromProps ({data}: Props) {
-			return data && data.artists;
+			return data && data.tag.artists;
 		},
 		getVariables (props, {count, cursor}, fragmentVariables) {
 			const {
@@ -91,13 +98,12 @@ export default createPaginationContainer (TagArtistsRemoveList, graphql`
 				$cursor: String
 				$search: String
 			) {
-				connected: node (id: $tagId) {
-					...TagEditArtistsRemove @arguments (
-						count: $count,
-						cursor: $cursor,
-						search: $search
-					)
-				}
+				...TagEditArtistsRemove @arguments (
+					tagId: $tagId,
+					count: $count,
+					cursor: $cursor,
+					search: $search
+				)
 			}
 		`
 	}

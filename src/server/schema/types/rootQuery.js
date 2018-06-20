@@ -67,17 +67,14 @@ const buildTagQuery = (variables: Variables) => {
 	return query;
 }
 
-export default class Viewer {
-	get id (): string {
-		return 'viewer';
-	}
+export default {
 
 	artists (variables: Variables) {
 		return artistConnection (
 			buildArtistQuery (variables),
 			variables
 		);
-	}
+	},
 
 	tags (variables: Variables) {
 		return tagConnection (

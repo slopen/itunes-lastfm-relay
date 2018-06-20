@@ -1,7 +1,7 @@
 // @flow
 
-import Viewer from 'server/schema/types/viewer';
 import Node from 'server/schema/types/node';
+import rootQuery from 'server/schema/types/rootQuery';
 import mutations from 'server/schema/mutations';
 
 export {default as schema} from './schema';
@@ -12,7 +12,6 @@ type NodeVariables = {
 
 type RootValueType = {
 	node: typeof node,
-	viewer: typeof viewer,
 	[key: string]: Function
 };
 
@@ -24,12 +23,10 @@ const node = ({id}: NodeVariables) => {
 	return Node.fromGlobalId (id);
 };
 
-const viewer = () => new Viewer ();
-
 
 export const rootValue = ({
 	node,
-	viewer,
+	...rootQuery,
 	...mutations
 }: RootValueType)
 

@@ -18,13 +18,13 @@ type Props = {
 	params: {
 		type?: 'tags' | 'artists'
 	},
-	viewer: HeaderType
+	data: HeaderType
 };
 
-const Header = ({params, viewer}: Props = {}) => {
+const Header = ({params, data}: Props = {}) => {
 	const path = params.type === 'tags' ? 'artists' : 'tags';
 	const title = params.type !== 'tags' ? 'artists' : 'tags';
-	const count = viewer [title] && viewer [title].count;
+	const count = data [title] && data [title].count;
 
 	return (
 		<h1 className="main-header hoverable">
@@ -39,7 +39,7 @@ const Header = ({params, viewer}: Props = {}) => {
 }
 
 export default createFragmentContainer (Header, graphql`
-	fragment Header_viewer on Viewer {
+	fragment Header on RootQuery {
 		artists (first:1) {
 			count
 		}

@@ -42,11 +42,11 @@ export default {
 
 		return {
 			clientMutationId,
-			tagArtistEdge: {
+			addedConnectedArtistEdge: {
 				cursor: offsetToCursor (0),
 				node: artist
 			},
-			viewerAddArtistId: artistId
+			removedAvailableArtistsId: artistId
 		};
 	},
 
@@ -58,8 +58,8 @@ export default {
 
 		return {
 			clientMutationId,
-			tagArtistId: artistId,
-			viewerAddArtistEdge: {
+			removedConnectedArtistsId: artistId,
+			addedAvailableArtistEdge: {
 				cursor: offsetToCursor (0),
 				node: artist
 			}

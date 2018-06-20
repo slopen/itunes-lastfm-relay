@@ -18,11 +18,11 @@ export type ArtistPageType = {|
 
 
 type Props = {
-	viewer: ArtistPageType
+	data: ArtistPageType
 };
 
-const ArtistPage = ({viewer}: Props) => {
-	const {artists} = viewer || {};
+const ArtistPage = ({data}: Props) => {
+	const {artists} = data || {};
 	const {edges} = artists || {};
 
 	if (!edges || !edges [0]) {
@@ -51,7 +51,7 @@ const ArtistPage = ({viewer}: Props) => {
 }
 
 export default createFragmentContainer (ArtistPage, graphql`
-	fragment ArtistPage_viewer on Viewer {
+	fragment ArtistPage on RootQuery {
 		artists (name: $name, first: 1) {
 			edges {
 				node {

@@ -23,14 +23,15 @@ const mutation = graphql`
 		$input: TagArtistAddInput!
 	) {
 		tagArtistAdd (input: $input) {
-			tagArtistEdge {
+			removedAvailableArtistsId
+
+			addedConnectedArtistEdge {
 				cursor
 				node {
 					id
 					...ArtistPreview
 				}
 			}
-			viewerAddArtistId
 		}
 	}
 `;
@@ -61,8 +62,7 @@ export default (environment: Environment, {
 			configs: [{
 				// removing viewer -> artists by excludeTag connection item
 				type: 'RANGE_DELETE',
-				parentName: 'viewer',
-				parentID: 'viewer',
+				parentID: 'client:root',
 				connectionKeys: [{
 					key: 'TagEditArtistsAdd_artists',
 					filters: {
@@ -70,8 +70,8 @@ export default (environment: Environment, {
 						search
 					}
 				}],
-				pathToConnection: ['viewer', 'artists'],
-				deletedIDFieldName: 'viewerAddArtistId'
+				pathToConnection: ['client:root', 'artists'],
+				deletedIDFieldName: 'removedAvailableArtistsId'
 			}, {
 				// adding tag -> artist connection item
 				type: 'RANGE_ADD',
@@ -79,7 +79,7 @@ export default (environment: Environment, {
 				connectionInfo: [{
 					key: 'TagArtists_artists',
 					filters: {
-						search
+						search: search || ''
 					},
 					rangeBehavior: 'prepend'
 				},
@@ -87,7 +87,7 @@ export default (environment: Environment, {
 					key: 'TagArtists_artists',
 					rangeBehavior: 'prepend'
 				}],
-				edgeName: 'tagArtistEdge'
+				edgeName: 'addedConnectedArtistEdge'
 			}]
 		}
 	);

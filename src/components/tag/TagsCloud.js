@@ -23,7 +23,8 @@ export type TagsCloudType = {|
 					|}>
 				|}
 			|}
-		|}>
+		|}>,
+		pageInfo?: Object
 	|}
 |};
 
@@ -31,7 +32,7 @@ import type {RelayPaginationProp} from 'react-relay';
 
 type Props = {
 	relay: RelayPaginationProp,
-	viewer: TagsCloudType
+	data: TagsCloudType
 };
 
 
@@ -71,8 +72,8 @@ class TagsCloud extends Component<Props> {
 	}
 
 	render () {
-		const {viewer} = this.props;
-		const {tags} = viewer || {};
+		const {data} = this.props;
+		const {tags} = data || {};
 		const {edges} = tags || {};
 
 		if (!edges || !edges.length) {
@@ -97,7 +98,7 @@ class TagsCloud extends Component<Props> {
 }
 
 export default createPaginationContainer (TagsCloud, graphql`
-	fragment TagsCloud_viewer on Viewer
+	fragment TagsCloud on RootQuery
 		@argumentDefinitions (
 			count: {type: "Int", defaultValue: 100}
 			cursor: {type: "String"}
@@ -127,8 +128,8 @@ export default createPaginationContainer (TagsCloud, graphql`
 	}`,
 	{
 		direction: 'forward',
-		getConnectionFromProps ({viewer}) {
-			return viewer && viewer.tags;
+		getConnectionFromProps ({data}: Props) {
+			return data && data.tags;
 		},
 		getVariables (props, {count, cursor}) {
 
@@ -142,9 +143,7 @@ export default createPaginationContainer (TagsCloud, graphql`
 				$count: Int!
 				$cursor: String
 			) {
-				viewer {
-					...TagsCloud_viewer @arguments (count: $count, cursor: $cursor)
-				}
+				...TagsCloud @arguments (count: $count, cursor: $cursor)
 			}
 		`
 	}

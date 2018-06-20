@@ -1,11 +1,26 @@
-schema {
-	query: RootQuery
-	mutation: RootMutation
+scalar Date
+
+interface Node {
+	id: ID!
+}
+
+type PageInfo {
+	hasNextPage: Boolean!
+	hasPreviousPage: Boolean!
+	startCursor: String
+	endCursor: String
 }
 
 type Artist implements Node {
+	id: ID!
 	name: String!
+	url: String
+	image: [ArtistImage]
+	stats: ArtistStats!
+	bio: ArtistBio
+
 	tracks: [ArtistTracks]
+
 	tags (
 		after: String,
 		first: Int,
@@ -13,25 +28,41 @@ type Artist implements Node {
 		last: Int
 	): ArtistTagsConnection
 	tagsLFM: [String]
+
 	similar (
 		after: String,
 		first: Int,
 		before: String,
 		last: Int
-	): ArtistSimilarConnection
+	): ArtistConnection
 	similarLFM: [String]
-	image: [ArtistImage]
-	url: String
-	bio: ArtistBio
-	stats: ArtistStats!
-	_id: ID
-	id: ID!
 }
 
 type ArtistBio {
 	published: Date
 	summary: String
 }
+
+type ArtistImage {
+	url: String
+	size: String
+}
+
+type ArtistStats {
+	listeners: Float
+	playcount: Float
+}
+
+type ArtistTracks {
+	name: String
+	album: String
+	length: Float
+	year: Float
+	bitrate: Float
+	path: String
+}
+
+
 
 type ArtistConnection {
 	pageInfo: PageInfo!
@@ -44,27 +75,6 @@ type ArtistEdge {
 	cursor: String!
 }
 
-type ArtistImage {
-	_id: Generic
-	url: String
-	size: String
-}
-
-type ArtistSimilarConnection {
-	pageInfo: PageInfo!
-	edges: [ArtistSimilarEdge!]!
-	count: Float
-}
-
-type ArtistSimilarEdge {
-	node: Artist!
-	cursor: String!
-}
-
-type ArtistStats {
-	listeners: Float
-	playcount: Float
-}
 
 type ArtistTagsConnection {
 	pageInfo: PageInfo!
@@ -77,52 +87,12 @@ type ArtistTagsEdge {
 	cursor: String!
 }
 
-type ArtistTracks {
-	_id: Generic
-	name: String
-	album: String
-	length: Float
-	year: Float
-	bitrate: Float
-	path: String
-}
-
-scalar Date
-
-scalar Generic
-
-interface Node {
-	id: ID!
-}
-
-enum orderByArtist {
-	URL_ASC
-	URL_DESC
-	_ID_ASC
-	_ID_DESC
-}
-
-enum orderByTag {
-	_ID_ASC
-	_ID_DESC
-}
-
-type PageInfo {
-	hasNextPage: Boolean!
-	hasPreviousPage: Boolean!
-	startCursor: String
-	endCursor: String
-}
-
-type RootQuery {
-	viewer: Viewer
-	node(id: ID!): Node
-}
 
 type Tag implements Node {
 	id: ID!
-	_id: ID
+
 	name: String!
+
 	artists(
 		after: String,
 		first: Int,
@@ -130,12 +100,18 @@ type Tag implements Node {
 		last: Int,
 		search: String
 	): TagArtistsConnection!
-	similar(
-		after: String,
-		first: Int,
-		before: String,
-		last: Int
-	): TagSimilarConnection
+}
+
+
+type TagConnection {
+	pageInfo: PageInfo!
+	edges: [TagEdge!]!
+	count: Float
+}
+
+type TagEdge {
+	node: Tag!
+	cursor: String!
 }
 
 type TagArtistsConnection {
@@ -149,52 +125,6 @@ type TagArtistsEdge {
 	cursor: String!
 }
 
-type TagConnection {
-	pageInfo: PageInfo!
-	edges: [TagEdge!]!
-	count: Float
-}
-
-type TagEdge {
-	node: Tag!
-	cursor: String!
-}
-
-type TagSimilarConnection {
-	pageInfo: PageInfo!
-	edges: [TagSimilarEdge!]!
-	count: Float
-}
-
-type TagSimilarEdge {
-	node: Tag!
-	cursor: String!
-}
-
-type Viewer implements Node {
-	id: ID!
-	artist(id: ID!): Artist
-	artists(
-		after: String,
-		first: Int,
-		before: String,
-		last: Int,
-		name: String,
-		url: String,
-		excludeTag: ID,
-		search: String
-	): ArtistConnection
-	tags(
-		after: String,
-		first: Int,
-		before: String,
-		last: Int,
-		name: String,
-		excludeArtist: ID,
-		search: String
-	): TagConnection
-	tag(id: ID!): Tag
-}
 
 input TagUpdateInput {
 	clientMutationId: String
@@ -207,6 +137,7 @@ type TagUpdatePayload {
 	tag: Tag
 }
 
+
 input TagArtistAddInput {
 	clientMutationId: String
 	tagId: ID!
@@ -215,9 +146,10 @@ input TagArtistAddInput {
 
 type TagArtistAddPayload {
 	clientMutationId: String
-	tagArtistEdge: TagArtistsEdge
-	viewerAddArtistId: ID
+	addedConnectedArtistEdge: TagArtistsEdge
+	removedAvailableArtistsId: ID
 }
+
 
 input TagArtistRemoveInput {
 	clientMutationId: String
@@ -227,8 +159,8 @@ input TagArtistRemoveInput {
 
 type TagArtistRemovePayload {
 	clientMutationId: String
-	tagArtistId: ID
-	viewerAddArtistEdge: ArtistEdge
+	removedConnectedArtistsId: ID
+	addedAvailableArtistEdge: ArtistEdge
 }
 
 
@@ -237,3 +169,38 @@ type RootMutation {
 	tagArtistAdd(input: TagArtistAddInput!): TagArtistAddPayload
 	tagArtistRemove(input: TagArtistRemoveInput!): TagArtistRemovePayload
 }
+
+
+type RootQuery {
+	node(id: ID!): Node
+
+	artist(id: ID!): Artist
+	artists(
+		after: String,
+		first: Int,
+		before: String,
+		last: Int,
+		name: String,
+		url: String,
+		excludeTag: ID,
+		search: String
+	): ArtistConnection
+
+	tags(
+		after: String,
+		first: Int,
+		before: String,
+		last: Int,
+		name: String,
+		excludeArtist: ID,
+		search: String
+	): TagConnection
+	tag(id: ID!): Tag
+}
+
+
+schema {
+	query: RootQuery
+	mutation: RootMutation
+}
+

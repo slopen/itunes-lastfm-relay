@@ -15,10 +15,7 @@ type Variables = {
 };
 
 type Props = {
-	data: {
-		available: Object,
-		connected: Object
-	},
+	data: Object,
 	relay: RelayRefetchProp,
 	onArtistAdd: (id: string) => void,
 	onArtistRemove: (id: string) => void,
@@ -73,14 +70,14 @@ class ArtistsEditList extends Component <Props, State> {
 				<div className="search-select select-add">
 					<TagEditArtistsAdd
 						search={search}
-						data={data.available}
+						data={data}
 						onChange={onArtistAdd}/>
 				</div>
 
 				<div className="search-select select-remove">
 					<TagEditArtistsRemove
 						search={search}
-						data={data.connected}
+						data={data}
 						onChange={onArtistRemove}/>
 				</div>
 			</fieldset>
@@ -96,18 +93,14 @@ export default createRefetchContainer (ArtistsEditList,
 				tagId: {type: "ID!"}
 				search: {type: "String"}
 			) {
-				available: viewer {
-					...TagEditArtistsAdd @arguments (
-						tagId: $tagId,
-						search: $search
-					)
-				}
-				connected: node (id: $tagId){
-					...TagEditArtistsRemove @arguments (
-						tagId: $tagId,
-						search: $search
-					)
-				}
+				...TagEditArtistsAdd @arguments (
+					tagId: $tagId,
+					search: $search
+				)
+				...TagEditArtistsRemove @arguments (
+					tagId: $tagId,
+					search: $search
+				)
 		}
 	`,
 	graphql`
