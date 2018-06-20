@@ -5,21 +5,25 @@ import {Link} from 'react-router-dom';
 
 import ArtistImage from './ArtistImage';
 import ArtistTags from './ArtistTags';
+import ArtistEdit from './ArtistEdit';
+
+import type {RelayProp} from 'react-relay';
 
 export type ArtistPreviewType = {|
-	+id: string,
-	+name: string,
+	id: string,
+	name: string,
 	+stats: {|
 		+playcount: ?number,
 		+listeners: ?number
 	|},
-	+bio: ?{|
-		+summary: ?string
-	|}
+	bio: {
+		summary: ?string
+	}
 |};
 
 
 type Props = {
+	relay?: RelayProp,
 	data: ArtistPreviewType,
 	fullMode?: boolean
 };
@@ -33,15 +37,19 @@ const RawBio = ({bio}) => {
 		: null;
 }
 
-const ArtistPreview = ({data, fullMode}: Props) => {
+const ArtistPreview = ({data, relay, fullMode}: Props) => {
 	const link = (
 		<Link to={'/artists/' + data.name}>{data.name}</Link>
 	);
 
+	const edit = relay ? (
+		<ArtistEdit data={data} relay={relay}/>
+	) : null;
+
 	return (
 		<div className={['media-item', fullMode ? 'full' : 'small'].join(' ')}>
 			{fullMode ? (
-				<h1 className="item-title">{link}</h1>
+				<h1 className="item-title">{link} {edit}</h1>
 			) : (
 				<h4 className="item-title">{link}</h4>
 			)}

@@ -33,7 +33,8 @@ type Artist implements Node {
 		after: String,
 		first: Int,
 		before: String,
-		last: Int
+		last: Int,
+		search: String
 	): ArtistConnection
 	similarLFM: [String]
 }
@@ -131,7 +132,6 @@ input TagUpdateInput {
 	tagId: ID!
 	name: String!
 }
-
 type TagUpdatePayload {
 	clientMutationId: String
 	tag: Tag
@@ -143,20 +143,17 @@ input TagArtistAddInput {
 	tagId: ID!
 	artistId: ID!
 }
-
 type TagArtistAddPayload {
 	clientMutationId: String
 	addedConnectedArtistEdge: TagArtistsEdge
 	removedAvailableArtistsId: ID
 }
 
-
 input TagArtistRemoveInput {
 	clientMutationId: String
 	tagId: ID
 	artistId: ID
 }
-
 type TagArtistRemovePayload {
 	clientMutationId: String
 	removedConnectedArtistsId: ID
@@ -164,10 +161,47 @@ type TagArtistRemovePayload {
 }
 
 
+input ArtistUpdateInput {
+	clientMutationId: String
+	artistId: ID!
+	name: String!
+}
+type ArtistUpdatePayload {
+	clientMutationId: String
+	artist: Artist
+}
+
+input ArtistSimilarAddInput {
+	clientMutationId: String
+	artistId: ID!
+	similarId: ID!
+}
+type ArtistSimilarAddPayload {
+	clientMutationId: String
+	addedConnectedSimilarEdge: ArtistEdge
+	removedAvailableSimilarId: ID
+}
+
+input ArtistSimilarRemoveInput {
+	clientMutationId: String
+	artistId: ID
+	similarId: ID
+}
+type ArtistSimilarRemovePayload {
+	clientMutationId: String
+	removedConnectedSimilarId: ID
+	addedAvailableSimilarEdge: ArtistEdge
+}
+
+
 type RootMutation {
 	tagUpdate(input: TagUpdateInput!): TagUpdatePayload
 	tagArtistAdd(input: TagArtistAddInput!): TagArtistAddPayload
 	tagArtistRemove(input: TagArtistRemoveInput!): TagArtistRemovePayload
+
+	artistUpdate(input: ArtistUpdateInput!): ArtistUpdatePayload
+	artistSimilarAdd(input: ArtistSimilarAddInput!): ArtistSimilarAddPayload
+	artistSimilarRemove(input: ArtistSimilarRemoveInput!): ArtistSimilarRemovePayload
 }
 
 
@@ -183,6 +217,7 @@ type RootQuery {
 		name: String,
 		url: String,
 		excludeTag: ID,
+		excludeSimilar: ID,
 		search: String
 	): ArtistConnection
 

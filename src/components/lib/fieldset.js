@@ -23,16 +23,27 @@ const Input = ({
 	onFocus,
 	onChange
 }) =>
-	<input
-		required
-		name={name}
-		value={value}
-		onFocus={onFocus}
-		onChange={onChange}
-		className="form-control"
-		placeholder={name}
-		autoComplete="off"
-		type="text"/>
+	typeof value && value.length > 24
+		? <textarea
+			required
+			name={name}
+			value={value}
+			onFocus={onFocus}
+			onChange={onChange}
+			className="form-control"
+			placeholder={name}
+			autoComplete="off"
+			type="text"/>
+		: <input
+			required
+			name={name}
+			value={value}
+			onFocus={onFocus}
+			onChange={onChange}
+			className="form-control"
+			placeholder={name}
+			autoComplete="off"
+			type="text"/>
 
 export default class EditFieldset extends Component <Props, State> {
 
@@ -66,12 +77,14 @@ export default class EditFieldset extends Component <Props, State> {
 					const value = typeof this.state [name] !== 'undefined'
 						? this.state [name] : data [name];
 
-					return <Input
-						key={name}
+					return <p key={name}><Input
 						name={name}
-						value={value}
+						value={typeof value === 'object'
+							? value.summary
+							: value
+						}
 						onFocus={this.onFocus}
-						onChange={this.onChange}/>
+						onChange={this.onChange}/></p>
 				})}
 			</fieldset>
 		);

@@ -15,6 +15,7 @@ import type {TagMongooseDoc} from 'server/models/tag';
 type Variables = {
 	name: string,
 	search: string,
+	excludeArtist: string
 } & ConnectionArguments;
 
 
@@ -25,6 +26,43 @@ export default class Tag extends Model {
 
 	static MongooseModel = MongooseTag;
 
+	static async buildQuery (variables: Variables) {
+		const query = {};
+
+		if (!variables) {
+			return query;
+		}
+
+		if (variables.excludeArtist) {
+			const {id} = fromGlobalId (
+				variables.excludeArtist
+			);
+
+			query.artists = {$nin: [id]};
+		}
+
+		if (variables.name) {
+			query.name = variables.name;
+		} else if (variables.search) {
+			query.name = {
+				$regex: nameregex (variables.search)
+			};
+		}
+
+		return query;
+	}
+
+	static async getById (globalTagId: string) {
+		const {id: tagId} = fromGlobalId (globalTagId);
+		// $FlowFixMe mongoose query extends promise returns MongooseDocument
+		const tag: TagMongooseDoc = await this.MongooseModel.findById (tagId);
+
+		if (!tag) {
+			throw new Error (`tag not found by ${globalTagId}`);
+		}
+
+		return tag;
+	}
 
 	static async updateTag (globalTagId: string, data: Object) {
 		const {id: _id} = fromGlobalId (globalTagId);
@@ -37,15 +75,8 @@ export default class Tag extends Model {
 	}
 
 	static async addArtist (globalTagId: string, globalArtistId: string) {
-		const {id: tagId} = fromGlobalId (globalTagId);
 		const {id: artistId} = fromGlobalId (globalArtistId);
-
-		// $FlowFixMe mongoose query extends promise returns MongooseDocument
-		const tag: TagMongooseDoc = await this.MongooseModel.findById (tagId);
-
-		if (!tag) {
-			throw new Error (`tag not found by ${globalTagId}`);
-		}
+		const tag: TagMongooseDoc = await this.getById (globalTagId);
 
 		const {artists} = tag;
 		const index = artists.findIndex ((id) =>
@@ -62,15 +93,8 @@ export default class Tag extends Model {
 	}
 
 	static async removeArtist (globalTagId: string, globalArtistId: string) {
-		const {id: tagId} = fromGlobalId (globalTagId);
 		const {id: artistId} = fromGlobalId (globalArtistId);
-
-		// $FlowFixMe mongoose query extends promise returns MongooseDocument
-		const tag: TagMongooseDoc = await this.MongooseModel.findById (tagId);
-
-		if (!tag) {
-			throw new Error (`tag not found by ${globalTagId}`);
-		}
+		const tag: TagMongooseDoc = await this.getById (globalTagId);
 
 		const {artists} = tag;
 		const index = artists.findIndex ((id) =>
@@ -81,7 +105,9 @@ export default class Tag extends Model {
 			throw new Error (`artist missing in connection ${globalTagId}`);
 		}
 
-		tag.artists.splice (index, 1);
+		tag.artists = tag.artists.filter ((id) =>
+			id.toString () === artistId
+		);
 
 		return new this (await tag.save ());
 	}

@@ -28,6 +28,7 @@ export default (T: Class <Model>) =>
 			.skip (offset)
 			.limit (limit || 1);
 
+
 		const connection = connectionFromArraySlice (
 			data.map ((doc) => new T (doc)),
 			variables,
