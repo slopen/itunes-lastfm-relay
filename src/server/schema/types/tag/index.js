@@ -7,9 +7,15 @@ import Model from 'server/schema/types/model';
 
 import connection from 'server/schema/connection';
 import {artistConnection} from 'server/schema/types/artist';
+import nameregex from 'server/schema/util/nameregex';
 
 import type {ConnectionArguments} from 'graphql-relay';
 import type {TagMongooseDoc} from 'server/models/tag';
+
+type Variables = {
+	name: string,
+	search: string,
+} & ConnectionArguments;
 
 
 export default class Tag extends Model {
@@ -22,6 +28,7 @@ export default class Tag extends Model {
 
 	static async updateTag (globalTagId: string, data: Object) {
 		const {id: _id} = fromGlobalId (globalTagId);
+
 		// $FlowFixMe mongoose query extends promise returns MongooseDocument
 		const tag: TagMongooseDoc = await this.MongooseModel
 			.findOneAndUpdate ({_id}, data, {new: true});
@@ -32,6 +39,7 @@ export default class Tag extends Model {
 	static async addArtist (globalTagId: string, globalArtistId: string) {
 		const {id: tagId} = fromGlobalId (globalTagId);
 		const {id: artistId} = fromGlobalId (globalArtistId);
+
 		// $FlowFixMe mongoose query extends promise returns MongooseDocument
 		const tag: TagMongooseDoc = await this.MongooseModel.findById (tagId);
 
@@ -56,6 +64,7 @@ export default class Tag extends Model {
 	static async removeArtist (globalTagId: string, globalArtistId: string) {
 		const {id: tagId} = fromGlobalId (globalTagId);
 		const {id: artistId} = fromGlobalId (globalArtistId);
+
 		// $FlowFixMe mongoose query extends promise returns MongooseDocument
 		const tag: TagMongooseDoc = await this.MongooseModel.findById (tagId);
 
@@ -78,9 +87,17 @@ export default class Tag extends Model {
 	}
 
 
-	async artists (variables: ConnectionArguments) {
+	async artists (variables: Variables) {
+		const query = {};
 		const {artists: $in} = this._doc;
-		const query = {_id: {$in}};
+
+		query._id = {$in};
+
+		if (variables.search) {
+			query.name = {
+				$regex: nameregex (variables.search)
+			};
+		}
 
 		return artistConnection (query, variables);
 	}

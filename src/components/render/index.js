@@ -27,6 +27,8 @@ type RenderProps = {
 	componentProps?: Object
 };
 
+const rootQueryOrFragment = (props: {__id: string}) =>
+	props.__id === 'client:root' ? {data: props} : props;
 
 export default ({
 	query,
@@ -45,7 +47,9 @@ export default ({
 				if (error) {
 					return <ErrorComponent error={error}/>;
 				} else if (props) {
-					return <Component {...props} {...componentProps}/>;
+					return <Component
+						{...rootQueryOrFragment (props)}
+						{...componentProps}/>;
 				}
 
 				return <LoaderComponent/>;

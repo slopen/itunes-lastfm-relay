@@ -15,11 +15,11 @@ export type TagPageType = {|
 |};
 
 type Props = {
-	viewer: TagPageType
+	data: TagPageType
 };
 
-const TagPage = ({viewer}: Props) => {
-	const {tags} = viewer || {};
+const TagPage = ({data}: Props) => {
+	const {tags} = data || {};
 	const {edges} = tags || {};
 
 	if (!edges || !edges [0]) {
@@ -43,7 +43,7 @@ const TagPage = ({viewer}: Props) => {
 }
 
 export default createFragmentContainer (TagPage, graphql`
-	fragment TagPage_viewer on Viewer {
+	fragment TagPage on Viewer {
 		tags (name: $name, first: 1) {
 			edges {
 				node {

@@ -3,7 +3,7 @@
 import React, {Component} from 'react';
 
 import Modal from 'components/lib/modal';
-import Fields from './fields';
+import Form from './form';
 
 import TagUpdateMutation from 'components/mutations/TagUpdate';
 import TagArtistAddMutation from 'components/mutations/TagArtistAdd';
@@ -24,7 +24,7 @@ type Props = {
 };
 
 type State = {
-	...TagData
+	search?: string
 };
 
 export default class TagEditModal extends Component <Props, State> {
@@ -37,24 +37,51 @@ export default class TagEditModal extends Component <Props, State> {
 		(this: any).onFieldChange = this.onFieldChange.bind (this);
 		(this: any).onArtistAdd = this.onArtistAdd.bind (this);
 		(this: any).onArtistRemove = this.onArtistRemove.bind (this);
+		(this: any).onArtistSearch = this.onArtistSearch.bind (this);
 	}
 
-	onFieldChange (data: TagData) {
-		const {data: {id}, relay: {environment}} = this.props;
+	onFieldChange ({name}: TagData) {
+		const {
+			data: {id: tagId},
+			relay: {environment}
+		} = this.props;
 
-		TagUpdateMutation (environment, id, data.name);
+		TagUpdateMutation (environment, {tagId, name});
+	}
+
+
+	onArtistSearch (search: string) {
+		this.setState ({search});
 	}
 
 	onArtistAdd (artistId: string) {
-		const {data, relay: {environment}} = this.props;
+		const {
+			data: {id: tagId},
+			relay: {environment}
+		} = this.props;
 
-		TagArtistAddMutation (environment, data.id, artistId);
+		const {search} = this.state;
+
+		TagArtistAddMutation (environment, {
+			tagId,
+			artistId,
+			search
+		});
 	}
 
 	onArtistRemove (artistId: string) {
-		const {data, relay: {environment}} = this.props;
+		const {
+			data: {id: tagId},
+			relay: {environment}
+		} = this.props;
 
-		TagArtistRemoveMutation (environment, data.id, artistId);
+		const {search} = this.state;
+
+		TagArtistRemoveMutation (environment, {
+			tagId,
+			artistId,
+			search
+		});
 	}
 
 	render () {
@@ -71,12 +98,13 @@ export default class TagEditModal extends Component <Props, State> {
 				isOpen={isOpen}
 				toggle={onToggle}>
 
-				<Fields
+				<Form
 					data={data}
 					relay={relay}
 					onFieldChange={this.onFieldChange}
 					onArtistAdd={this.onArtistAdd}
-					onArtistRemove={this.onArtistRemove}/>
+					onArtistRemove={this.onArtistRemove}
+					onArtistSearch={this.onArtistSearch}/>
 			</Modal>
 		);
 	}

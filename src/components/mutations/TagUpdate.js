@@ -1,9 +1,19 @@
 // @flow
 
 import uuid from 'uuid';
-import {commitMutation, graphql} from 'react-relay';
+import {
+	commitMutation,
+	graphql
+} from 'react-relay';
 
-import type {Environment} from 'react-relay';
+import type {
+	Environment
+} from 'react-relay';
+
+type MutationData = {
+	tagId: string,
+	name: string
+};
 
 const mutation = graphql`
 	mutation TagUpdateMutation (
@@ -18,7 +28,10 @@ const mutation = graphql`
 	}
 `;
 
-export default (environment: Environment, tagId: string, name: string) => {
+export default (environment: Environment, {
+	tagId,
+	name
+}: MutationData) => {
 	const variables = {
 		input: {
 			tagId,
@@ -33,7 +46,7 @@ export default (environment: Environment, tagId: string, name: string) => {
 			mutation,
 			variables,
 			onCompleted: (response: Object) => {
-				console.log ('* mutation response:', response)
+				console.log ('* mutation response:', response);
 			},
 			onError: (err) => console.error ('* mutation error:', err)
 		}

@@ -13,15 +13,6 @@
 	.modal-content{
 		background: #000;
 		border-radius: 0;
-
-		.field {
-			margin:1em 0;
-
-			.media-list{
-				max-height: 150px;
-				overflow: auto;
-			}
-		}
 	}
 
 	.close{
@@ -35,4 +26,32 @@
 
 .modal-backdrop{
 	background-color:#222;
+}
+
+.search-select-control{
+	margin:1em 0;
+
+	.search-control{
+		margin-bottom:1em;
+	}
+
+	.search-select{
+		display: inline-block;
+		vertical-align: top;
+		width: 50%;
+
+		.media-list{
+			height: 156px;
+			max-height: 156px;
+			overflow: auto;
+			background:#0a0a0a;
+		}
+
+		&.select-add{
+			padding-right: 1px;
+		}
+		&.select-remove{
+			padding-left: 1px;
+		}
+	}
 }

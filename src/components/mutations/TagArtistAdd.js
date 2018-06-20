@@ -1,9 +1,22 @@
 // @flow
 
 import uuid from 'uuid';
-import {commitMutation, graphql} from 'react-relay';
+import {
+	commitMutation,
+	graphql
+} from 'react-relay';
 
-import type {Environment} from 'react-relay';
+
+import type {
+	Environment
+} from 'react-relay';
+
+type MutationData = {
+	tagId: string,
+	artistId: string,
+	search?: string
+};
+
 
 const mutation = graphql`
 	mutation TagArtistAddMutation (
@@ -23,7 +36,11 @@ const mutation = graphql`
 `;
 
 
-export default (environment: Environment, tagId: string, artistId: string) => {
+export default (environment: Environment, {
+	tagId,
+	artistId,
+	search
+}: MutationData) => {
 	const variables = {
 		input: {
 			tagId,
@@ -38,29 +55,39 @@ export default (environment: Environment, tagId: string, artistId: string) => {
 			mutation,
 			variables,
 			onCompleted: (response: Object) => {
-				console.log ('* mutation response:', response)
+				console.log ('* mutation response:', response);
 			},
 			onError: (err) => console.error ('* mutation error:', err),
 			configs: [{
-				// adding tag -> artist connection item
-				type: 'RANGE_ADD',
-				parentID: tagId,
-				connectionInfo: [{
-					key: 'TagArtists_artists',
-					rangeBehavior: 'prepend'
-				}],
-				edgeName: 'tagArtistEdge'
-			}, {
 				// removing viewer -> artists by excludeTag connection item
 				type: 'RANGE_DELETE',
 				parentName: 'viewer',
 				parentID: 'viewer',
 				connectionKeys: [{
 					key: 'TagEditArtistsAdd_artists',
-					filters: {excludeTag: tagId}
+					filters: {
+						excludeTag: tagId,
+						search
+					}
 				}],
 				pathToConnection: ['viewer', 'artists'],
 				deletedIDFieldName: 'viewerAddArtistId'
+			}, {
+				// adding tag -> artist connection item
+				type: 'RANGE_ADD',
+				parentID: tagId,
+				connectionInfo: [{
+					key: 'TagArtists_artists',
+					filters: {
+						search
+					},
+					rangeBehavior: 'prepend'
+				},
+				{
+					key: 'TagArtists_artists',
+					rangeBehavior: 'prepend'
+				}],
+				edgeName: 'tagArtistEdge'
 			}]
 		}
 	);

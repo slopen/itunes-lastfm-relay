@@ -127,7 +127,8 @@ type Tag implements Node {
 		after: String,
 		first: Int,
 		before: String,
-		last: Int
+		last: Int,
+		search: String
 	): TagArtistsConnection!
 	similar(
 		after: String,
@@ -178,39 +179,38 @@ type Viewer implements Node {
 		first: Int,
 		before: String,
 		last: Int,
-		orderBy: orderByArtist,
 		name: String,
 		url: String,
-		_id: ID,
-		excludeTag: ID
+		excludeTag: ID,
+		search: String
 	): ArtistConnection
 	tags(
 		after: String,
 		first: Int,
 		before: String,
 		last: Int,
-		orderBy: orderByTag,
 		name: String,
-		_id: ID,
+		excludeArtist: ID,
+		search: String
 	): TagConnection
 	tag(id: ID!): Tag
 }
 
 input TagUpdateInput {
+	clientMutationId: String
 	tagId: ID!
 	name: String!
-	clientMutationId: String
 }
 
 type TagUpdatePayload {
-	tag: Tag
 	clientMutationId: String
+	tag: Tag
 }
 
 input TagArtistAddInput {
+	clientMutationId: String
 	tagId: ID!
 	artistId: ID!
-	clientMutationId: String
 }
 
 type TagArtistAddPayload {
@@ -220,9 +220,9 @@ type TagArtistAddPayload {
 }
 
 input TagArtistRemoveInput {
+	clientMutationId: String
 	tagId: ID
 	artistId: ID
-	clientMutationId: String
 }
 
 type TagArtistRemovePayload {

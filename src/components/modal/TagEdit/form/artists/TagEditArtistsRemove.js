@@ -18,47 +18,45 @@ type ArtistPreviewNode = {
 type TagArtistsType = {|
 	+id: string,
 	+artists: {|
-		+edges: $ReadOnlyArray <ArtistPreviewNode>
+		+edges: $ReadOnlyArray <ArtistPreviewNode>,
+		+pageInfo?: Object
 	|}
 |};
 
 type Props = {
-	relay: RelayPaginationProp,
+	relay?: RelayPaginationProp,
 	data: TagArtistsType,
 	onChange: (id: string) => void
 };
 
 
-const ArtistsList = ({relay, data, onChange}: Props) =>
-	<RelayList
-		limit={12}
+
+const TagArtistsRemoveList = ({relay, data, onChange}: Props) =>
+	relay ? <RelayList
+		limit={8}
 		relay={relay}
 		list={data.artists.edges}
 		renderRow={({node}: ArtistPreviewNode) =>
 			<ArtistSelectItem
 				data={node}
 				key={node.id}
-				onAction={() =>
-					onChange (node.id)
-				}
-				actionIcon={
-					<i className="fa fa-times"/>
-				}/>
-		}/>
+				onAction={() => onChange (node.id)}
+				actionIcon={<i className="fa fa-times"/>}/>
+		}/> : null;
 
 
-export default createPaginationContainer (ArtistsList, graphql`
+export default createPaginationContainer (TagArtistsRemoveList, graphql`
 	fragment TagEditArtistsRemove on Tag
 		@argumentDefinitions (
 			count: {type: "Int", defaultValue: 12}
 			cursor: {type: "String"}
+			search: {type: "String"}
 		) {
-
-		id
 
 		artists (
 			first: $count
 			after: $cursor
+			search: $search
 		) @connection(key: "TagArtists_artists") {
 			edges {
 				node {
@@ -70,24 +68,34 @@ export default createPaginationContainer (ArtistsList, graphql`
 	}`,
 	{
 		direction: 'forward',
-		getConnectionFromProps ({data}) {
+		getConnectionFromProps ({data}: Props) {
 			return data && data.artists;
 		},
-		getVariables: ({data: {id}}: Props, {count, cursor}) => ({
-			id,
-			count,
-			cursor
-		}),
+		getVariables (props, {count, cursor}, fragmentVariables) {
+			const {
+				tagId,
+				search
+			} = fragmentVariables || {};
+
+			return {
+				count,
+				cursor,
+				tagId,
+				search
+			};
+		},
 		query: graphql`
 			query TagEditArtistsRemovePaginationQuery (
-				$id: ID!
+				$tagId: ID!
 				$count: Int!
 				$cursor: String
+				$search: String
 			) {
-				tag: node (id: $id) {
+				connected: node (id: $tagId) {
 					...TagEditArtistsRemove @arguments (
 						count: $count,
-						cursor: $cursor
+						cursor: $cursor,
+						search: $search
 					)
 				}
 			}

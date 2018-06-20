@@ -150,6 +150,7 @@ module.exports = {
         'no-confusing-arrow': 'off',
         'no-console': 'off',
         'no-continue': 'off',
+        'no-control-regex': 'off',
         'no-div-regex': 'error',
         'no-duplicate-imports': 'off',
         'no-else-return': 'off',

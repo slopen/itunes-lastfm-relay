@@ -1,9 +1,20 @@
 // @flow
 
 import uuid from 'uuid';
-import {commitMutation, graphql} from 'react-relay';
+import {
+	commitMutation,
+	graphql
+} from 'react-relay';
 
-import type {Environment} from 'react-relay';
+import type {
+	Environment
+} from 'react-relay';
+
+type MutationData = {
+	tagId: string,
+	artistId: string,
+	search?: string
+};
 
 const mutation = graphql`
 	mutation TagArtistRemoveMutation (
@@ -23,7 +34,11 @@ const mutation = graphql`
 	}
 `;
 
-export default (environment: Environment, tagId: string, artistId: string) => {
+export default (environment: Environment, {
+	tagId,
+	artistId,
+	search
+}: MutationData) => {
 	const variables = {
 		input: {
 			tagId,
@@ -46,6 +61,15 @@ export default (environment: Environment, tagId: string, artistId: string) => {
 				type: 'RANGE_DELETE',
 				parentID: tagId,
 				connectionKeys: [{
+					key: 'TagArtists_artists',
+					filters: {search}
+				}],
+				pathToConnection: ['tag', 'artists'],
+				deletedIDFieldName: 'tagArtistId'
+			}, {
+				type: 'RANGE_DELETE',
+				parentID: tagId,
+				connectionKeys: [{
 					key: 'TagArtists_artists'
 				}],
 				pathToConnection: ['tag', 'artists'],
@@ -56,7 +80,10 @@ export default (environment: Environment, tagId: string, artistId: string) => {
 				parentID: 'viewer',
 				connectionInfo: [{
 					key: 'TagEditArtistsAdd_artists',
-					filters: {excludeTag: tagId},
+					filters: {
+						excludeTag: tagId,
+						search
+					},
 					rangeBehavior: 'prepend'
 				}],
 				edgeName: 'viewerAddArtistEdge'

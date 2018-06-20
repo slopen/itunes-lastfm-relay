@@ -17,7 +17,8 @@ type ArtistPreviewNode = {
 type TagArtistsType = {|
 	+id: string,
 	+artists: {|
-		+edges: $ReadOnlyArray <ArtistPreviewNode>
+		+edges: $ReadOnlyArray <ArtistPreviewNode>,
+		+pageInfo?: Object
 	|}
 |};
 
@@ -62,7 +63,7 @@ export default createPaginationContainer (ArtistsList, graphql`
 	}`,
 	{
 		direction: 'forward',
-		getConnectionFromProps ({data}) {
+		getConnectionFromProps ({data}: Props) {
 			return data && data.artists;
 		},
 		getVariables: ({data: {id}}: Props, {count, cursor}) => ({

@@ -63,7 +63,7 @@ export default class RelayList extends Component<Props> {
 					type="uniform"
 					length={list.length}
 					minSize={limit}
-					pageSize={limit / 2}
+					pageSize={limit}
 					itemRenderer={this.renderRow}/>
 			</div>
 		);

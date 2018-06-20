@@ -17,7 +17,8 @@ type ArtistPreviewNode = {
 type ArtistSimilarType = {|
 	+id: string,
 	+artistSimilar: {|
-		+edges: $ReadOnlyArray <ArtistPreviewNode>
+		+edges: $ReadOnlyArray <ArtistPreviewNode>,
+		+pageInfo?: Object
 	|}
 |};
 
@@ -61,7 +62,7 @@ export default createPaginationContainer (ArtistsList, graphql`
 	}`,
 	{
 		direction: 'forward',
-		getConnectionFromProps ({data}) {
+		getConnectionFromProps ({data}: Props) {
 			return data && data.artistSimilar;
 		},
 		getVariables ({data}: Props, {count, cursor}) {

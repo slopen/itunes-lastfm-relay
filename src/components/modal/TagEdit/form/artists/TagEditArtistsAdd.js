@@ -14,48 +14,45 @@ type ArtistPreviewNode = {
 	node: ArtistSelectItemType
 };
 
-
 type Props = {
-	relay: RelayPaginationProp,
-	onChange: (id: string) => void,
+	relay?: RelayPaginationProp,
 	data: {
 		+artists: {
-			+edges: $ReadOnlyArray <ArtistPreviewNode>
+			+edges: $ReadOnlyArray <ArtistPreviewNode>,
+			+pageInfo?: Object
 		}
-	}
+	},
+	onChange: (id: string) => void,
 };
 
 
-const ArtistsList = ({relay, data, onChange}: Props) =>
-	<RelayList
-		limit={12}
+const TagArtistsAddList = ({relay, data, onChange}: Props) =>
+	relay ? <RelayList
+		limit={8}
 		relay={relay}
 		list={data.artists.edges}
 		renderRow={({node}: ArtistPreviewNode) =>
 			<ArtistSelectItem
 				data={node}
 				key={node.id}
-				onAction={() =>
-					onChange (node.id)
-				}
-				actionIcon={
-					<i className="fa fa-plus"/>
-				}/>
-		}/>
+				onAction={() => onChange (node.id)}
+				actionIcon={<i className="fa fa-plus"/>}/>
+		}/> : null;
 
-
-export default createPaginationContainer (ArtistsList, graphql`
+export default createPaginationContainer (TagArtistsAddList, graphql`
 	fragment TagEditArtistsAdd on Viewer
 		@argumentDefinitions (
 			count: {type: "Int", defaultValue: 12}
 			cursor: {type: "String"}
-			excludeTag: {type: "ID"}
+			tagId: {type: "ID"}
+			search: {type: "String"}
 		) {
 
 		artists (
 			first: $count
 			after: $cursor
-			excludeTag: $excludeTag
+			excludeTag: $tagId
+			search: $search
 		) @connection (key: "TagEditArtistsAdd_artists") {
 			edges {
 				node {
@@ -67,29 +64,35 @@ export default createPaginationContainer (ArtistsList, graphql`
 	}`,
 	{
 		direction: 'forward',
-		getConnectionFromProps ({data}) {
+		getConnectionFromProps ({data}: Props) {
 			return data && data.artists;
 		},
 		getVariables (props, {count, cursor}, fragmentVariables) {
+			const {
+				tagId,
+				search
+			} = fragmentVariables || {};
+
 			return {
 				count,
 				cursor,
-				excludeTag: fragmentVariables
-					? fragmentVariables.excludeTag
-					: null
+				tagId,
+				search
 			};
 		},
 		query: graphql`
 			query TagEditArtistsAddPaginationQuery (
 				$count: Int!
 				$cursor: String
-				$excludeTag: ID
+				$tagId: ID
+				$search: String
 			) {
-				data: viewer {
+				available: viewer {
 					...TagEditArtistsAdd @arguments (
 						count: $count,
 						cursor: $cursor,
-						excludeTag: $excludeTag
+						tagId: $tagId,
+						search: $search
 					)
 				}
 			}
