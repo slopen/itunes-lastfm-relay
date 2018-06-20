@@ -106,7 +106,7 @@ export default class Tag extends Model {
 		}
 
 		tag.artists = tag.artists.filter ((id) =>
-			id.toString () === artistId
+			id.toString () !== artistId
 		);
 
 		return new this (await tag.save ());

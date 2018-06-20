@@ -67,11 +67,10 @@ export default (environment: Environment, {
 					}
 				},
 				{
-					key: 'ArtistSimilar_similar',
-					rangeBehavior: 'prepend'
+					key: 'ArtistSimilar_similar'
 				}],
-				pathToConnection: ['tag', 'artists'],
-				deletedIDFieldName: 'removedConnectedArtistsId'
+				pathToConnection: ['artist', 'similar'],
+				deletedIDFieldName: 'removedConnectedSimilarId'
 			}, {
 				// adding root -> artists by excludeTag connection item
 				type: 'RANGE_ADD',
@@ -84,7 +83,7 @@ export default (environment: Environment, {
 					},
 					rangeBehavior: 'prepend'
 				}],
-				edgeName: 'addedAvailableArtistEdge'
+				edgeName: 'addedAvailableSimilarEdge'
 			}]
 		}
 	);

@@ -114,8 +114,48 @@ export default class Artist extends Model {
 		}
 
 		artist.tags = artist.tags.filter ((id) =>
-			id.toString () === tagId
+			id.toString () !== tagId
 		);
+
+		return new this (await artist.save ());
+	}
+
+	static async addSimilar (globalArtistId: string, globalSimilarId: string) {
+		const {id: similarId} = fromGlobalId (globalSimilarId);
+		const artist: ArtistMongooseDoc = await this.getById (globalArtistId);
+
+		const {similar} = artist;
+		const index = similar.findIndex ((id) =>
+			id.toString () === similarId
+		);
+
+		if (index !== -1) {
+			throw new Error (`artist already in connection ${globalSimilarId}`);
+		}
+
+		artist.similar.push (similarId);
+
+		return new this (await artist.save ());
+	}
+
+	static async removeSimilar (globalArtistId: string, globalSimilarId: string) {
+		const {id: similarId} = fromGlobalId (globalSimilarId);
+		const artist: ArtistMongooseDoc = await this.getById (globalArtistId);
+		// $FlowFixMe mongoose query extends promise returns MongooseDocument
+		const similars: Array <ArtistMongooseDoc> =
+			await this.MongooseModel.find ({_id: artist._id});
+
+		artist.similar = artist.similar.filter ((id) =>
+			id.toString () !== similarId
+		);
+
+		await Promise.all (similars.map (({_id, similar}) =>
+			this.MongooseModel.findOneAndUpdate ({_id}, {
+				similar: similar.filter ((id) =>
+					id.toString () !== artist._id.toString ()
+				)
+			})
+		));
 
 		return new this (await artist.save ());
 	}

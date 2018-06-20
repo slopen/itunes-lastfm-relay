@@ -16,7 +16,7 @@ type ArtistPreviewNode = {
 
 type ArtistSimilarType = {|
 	+id: string,
-	+artistSimilar: {|
+	+similar: {|
 		+edges: $ReadOnlyArray <ArtistPreviewNode>,
 		+pageInfo?: Object
 	|}
@@ -31,7 +31,7 @@ const ArtistsList = ({relay, data}: Props) =>
 	<RelayList
 		limit={12}
 		relay={relay}
-		list={data.artistSimilar.edges}
+		list={data.similar.edges}
 		renderRow={({node}: ArtistPreviewNode) =>
 			<div className="item" key={node.id}>
 				<ArtistPreview data={node}/>
@@ -48,10 +48,10 @@ export default createPaginationContainer (ArtistsList, graphql`
 
 		id
 
-		artistSimilar: similar (
+		similar (
 			first: $count
 			after: $cursor
-		) @connection (key: "ArtistsList_artistSimilar") {
+		) @connection (key: "ArtistSimilar_similar") {
 			edges {
 				node {
 					id
@@ -63,7 +63,7 @@ export default createPaginationContainer (ArtistsList, graphql`
 	{
 		direction: 'forward',
 		getConnectionFromProps ({data}: Props) {
-			return data && data.artistSimilar;
+			return data && data.similar;
 		},
 		getVariables ({data}: Props, {count, cursor}) {
 			return {

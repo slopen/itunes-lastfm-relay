@@ -66,7 +66,7 @@ export default (environment: Environment, {
 				connectionKeys: [{
 					key: 'ArtistEditSimilarAdd_artists',
 					filters: {
-						excludeSimilar: similarId,
+						excludeSimilar: artistId,
 						search
 					}
 				}],

@@ -22,6 +22,22 @@ type TagArtistInput = {
 	}
 };
 
+type ArtistUpdateInput = {
+	input: {
+		clientMutationId: string,
+		name: string,
+		artistId: string
+	}
+};
+
+type ArtistSimilarInput = {
+	input: {
+		clientMutationId: string,
+		artistId: string,
+		similarId: string
+	}
+};
+
 
 export default {
 
@@ -62,6 +78,45 @@ export default {
 			addedAvailableArtistEdge: {
 				cursor: offsetToCursor (0),
 				node: artist
+			}
+		};
+	},
+
+	artistUpdate: async ({input}: ArtistUpdateInput) => {
+		const {clientMutationId, name, artistId} = input;
+
+		return {
+			clientMutationId,
+			artist: await Artist.updateArtist (artistId, {name})
+		};
+	},
+
+	artistSimilarAdd: async ({input}: ArtistSimilarInput) => {
+		const {clientMutationId, artistId, similarId} = input;
+
+		await Artist.addSimilar (artistId, similarId);
+
+		return {
+			clientMutationId,
+			addedConnectedSimilarEdge: {
+				cursor: offsetToCursor (0),
+				node: await Artist.addSimilar (similarId, artistId)
+			},
+			removedAvailableSimilarId: similarId
+		};
+	},
+
+	artistSimilarRemove: async ({input}: ArtistSimilarInput) => {
+		const {clientMutationId, similarId, artistId} = input;
+
+		await Artist.removeSimilar (artistId, similarId);
+
+		return {
+			clientMutationId,
+			removedConnectedSimilarId: similarId,
+			addedAvailableSimilarEdge: {
+				cursor: offsetToCursor (0),
+				node: await Artist.removeSimilar (similarId, artistId)
 			}
 		};
 	}
